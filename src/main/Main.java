@@ -43,7 +43,11 @@ public class Main {
 				
 				// Printing x and y coordinate on mouse clicks for testing
 				if (window.isMousePressed(GLFW.GLFW_MOUSE_BUTTON_LEFT))
-					System.out.println(window.getMouseX()+", "+window.getMouseY());
+				{
+					System.out.println(
+							window.getMouseX()+", "+window.getMouseY()
+					);
+				}
 				
 				// Finish update
 				window.swapBuffers();
