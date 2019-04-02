@@ -10,16 +10,19 @@ import engine.io.Window;
  *
  */
 public class Main {
+	
 	public static void main(String[] args) {
-		// Screen width and screen height
-		int WIDTH = 800;
-		int HEIGHT = 600;
+		// Setting the states:
+		final int MAIN_MENU = 0;
+		final int PLAYING = 1;
+		int state = PLAYING;
 		
-		// Max frame rate
-		int FPS = 60; 
+		// Setting up window settings
+		int WIDTH = 800;              // Screen Width
+		int HEIGHT = 600;             // Screen Height
+		int FPS = 60;                 // Max Frame Rate
+		String windowName = "Turris"; // Name of the window
 		
-		// Name of the window
-		String windowName = "Turris";
 		// Creates the game window
 		Window window = new Window(WIDTH, HEIGHT, FPS, windowName);
 		window.create();
@@ -30,23 +33,23 @@ public class Main {
 			if (window.isUpdating())
 			{
 				
-				window.clear(); // Clears the previous frame
+				window.clear();  // Clears the previous frame
 				window.update(); // Start update
-				window.setColour(255, 255, 255, 0.4f);
-				for (int x = 0; x < 80; x++)
-					for (int y = 0; y < 60; y++)
-						window.rectangle(x*10, y*10, 9, 9);
 				
-				// Testing to see if input is working
-				if (window.isKeyPressed(GLFW.GLFW_KEY_SPACE))
-					System.out.println("Hey");
-				
-				// Printing x and y coordinate on mouse clicks for testing
-				if (window.isMousePressed(GLFW.GLFW_MOUSE_BUTTON_LEFT))
+				// Organises the updating within the states
+				switch (state)
 				{
-					System.out.println(
-							window.getMouseX()+", "+window.getMouseY()
-					);
+					case MAIN_MENU : 
+						break;
+					case PLAYING :
+						// Settings the colour to a transparent white
+						window.setColour(255, 255, 255, 0.4f);
+						
+						// Drawing a grid
+						for (int x = 0; x < 80; x++)
+							for (int y = 0; y < 60; y++)
+								window.rectangle(x*10, y*10, 9, 9);	
+						break;
 				}
 				
 				// Finish update
