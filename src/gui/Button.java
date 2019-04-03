@@ -12,8 +12,8 @@ public class Button {
 	private float r = 255;
 	private float g = 255;
 	private float b = 255;
-	private final static float ALPHA = 0.33f;
 	private int corner_radius = 9;
+	private final static float ALPHA = 0.33f;
 	
 	public Button(String name, int x, int y, int width, int height, int state)
 	{
