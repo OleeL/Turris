@@ -23,6 +23,8 @@ public class Window {
 	private double fps_cap, time, processedTime = 0, fps = 0;
 	private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 	private boolean[] mouseButtons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
+	public final int LEFT_MOUSE = 0;
+	public final int RIGHT_MOUSE = 1;
 	
 	public Window(int width, int height, int fps, String title)
 	{
@@ -170,7 +172,7 @@ public class Window {
 	}
 	
 	// Sets the colour of drawing vector graphics
-	public void setColour(int r, int g, int b, float a)
+	public void setColour(float r, float g, float b, float a)
 	{
 		GL11.glColor4f(r, g, b, a);
 	}
@@ -251,12 +253,12 @@ public class Window {
 		glEnd();
 	}
 	
-	public void DrawGLRoundedCorner(float x, float y, double sa, double arc, float r) {
+	private void DrawGLRoundedCorner(float x, float y, double sa, double arc, float r) {
 	    // centre of the arc, for clockwise sense
 	    float cent_x = (float) (x + r * Math.cos(sa + Math.PI / 2));
 	    float cent_y = (float) (y + r * Math.sin(sa + Math.PI / 2));
 
-	    int N_ROUNDING_PIECES = 64;
+	    final int N_ROUNDING_PIECES = 32;
 	    // build up piecemeal including end of the arc
 	    int n = (int) Math.ceil(N_ROUNDING_PIECES * arc / Math.PI * 2);
 	    for (int i = 0; i <= n; i++) {
