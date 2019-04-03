@@ -43,15 +43,34 @@ public class Main {
 						break;
 					case PLAYING :
 						// Settings the colour to a transparent white
-						window.setColour(255, 255, 255, 0.4f);
+						window.setColour(255, 255, 255, .25f);
+
+						float margin_y = 25;
+						float box_w = 500;
+						float box_h = 75;
+						float box_x = (WIDTH/2)-(box_w/2);
+						float box_y = 100;
+						float box_corner = 10;
+						
+						for (int i = 0; i < 4; i++)
+						{
+							window.DrawRoundRect(
+									box_x, 
+									margin_y + (box_y*i),
+									box_w,
+									box_h,
+									box_corner);
+						}
 						
 						// Drawing a grid
-						for (int x = 0; x < 80; x++)
-							for (int y = 0; y < 60; y++)
-								window.rectangle(x*10, y*10, 9, 9);	
+						//for (int x = 0; x < 80; x++)
+							//for (int y = 0; y < 60; y++)
+								//window.rectangle(x*10, y*10, 9, 9);	
 						break;
 				}
-				
+				if (window.isMousePressed(0))
+					System.out.println("("+window.getMouseX()
+					+", "+window.getMouseY()+")");
 				// Finish update
 				window.swapBuffers();
 			}

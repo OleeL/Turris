@@ -2,15 +2,14 @@ package engine.io;
 
 import java.nio.DoubleBuffer;
 
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
-
-import org.joml.Vector3f;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL14.*;
 /**
  * @author Team 62
  * 
@@ -227,5 +226,46 @@ public class Window {
 	public void rectangle(float x, float y, float w, float h) {
         glRectf(x, y, x+w, y+h);
 	}
+
+	public void DrawRoundRect( 
+			float x, 
+			float y, 
+			float width, 
+			float height,
+			float radius )
+	{
+		glBegin(GL_POLYGON);
+
+		// top-left corner
+		DrawGLRoundedCorner(x, y + radius, 3 * Math.PI / 2, Math.PI / 2, radius);
+
+		// top-right
+		DrawGLRoundedCorner(x + width - radius, y, 0.0, Math.PI / 2, radius);
+
+		// bottom-right
+		DrawGLRoundedCorner(x + width, y + height - radius, Math.PI / 2, Math.PI / 2, radius);
+
+		// bottom-left
+		DrawGLRoundedCorner(x + radius, y + height, Math.PI, Math.PI / 2, radius);
+
+		glEnd();
+	}
 	
+	public void DrawGLRoundedCorner(float x, float y, double sa, double arc, float r) {
+	    // centre of the arc, for clockwise sense
+	    float cent_x = (float) (x + r * Math.cos(sa + Math.PI / 2));
+	    float cent_y = (float) (y + r * Math.sin(sa + Math.PI / 2));
+
+	    int N_ROUNDING_PIECES = 64;
+	    // build up piecemeal including end of the arc
+	    int n = (int) Math.ceil(N_ROUNDING_PIECES * arc / Math.PI * 2);
+	    for (int i = 0; i <= n; i++) {
+	        double ang = sa + arc * (double)i  / (double)n;
+
+	        // compute the next point
+	        float next_x = (float) (cent_x + r * Math.sin(ang));
+	        float next_y = (float) (cent_y - r * Math.cos(ang));
+	        glVertex2f(next_x, next_y);
+	    }
+	}
 }
