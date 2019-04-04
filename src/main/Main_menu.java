@@ -22,7 +22,11 @@ public class Main_menu {
 	
 	public static void create()
 	{
+		
 		buttons[0] = new Button("New Game", 300, 50, 200, 50, NEW_GAME);
+		int width = (int) buttons[0].getText().getFont().getFontImageWidth();
+		int height = (int) buttons[0].getText().getFont().getFontImageHeight();
+		buttons[0].getText().setPosition( 300+(width/2), 50+(height/2));
 	}
 	
 	public static void update()
