@@ -1,4 +1,4 @@
-package gui;
+package engine.io;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

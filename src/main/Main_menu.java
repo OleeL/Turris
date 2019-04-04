@@ -1,6 +1,7 @@
 package main;
 
 import gui.Button;
+import gui.Texture;
 
 /**
  * @author Team 62
@@ -19,14 +20,21 @@ public class Main_menu {
 	public static final int EXIT = 6;
 	public static int state = 0;
 	private static Button[] buttons = new Button[1];
-	
+	private static Texture background;
 	public static void create()
 	{
-		
-		buttons[0] = new Button("New Game", 300, 50, 200, 50, NEW_GAME);
-		int width = (int) buttons[0].getText().getFont().getFontImageWidth();
-		int height = (int) buttons[0].getText().getFont().getFontImageHeight();
-		buttons[0].getText().setPosition( 300+(width/2), 50+(height/2));
+		background = new Texture("turris_text", 0, 500);
+		int button_x = 300;
+		int button_y = 50;
+		int button_w = 200;
+		int button_h = 50;
+		buttons[0] = new Button("New Game", button_x, button_y, button_w, button_h, NEW_GAME);
+		int text_w= (int) buttons[0].getText().getFont().getFontImageWidth();
+		int text_h= (int) buttons[0].getText().getFont().getFontImageHeight();
+		buttons[0].getText().setPosition( 
+				((button_x+(button_w/2))-(text_w/8)),  // x
+		        ((button_y+(button_h/2))-(text_h/8))); // y
+				
 	}
 	
 	public static void update()
@@ -38,8 +46,10 @@ public class Main_menu {
 	
 	public static void draw()
 	{
+		
 		for (Button button : buttons)
 			button.draw();
+		background.draw();
 	}
 	
 }

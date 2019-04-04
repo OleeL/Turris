@@ -80,6 +80,7 @@ public class Window {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_TEXTURE_2D);
 	}
 	
 	// Returns whether the window should be closed
@@ -229,7 +230,7 @@ public class Window {
         glRectf(x, y, x+w, y+h);
 	}
 
-	public void DrawRoundRect( 
+	public void roundRectangle( 
 			float x, 
 			float y, 
 			float width, 

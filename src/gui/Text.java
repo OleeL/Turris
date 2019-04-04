@@ -7,6 +7,8 @@
 
 package gui;
 
+import engine.io.Font;
+
 public class Text {
 
 	public String text;
@@ -23,7 +25,7 @@ public class Text {
 		
 		// Creating the font        
         try {
-			font = new Font("assets/fonts/SEGOEUI.TTF", size);
+			font = new Font("./assets/fonts/SEGOEUI.TTF", size);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

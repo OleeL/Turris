@@ -16,11 +16,11 @@ public class Button {
 	private int width;
 	private int height;
 	private int state;
-	private float r = .33f;
-	private float g = .33f;
-	private float b = .33f;
+	private float r = 0.33f;
+	private float g = 0.33f;
+	private float b = 0.33f;
 	private int corner_radius = 9;
-	private final static float BOX_ALPHA = .33f;
+	private final static float BOX_ALPHA = 255f;
 	private final static float FONT_ALPHA = 1f;
 	private Text text;
 	private float font_r = 1f;
@@ -74,17 +74,17 @@ public class Button {
 				Main.window.getMouseY() > y &&
 				Main.window.getMouseY() < y+height)
 		{
-			r = 0.3f;
-			g = 0.3f;
-			b = 0.3f;
+			r = 0.2f;
+			g = 0.2f;
+			b = 0.2f;
 			if (Main.window.isKeyPressed(Main.window.LEFT_MOUSE))
 				return true;
 		}
 		else
 		{
-			r = 0.7f;
-			g = 0.7f;
-			b = 0.7f;
+			r = 0.4f;
+			g = 0.4f;
+			b = 0.4f;
 		}
 		return false;
 	}
@@ -92,7 +92,7 @@ public class Button {
 	public void draw()
 	{
 		Main.window.setColour(r, g, b, BOX_ALPHA);
-		Main.window.DrawRoundRect(x, y, width, height, corner_radius);
+		Main.window.roundRectangle(x, y, width, height, corner_radius);
 		Main.window.setColour(font_r, font_g, font_b, FONT_ALPHA);
 		text.draw();
 	}

@@ -32,48 +32,34 @@ public class Main {
 		Main_menu.create();
 		
 		// While the windows isn't closed print to the screen
-		while (!window.closed())
-		{
-			if (window.isUpdating())
-			{
+		while (!window.closed()) {
+			if (window.isUpdating()) {
 				window.clear();  // Clears the previous frame
 				window.update(); // Start update
 				
 				// Organises the updating within the states
-				switch (state)
-				{
+				switch (state){
+				
 					case MAIN_MENU : 
 						Main_menu.update();
 						Main_menu.draw();
 						break;
-					case PLAYING :
-						// Settings the colour to a transparent white
-						window.setColour(255, 255, 255, .33f);
-
-						float margin_y = 25;
-						float box_w = 500;
-						float box_h = 75;
-						float box_x = (WIDTH/2)-(box_w/2);
-						float box_y = 100;
-						float box_corner = 10;
 						
-						for (int i = 0; i < 4; i++)
-						{
-							window.DrawRoundRect(
-									box_x, 
-									margin_y + (box_y*i),
-									box_w,
-									box_h,
-									box_corner);
-						}
+					case PLAYING :
+
 						break;
 				}
-				if (window.isMousePressed(0))
-					System.out.println("("+window.getMouseX()
-					+", "+window.getMouseY()+")");
+				printMouseCoordsOnClick();
+				
 				// Finish update
 				window.swapBuffers();
 			}
 		}
+	}
+	
+	public static void printMouseCoordsOnClick() {
+		if (window.isMousePressed(window.LEFT_MOUSE))
+			System.out.println("("+window.getMouseX()
+			+", "+window.getMouseY()+")");
 	}
 }
