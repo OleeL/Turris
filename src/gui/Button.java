@@ -77,8 +77,10 @@ public class Button {
 			r = 0.2f;
 			g = 0.2f;
 			b = 0.2f;
-			if (Main.window.isKeyPressed(Main.window.LEFT_MOUSE))
+			
+			if (Main.window.isMousePressed(0)){
 				return true;
+			}
 		}
 		else
 		{

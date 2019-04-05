@@ -72,15 +72,15 @@ public class Window {
 		
 		// Sets the time
 		time = getTime();
-		
+
+		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity(); // Resets any previous projection matrices
 		glOrtho(0, width, height, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_TEXTURE_2D);
 	}
 	
 	// Returns whether the window should be closed

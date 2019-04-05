@@ -34,6 +34,11 @@ public class Text {
 	public Font getFont() {
 		return font;
 	}
+	
+	public String getText()
+	{
+		return text;
+	}
 
 	public void setFont(String fontName, int fontStyle, int size)
 	{

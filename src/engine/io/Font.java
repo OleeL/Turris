@@ -47,6 +47,14 @@ public class Font {
     public float getCharHeight() {
         return (float) (fontMetrics.getMaxAscent() + fontMetrics.getMaxDescent());
     }
+    public float getTextWidth(String text)
+    {
+    	float size = 0;
+    	for (char c : text.toCharArray()){
+    		size += getCharWidth(c);
+    	}
+    	return size;
+    }
     
     //Constructors
     public Font(String path, float size) throws Exception {
@@ -60,18 +68,23 @@ public class Font {
         fontMetrics = graphics.getFontMetrics();
         bufferedImage = graphics.getDeviceConfiguration().createCompatibleImage((int) getFontImageWidth(),(int) getFontImageHeight(),Transparency.TRANSLUCENT);
         
-      //Generate texture
-      fontTextureId = glGenTextures();
-        glEnable(GL_TEXTURE_2D);
+        //Generate texture
+        fontTextureId = glGenTextures();
+        
+        // Binds the texture to the id.
         glBindTexture(GL_TEXTURE_2D, fontTextureId);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,(int) getFontImageWidth(),(int) getFontImageHeight(),0, GL_RGBA, GL_UNSIGNED_BYTE, asByteBuffer());
  
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        
+        // Unbinds the texture from the id.
+		glBindTexture(GL_TEXTURE_2D, 0);
     }
     
     //Functions
     public void drawText(String text, int x, int y) {
+    	// Binds the texture to the id.
         glBindTexture(GL_TEXTURE_2D, this.fontTextureId);
         glBegin(GL_QUADS);
         
@@ -85,21 +98,24 @@ public class Font {
             float cy = 1f / getFontImageHeight() * getCharY(c);
  
             glTexCoord2f(cx, cy);
-            glVertex3f(xTmp, y, 0);
+            glVertex2f(xTmp, y);
  
             glTexCoord2f(cx + cw, cy);
-            glVertex3f(xTmp + width, y, 0);
+            glVertex2f(xTmp + width, y);
  
             glTexCoord2f(cx + cw, cy + ch);
-            glVertex3f(xTmp + width, y + height, 0);
+            glVertex2f(xTmp + width, y + height);
  
             glTexCoord2f(cx, cy + ch);
-            glVertex3f(xTmp, y + height, 0);
+            glVertex2f(xTmp, y + height);
  
             xTmp += width;
         }
         
         glEnd();
+        
+		// Unbinds the texture from the id.
+		glBindTexture(GL_TEXTURE_2D, 0);
     }
     
     //Conversions

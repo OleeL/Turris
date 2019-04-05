@@ -19,37 +19,49 @@ public class Main_menu {
 	public static final int ABOUT = 5;
 	public static final int EXIT = 6;
 	public static int state = 0;
-	private static Button[] buttons = new Button[1];
-	private static Texture background;
-	public static void create()
-	{
-		background = new Texture("turris_text", 0, 500);
-		int button_x = 300;
-		int button_y = 50;
-		int button_w = 200;
-		int button_h = 50;
-		buttons[0] = new Button("New Game", button_x, button_y, button_w, button_h, NEW_GAME);
-		int text_w= (int) buttons[0].getText().getFont().getFontImageWidth();
-		int text_h= (int) buttons[0].getText().getFont().getFontImageHeight();
-		buttons[0].getText().setPosition( 
-				((button_x+(button_w/2))-(text_w/8)),  // x
-		        ((button_y+(button_h/2))-(text_h/8))); // y
-				
+	private static Button[] buttons = new Button[4];
+	private static Texture title, background;
+	
+	public static void create(){
+		background = new Texture("background_small.jpg", 0, 0);
+		title = new Texture("turris_text.png", 283, 25);
+		
+		int b_x = 300;
+		int b_y = 150;
+		int b_w = 200;
+		int b_h = 50;
+		int b_yIncrement = 60;
+		
+		String[] names  = {"New Game", "Load Game", "Settings", "Exit"};
+		int[]    states = { NEW_GAME,   LOAD_GAME,   SETTINGS,   EXIT};
+		for (int i = 0; i < 4; i++){
+			buttons[i] = new Button(names[i], b_x, b_y, b_w, b_h, states[i]);
+			int text_w= (int) buttons[i].getText().getFont().getTextWidth(
+					buttons[i].getText().getText());
+			int text_h= (int) buttons[i].getText().getFont().getCharHeight();
+			buttons[i].getText().setPosition( 
+					((b_x+(b_w/2))-(text_w/2)),  // x
+			        ((b_y+(b_h/2))-(text_h/2))); // y
+			b_y += b_yIncrement;
+		}		
 	}
 	
 	public static void update()
 	{
-		for (Button button : buttons)
-			if (button.updateClick())
+		for (Button button : buttons) {
+			if (button.updateClick()) {
 				state = button.getState();
+			}
+		}
 	}
 	
 	public static void draw()
 	{
-		
-		for (Button button : buttons)
-			button.draw();
 		background.draw();
+		for (Button button : buttons) {
+			button.draw();
+		}
+		title.draw();
 	}
 	
 }
