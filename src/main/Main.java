@@ -1,7 +1,7 @@
 package main;
 
-import org.lwjgl.glfw.GLFW;
 import engine.io.Window;
+import playing.Playing;
 
 /**
  * @author Team 62
@@ -12,11 +12,12 @@ import engine.io.Window;
 public class Main {
 	public static Window window;
 	
+	// Setting the states:
+	public static final int MAIN_MENU = 0;
+	public static final int PLAYING = 1;
+	public static int state = MAIN_MENU;
+	
 	public static void main(String[] args) {
-		// Setting the states:
-		final int MAIN_MENU = 0;
-		final int PLAYING = 1;
-		int state = MAIN_MENU;
 		
 		// Setting up window settings
 		int WIDTH = 800;              // Screen Width
@@ -30,6 +31,7 @@ public class Main {
 		
 		// Creates the main menu
 		Main_menu.create();
+		Playing.create();
 		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
@@ -41,12 +43,13 @@ public class Main {
 				switch (state){
 				
 					case MAIN_MENU : 
-						Main_menu.update();
+						Main_menu.update(window.getTime());
 						Main_menu.draw();
 						break;
 						
 					case PLAYING :
-
+						Playing.update();
+						Playing.draw();
 						break;
 				}
 				printMouseCoordsOnClick();

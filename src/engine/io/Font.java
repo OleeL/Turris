@@ -12,6 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Font {
    
    //Constants
+   @SuppressWarnings("serial")
    private final Map<Integer,String> CHARS = new HashMap<Integer,String>() {{
         put(0, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         put(1, "abcdefghijklmnopqrstuvwxyz");

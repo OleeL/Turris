@@ -2,14 +2,12 @@ package engine.io;
 
 import java.nio.DoubleBuffer;
 
-import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL14.*;
 /**
  * @author Team 62
  * 
@@ -20,7 +18,8 @@ public class Window {
 	private int width, height;
 	private String title;
 	private long window;
-	private double fps_cap, time, processedTime = 0, fps = 0;
+	private boolean closed = false;
+	private double fps_cap, time, processedTime = 0;
 	private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 	private boolean[] mouseButtons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
 	public final int LEFT_MOUSE = 0;
@@ -102,6 +101,12 @@ public class Window {
 		GLFW.glfwPollEvents(); 
 	}
 	
+	// stops the function
+	public void stop() {
+		GLFW.glfwTerminate();
+		closed = true;
+	}
+	
 	// Renders all info to the screen
 	public void swapBuffers()
 	{
@@ -117,14 +122,16 @@ public class Window {
 	// Returns whether
 	public boolean isUpdating()
 	{
-		double nextTime = getTime();
-		double passedTime = nextTime - time;
-		processedTime += passedTime;
-		time = nextTime;
-		while (processedTime > 1.0 / fps_cap)
-		{
-			processedTime -= 1.0 / fps_cap;
-			return true;
+		if (!closed) {
+			double nextTime = getTime();
+			double passedTime = nextTime - time;
+			processedTime += passedTime;
+			time = nextTime;
+			
+			while (processedTime > 1.0/fps_cap) {
+				processedTime -= 1.0/fps_cap;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -175,7 +182,7 @@ public class Window {
 	// Sets the colour of drawing vector graphics
 	public void setColour(float r, float g, float b, float a)
 	{
-		GL11.glColor4f(r, g, b, a);
+		glColor4f(r, g, b, a);
 	}
 	
 	// Returns true if a certain mouse button is down
@@ -270,5 +277,13 @@ public class Window {
 	        float next_y = (float) (cent_y - r * Math.cos(ang));
 	        glVertex2f(next_x, next_y);
 	    }
+	}
+	
+	public void drawLine(float x1, float y1, float x2, float y2)
+	{
+		glBegin(GL_LINES);
+			glVertex2f(x1, y1);
+			glVertex2f(x2, y2);
+		glEnd();
 	}
 }

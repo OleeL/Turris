@@ -1,6 +1,7 @@
 package main;
 
 import gui.Button;
+import gui.Cloud;
 import gui.Texture;
 
 /**
@@ -21,19 +22,23 @@ public class Main_menu {
 	public static int state = 0;
 	private static Button[] buttons = new Button[4];
 	private static Texture title, background;
+	private static Cloud clouds[] = new Cloud[2];
+	
 	
 	public static void create(){
 		background = new Texture("background_small.jpg", 0, 0);
 		title = new Texture("turris_text.png", 283, 25);
-		
+		for (int i = 0; i < clouds.length; i++){
+			clouds[i] = new Cloud(i+1);
+		}
 		int b_x = 300;
 		int b_y = 150;
 		int b_w = 200;
 		int b_h = 50;
 		int b_yIncrement = 60;
 		
-		String[] names  = {"New Game", "Load Game", "Settings", "Exit"};
-		int[]    states = { NEW_GAME,   LOAD_GAME,   SETTINGS,   EXIT};
+		String[] names  = {"New Game", "Load Game", "How To Play", "Exit"};
+		int[]    states = { NEW_GAME,   LOAD_GAME,   HELP,          EXIT};
 		for (int i = 0; i < 4; i++){
 			buttons[i] = new Button(names[i], b_x, b_y, b_w, b_h, states[i]);
 			int text_w= (int) buttons[i].getText().getFont().getTextWidth(
@@ -46,22 +51,67 @@ public class Main_menu {
 		}		
 	}
 	
-	public static void update()
+	public static void update(double dt)
 	{
-		for (Button button : buttons) {
-			if (button.updateClick()) {
-				state = button.getState();
-			}
+		for (Cloud cloud : clouds) cloud.update(dt);
+		switch (state){
+			case MAIN:
+				for (Button button : buttons) {
+					if (button.updateClick()) {
+						button_push(button.getState());
+					}
+				}
+				break;
+				
+			case NEW_GAME:
+				break;
+				
+			case LOAD_GAME:
+				break;
+				
+			case SETTINGS:
+				break;
+				
 		}
+		
 	}
 	
 	public static void draw()
 	{
 		background.draw();
-		for (Button button : buttons) {
-			button.draw();
+		for (Cloud cloud : clouds) cloud.draw();
+		
+		switch(state){
+				
+			case MAIN:
+				title.draw();
+				for (Button button : buttons) button.draw();
+				title.draw();
+				break;
+				
+			case NEW_GAME:
+				Main.state = Main.PLAYING;
+				
+				break;
+				
+			case LOAD_GAME:
+				break;
+				
+			case SETTINGS:
+				break;
+				
+				
 		}
-		title.draw();
+	}
+	
+	public static void button_push(int button)
+	{
+		state = button;
+		switch (button)
+		{
+		case EXIT:
+			System.exit(-1);			
+		}
 	}
 	
 }

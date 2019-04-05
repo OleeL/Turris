@@ -34,7 +34,7 @@ public class Button {
 		this.width = width;
 		this.height = height;
 		this.state = state;
-		text = new Text(name, x, y, 12);
+		text = new Text(name, x, y, 16);
 	}
 	
 	public int getState()
@@ -97,5 +97,13 @@ public class Button {
 		Main.window.roundRectangle(x, y, width, height, corner_radius);
 		Main.window.setColour(font_r, font_g, font_b, FONT_ALPHA);
 		text.draw();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
