@@ -9,7 +9,8 @@ public class Cloud {
 	public Cloud(int cloud) {
 		int random_x = Random.integer(0, 900);
 		int random_y = Random.integer(0, 200);
-		texture = new Texture("clouds/cloud_"+cloud+".png", random_x, random_y);
+		texture = new Texture("clouds/cloud_"+cloud+".png", random_x, random_y,
+								1f, 1f);
 	}
 	
 	public void update(double dt)

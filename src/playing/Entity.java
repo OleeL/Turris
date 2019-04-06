@@ -37,7 +37,15 @@ public class Entity {
 	public void setY(float y) {
 		this.y = y;
 	}
-
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+	
 	public Texture getTexture() {
 		return texture;
 	}

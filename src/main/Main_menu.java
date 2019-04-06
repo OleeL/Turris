@@ -26,8 +26,8 @@ public class Main_menu {
 	
 	
 	public static void create(){
-		background = new Texture("background_small.jpg", 0, 0);
-		title = new Texture("turris_text.png", 283, 25);
+		background = new Texture("background_small.jpg", 0, 0, 1f, 1f);
+		title = new Texture("turris_text.png", 283, 25, 1f, 1f);
 		for (int i = 0; i < clouds.length; i++){
 			clouds[i] = new Cloud(i+1);
 		}

@@ -11,8 +11,8 @@ import static org.lwjgl.opengl.GL11.*;
 import engine.io.Image;
 
 public class Texture {
-	private int id, w, h;
-	private float x, y;
+	private int id;
+	private float x, y, w, h;;
 	private Image texture;
 	private String filename;
 	
@@ -21,15 +21,17 @@ public class Texture {
 	 * @param Texture texture 
 	 * @param integer x position 
 	 * @param integer y position 
+	 * @param float x scale position (0.0 - 1.0)
+	 * @param float y scale position (0.0 - 1.0)
 	 */
-	public Texture(String filename, int x, int y) {
+	public Texture(String filename, int x, int y, float w, float h) {
 		this.filename = filename;
 		id = glGenTextures();
 		texture = Image.loadImage("./assets/images/"+filename);
 		this.x = x;
 		this.y = y;
-		this.w = texture.getWidth();
-		this.h = texture.getHeight();
+		this.w = texture.getWidth() * w;
+		this.h = texture.getHeight() * h;
 		
 		// Binds the texture to the id.
 		glBindTexture(GL_TEXTURE_2D, id);
@@ -44,11 +46,11 @@ public class Texture {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	public int getWidth() {
+	public float getWidth() {
 		return w;
 	}
 
-	public int getHeight() {
+	public float getHeight() {
 		return h;
 	}
 	

@@ -74,6 +74,8 @@ public class Window {
 
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_LINE_SMOOTH);
+		glLineWidth(0.5f);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity(); // Resets any previous projection matrices
 		glOrtho(0, width, height, 0, 1, -1);
@@ -179,7 +181,18 @@ public class Window {
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 	
-	// Sets the colour of drawing vector graphics
+	/**
+	 * <pre>
+	 * Sets the colour of the vector graphics with values 0.0 - 1.0 
+	 * To get 255 bit character, you would type:
+	 * 	    
+	 *     x / 255 = colour;
+	 * 
+	 * @param float r, float g, float b, float alpha
+	 * </pre>
+	 *    
+	 *  
+	 */
 	public void setColour(float r, float g, float b, float a)
 	{
 		glColor4f(r, g, b, a);
@@ -261,7 +274,7 @@ public class Window {
 		glEnd();
 	}
 	
-	private void DrawGLRoundedCorner(float x, float y, double sa, double arc, float r) {
+	public void DrawGLRoundedCorner(float x, float y, double sa, double arc, float r) {
 	    // centre of the arc, for clockwise sense
 	    float cent_x = (float) (x + r * Math.cos(sa + Math.PI / 2));
 	    float cent_y = (float) (y + r * Math.sin(sa + Math.PI / 2));

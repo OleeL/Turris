@@ -16,11 +16,11 @@ public class Button {
 	private int width;
 	private int height;
 	private int state;
-	private float r = 0.33f;
-	private float g = 0.33f;
-	private float b = 0.33f;
+	private float r = 0f;
+	private float g = 0f;
+	private float b = 0f;
 	private int corner_radius = 9;
-	private final static float BOX_ALPHA = 255f;
+	private final static float BOX_ALPHA = 0.5f;
 	private final static float FONT_ALPHA = 1f;
 	private Text text;
 	private float font_r = 1f;
@@ -74,9 +74,9 @@ public class Button {
 				Main.window.getMouseY() > y &&
 				Main.window.getMouseY() < y+height)
 		{
-			r = 0.2f;
-			g = 0.2f;
-			b = 0.2f;
+			r = 0.4f;
+			g = 0.4f;
+			b = 0.4f;
 			
 			if (Main.window.isMousePressed(0)){
 				return true;
@@ -84,9 +84,9 @@ public class Button {
 		}
 		else
 		{
-			r = 0.4f;
-			g = 0.4f;
-			b = 0.4f;
+			r = 0f;
+			g = 0f;
+			b = 0f;
 		}
 		return false;
 	}
