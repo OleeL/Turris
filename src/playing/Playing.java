@@ -6,8 +6,6 @@
  */
 package playing;
 
-import main.Main;
-
 public class Playing {
 	
 	private static final String LEVEL_1 = "assets/levels/level_1.csv";
@@ -18,32 +16,22 @@ public class Playing {
 	public static final int PAUSED  = 1;
 	public static int state = PLAYING;
 	public static Grid grid;
-	public static float gui_open_button_x;
-	public static float gui_open_button_y;
-	public static float gui_close_button_y;
+	public static GUI gui;
 	
 	public static void create(){
 		//grid = new Grid(16,12,50);
 		grid = new Grid(LEVEL_1);
+		gui  = new GUI();
 	}
 	
 	public static void update(){
-		grid.update();		
+		grid.update();
+		gui.update();
 	}
 	
 	public static void draw() {
 		grid.draw();
+		gui.draw();
 	}
 	
-	public static void gui_create(){
-		
-	}
-	public static void gui_update(){
-		
-	}
-	
-	public static void gui_draw(){
-		// Open button
-		Main.window.setColour(1f, 1f, 1f, 1f);
-	}
 }

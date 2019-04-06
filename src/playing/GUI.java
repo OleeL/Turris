@@ -1,0 +1,182 @@
+/**
+ * 
+ */
+package playing;
+
+import static org.lwjgl.opengl.GL11.GL_POLYGON;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glVertex2f;
+
+import main.Main;
+
+/**
+ * @author Olee
+ *
+ */
+public class GUI {
+	
+	private float x = Main.window.getWidth();
+	private float y = 0;
+	private float w = 100;
+	private float h = Main.window.getHeight();
+	
+	private float open_button_w = 25;
+	private float open_button_h = 50;
+	private float open_button_x = Main.window.getWidth() - open_button_w;
+	private float open_button_y;
+	private float open_button_radius = 6;
+	
+	private float stats_w = 200f;
+	private float stats_h = 100f;
+	private float stats_x = Main.window.getWidth() - stats_w;
+	private float stats_y = Main.window.getHeight() - stats_h;
+
+	private final float BUTTON_SIZE = 50;
+	private GUIButton[] buttons;
+
+	private boolean closed = true;
+	
+	// Colours
+	private static final float[] LINE_COLOUR    = {1.0f, 1.0f, 1.0f, 0.7f};
+	private static final float[] DEFAULT_COLOUR = {0.0f, 0.0f, 0.0f, 0.5f};
+	private static final float[] HOVER_COLOUR   = {0.4f, 0.4f, 0.4f, 0.5f};
+	private static float[]       colour         = DEFAULT_COLOUR;
+	
+	public GUI(){
+		buttons = new GUIButton[24];
+		buttons[0] = new GUIButton("Tower I",      BUTTON_SIZE, BUTTON_SIZE, 1);
+		buttons[1] = new GUIButton("Tower II",     BUTTON_SIZE, BUTTON_SIZE, 2);
+		buttons[2] = new GUIButton("Tower III",    BUTTON_SIZE, BUTTON_SIZE, 3);
+		buttons[3] = new GUIButton("Tower IV",     BUTTON_SIZE, BUTTON_SIZE, 4);
+		buttons[4] = new GUIButton("Tower V",      BUTTON_SIZE, BUTTON_SIZE, 5);
+		buttons[5] = new GUIButton("Tower VI",     BUTTON_SIZE, BUTTON_SIZE, 6);
+		buttons[6] = new GUIButton("Tower VII",    BUTTON_SIZE, BUTTON_SIZE, 7);
+		buttons[7] = new GUIButton("Tower VIII",   BUTTON_SIZE, BUTTON_SIZE, 8);
+		buttons[8] = new GUIButton("Tower IX",     BUTTON_SIZE, BUTTON_SIZE, 9);
+		buttons[9] = new GUIButton("Tower X",      BUTTON_SIZE, BUTTON_SIZE, 10);
+		buttons[10] = new GUIButton("T XI",    BUTTON_SIZE, BUTTON_SIZE, 11);
+		buttons[11] = new GUIButton("T XII",   BUTTON_SIZE, BUTTON_SIZE, 12);
+		buttons[12] = new GUIButton("T XIII",  BUTTON_SIZE, BUTTON_SIZE, 13);
+		buttons[13] = new GUIButton("T XIV",   BUTTON_SIZE, BUTTON_SIZE, 14);
+		buttons[14] = new GUIButton("T XV",    BUTTON_SIZE, BUTTON_SIZE, 15);
+		buttons[15] = new GUIButton("T XVI",   BUTTON_SIZE, BUTTON_SIZE, 16);
+		buttons[16] = new GUIButton("T XVII",  BUTTON_SIZE, BUTTON_SIZE, 17);
+		buttons[17] = new GUIButton("T XVIII", BUTTON_SIZE, BUTTON_SIZE, 18);
+		buttons[18] = new GUIButton("T XIX",   BUTTON_SIZE, BUTTON_SIZE, 19);
+		buttons[19] = new GUIButton("T XX",    BUTTON_SIZE, BUTTON_SIZE, 20);
+		buttons[20] = new GUIButton("T XXI",   BUTTON_SIZE, BUTTON_SIZE, 21);
+		buttons[21] = new GUIButton("T XXII",  BUTTON_SIZE, BUTTON_SIZE, 22);
+		buttons[22] = new GUIButton("T XXIII", BUTTON_SIZE, BUTTON_SIZE, 23);
+		buttons[23] = new GUIButton("Pause",       BUTTON_SIZE, BUTTON_SIZE, 0);
+		for (int by = 0; by < buttons.length/2; by++) {
+			for (int bx = 0; bx < 2; bx++){
+				buttons[by*2+bx].setPosition(
+						x-w+(bx*BUTTON_SIZE), by*BUTTON_SIZE);
+			}
+		}
+	}
+	
+	public void update(){
+		double mx = Main.window.getMouseX();
+		double my = Main.window.getMouseY();
+		int screenWidth = Main.window.getWidth();
+		
+		if (mx > open_button_x &&
+				mx < open_button_x+open_button_w &&
+				my > open_button_y &&
+				my < open_button_y+open_button_h)
+		{
+			colour = HOVER_COLOUR;
+			if (Main.window.isMouseDown(Main.window.LEFT_MOUSE)){
+				if (closed) {
+					x = screenWidth - w;
+					open_button_x = (screenWidth - w) - open_button_w;
+				}
+				else {
+					x = screenWidth;
+					open_button_x = screenWidth - open_button_w;
+				}
+				closed = !closed;
+			}
+		}
+		else
+		{
+			colour = DEFAULT_COLOUR;
+		}
+		
+		if (!closed) {		
+			for (GUIButton button : buttons){
+				button.update();
+			}
+		}
+		
+		stats_x = (screenWidth - stats_w) - (screenWidth - x);
+	}
+	
+	public void draw(){		
+		// Drawing the stats box
+		Main.window.setColour(DEFAULT_COLOUR);
+		Main.window.rectangle(stats_x, stats_y, stats_w, stats_h);
+		Main.window.setColour(LINE_COLOUR);
+		Main.window.drawLine(stats_x, stats_y, stats_x+stats_w, stats_y);
+		Main.window.drawLine(stats_x, stats_y, stats_x, stats_y+stats_h);
+		
+		
+		// Setting the colours for the open GUI button
+		Main.window.setColour(colour);
+		
+		// Open button
+		glBegin(GL_POLYGON);
+		
+			// top-left corner
+			Main.window.DrawGLRoundedCorner(
+					open_button_x, 
+					open_button_y + open_button_radius, 
+					3 * Math.PI / 2, 
+					Math.PI / 2, 
+					open_button_radius
+					);
+	
+			// top-right corner
+			glVertex2f(
+					open_button_x+open_button_w, 
+					open_button_y);
+	
+			// bottom-right corner 
+			glVertex2f(
+					open_button_x+open_button_w, 
+					open_button_y+open_button_h);
+			
+			// bottom-left
+			Main.window.DrawGLRoundedCorner(
+					open_button_x + open_button_radius, 
+					open_button_y + open_button_h, 
+					Math.PI,
+					Math.PI / 2,
+					open_button_radius);
+		glEnd();
+		
+		// Drawing a line to draw off the GUI
+		if (!closed)
+		{
+			// Setting the colours for the GUI
+			Main.window.setColour(DEFAULT_COLOUR);
+			
+			// GUI
+			Main.window.rectangle(x, y, w, h);			
+			
+			for (GUIButton button : buttons) {
+				button.draw();
+			}
+			
+			Main.window.setColour(LINE_COLOUR);
+			Main.window.drawLine(x, y, x, (y+h)-stats_h);
+		}
+		
+	}
+	
+	public void close() {
+		closed = !closed;
+	}
+}

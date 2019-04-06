@@ -74,7 +74,7 @@ public class Window {
 
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_LINE_SMOOTH);
+		//glEnable(GL_LINE_SMOOTH);
 		glLineWidth(0.5f);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity(); // Resets any previous projection matrices
@@ -196,6 +196,11 @@ public class Window {
 	public void setColour(float r, float g, float b, float a)
 	{
 		glColor4f(r, g, b, a);
+	}
+	
+	public void setColour(float[] rgba)
+	{
+		glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);
 	}
 	
 	// Returns true if a certain mouse button is down
