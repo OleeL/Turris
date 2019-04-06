@@ -153,4 +153,8 @@ public class Grid {
 		}
 	}
 	
+	public float getTileSize() {
+		return grid_size;
+	}
+	
 }

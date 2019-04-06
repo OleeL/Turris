@@ -31,19 +31,17 @@ public class GUIButton {
 		
 		// If mouse hovers over the button
 		if (mx > x && mx < x+w && my > y && my < y+h){
-			// If mouse is clicked
 			button_colour = BUTTON_HOVER_COLOUR;
-			if (Main.window.isMouseDown(Main.window.LEFT_MOUSE)){
+			// If mouse is clicked
+			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
 				return code;
 			}
-			
-			return -1;
 		}
 		else
 		{
 			button_colour = DEFAULT_BUTTON_COLOUR;
-			return -1;
 		}
+		return -1;
 	}
 	
 	public void draw() {

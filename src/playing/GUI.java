@@ -77,10 +77,21 @@ public class GUI {
 		}
 	}
 	
-	public void update(){
+	public int update(){
+		int state = -1;
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		int screenWidth = Main.window.getWidth();
+		
+		if (!closed) {		
+			
+			for (GUIButton button : buttons){
+				int temp_state = button.update();
+				if (temp_state > -1) {
+					state = temp_state;
+				}
+			}
+		}
 		
 		if (mx > open_button_x &&
 				mx < open_button_x+open_button_w &&
@@ -88,7 +99,7 @@ public class GUI {
 				my < open_button_y+open_button_h)
 		{
 			colour = HOVER_COLOUR;
-			if (Main.window.isMouseDown(Main.window.LEFT_MOUSE)){
+			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
 				if (closed) {
 					x = screenWidth - w;
 					open_button_x = (screenWidth - w) - open_button_w;
@@ -105,13 +116,8 @@ public class GUI {
 			colour = DEFAULT_COLOUR;
 		}
 		
-		if (!closed) {		
-			for (GUIButton button : buttons){
-				button.update();
-			}
-		}
-		
 		stats_x = (screenWidth - stats_w) - (screenWidth - x);
+		return state;
 	}
 	
 	public void draw(){		
