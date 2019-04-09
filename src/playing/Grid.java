@@ -157,4 +157,14 @@ public class Grid {
 		return grid_size;
 	}
 	
+	public String getTile(int x, int y) {
+		try {
+			return grid[y][x].getName();
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+			return "";
+		}
+	}
+	
 }

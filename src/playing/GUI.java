@@ -100,15 +100,7 @@ public class GUI {
 		{
 			colour = HOVER_COLOUR;
 			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
-				if (closed) {
-					x = screenWidth - w;
-					open_button_x = (screenWidth - w) - open_button_w;
-				}
-				else {
-					x = screenWidth;
-					open_button_x = screenWidth - open_button_w;
-				}
-				closed = !closed;
+				close();
 			}
 		}
 		else
@@ -169,13 +161,15 @@ public class GUI {
 			// Setting the colours for the GUI
 			Main.window.setColour(DEFAULT_COLOUR);
 			
-			// GUI
+			// GUI side
 			Main.window.rectangle(x, y, w, h);			
 			
+			// Drawing all of the buttons on towers and button on the GUI
 			for (GUIButton button : buttons) {
 				button.draw();
 			}
 			
+			// Creating a border for the GUI.
 			Main.window.setColour(LINE_COLOUR);
 			Main.window.drawLine(x, y, x, (y+h)-stats_h);
 		}
@@ -183,6 +177,18 @@ public class GUI {
 	}
 	
 	public void close() {
+		if (closed) {
+			x = Main.window.getWidth() - w;
+			open_button_x = (Main.window.getWidth() - w) - open_button_w;
+		}
+		else {
+			x = Main.window.getWidth();
+			open_button_x = Main.window.getWidth() - open_button_w;
+		}
 		closed = !closed;
+	}
+	
+	public boolean isClosed() {
+		return closed;
 	}
 }

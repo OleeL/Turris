@@ -31,11 +31,15 @@ public class Playing {
 	public static final int TOWER_2    = 2;
 	public static final int TOWER_3    = 3;
 	public static int selected = UNSELECTED;
+	
+	// Tile size
+	public static float tileSize;
 		
 	public static void create(){
 		//grid = new Grid(16,12,50);
 		grid = new Grid(LEVEL_1);
 		gui  = new GUI();
+		tileSize = grid.getTileSize();
 	}
 	
 	public static void update(){
@@ -66,11 +70,27 @@ public class Playing {
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		if (selected != PAUSE && selected != UNSELECTED) {
+			if (!gui.isClosed()) {
+				gui.close();}
+			float temp_tile_x = round((float)mx-(tileSize/2), tileSize);
+			float temp_tile_y = round((float)my-(tileSize/2), tileSize);
+			
+			// If you can place the tile in that place, then show green
+			if (grid.getTile((int) (temp_tile_x / tileSize),
+                             (int) (temp_tile_y / tileSize)).equals("x")){
+				Main.window.setColour(0f, 1f, 0f, 0.5f);
+			}
+			else // show red
+			{
+				Main.window.setColour(1f, 0f, 0f, 0.5f);
+			}
+			
+			
 			Main.window.rectangle(
-					round((float)mx-(grid.getTileSize()/2), grid.getTileSize()),
-					round((float)my-(grid.getTileSize()/2), grid.getTileSize()),
-					grid.getTileSize(),
-					grid.getTileSize());
+					temp_tile_x,
+					temp_tile_y,
+					tileSize,
+					tileSize);
 		}
 	}
 	
