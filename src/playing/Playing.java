@@ -43,19 +43,24 @@ public class Playing {
 	}
 	
 	public static void update(){
-		grid.update();
 		int btn = gui.update();
 		if ( btn > -1) selected = btn;
-		switch (selected)
+		if (selected != UNSELECTED){
+			switch (selected)
+			{
+				case TOWER_1:
+					break;
+				case TOWER_2:
+					break;
+				case TOWER_3:
+					break;
+				case PAUSE:
+					break;
+			}
+		}
+		else
 		{
-			case TOWER_1:
-				break;
-			case TOWER_2:
-				break;
-			case TOWER_3:
-				break;
-			case PAUSE:
-				break;
+			grid.update();
 		}
 	
 		if (Main.window.isMousePressed(Main.window.RIGHT_MOUSE)) {
@@ -76,8 +81,8 @@ public class Playing {
 			float temp_tile_y = round((float)my-(tileSize/2), tileSize);
 			
 			// If you can place the tile in that place, then show green
-			if (grid.getTile((int) (temp_tile_x / tileSize),
-                             (int) (temp_tile_y / tileSize)).equals("x")){
+			if (grid.getTile((int)(temp_tile_x / tileSize),
+                             (int)(temp_tile_y / tileSize)).equals(Grid.BLANK)){
 				Main.window.setColour(0f, 1f, 0f, 0.5f);
 			}
 			else // show red
@@ -92,6 +97,10 @@ public class Playing {
 					tileSize,
 					tileSize);
 		}
+	}
+	
+	public static void place(int tower) {
+		
 	}
 	
 	// This function is global because it's really useful in all parts of the game

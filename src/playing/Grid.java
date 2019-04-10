@@ -18,17 +18,18 @@ import org.lwjgl.glfw.GLFW;
 
 public class Grid {
 
-	private static final String PNG             = ".png";
-	private static final String PATH            = "/tiles/";
-	private static final String BLANK           = "x";
-	private static final String ACROSS          = "path_as";
-	private static final String DOWN            = "path_ds";
-	private static final String STOP_BOTTOM     = "path_sb";
-	private static final String STOP_TOP        = "path_st";
-	private static final String BOTTOM_TO_LEFT  = "path_bl";
-	private static final String BOTTOM_TO_RIGHT = "path_br";
-	private static final String TOP_TO_LEFT     = "path_tl";
-	private static final String TOP_TO_RIGHT    = "path_tr"; 
+	// File names and defining
+	public static final String PNG             = ".png";
+	public static final String PATH            = "/tiles/";
+	public static final String BLANK           = "x";
+	public static final String ACROSS          = "path_as";
+	public static final String DOWN            = "path_ds";
+	public static final String STOP_BOTTOM     = "path_sb";
+	public static final String STOP_TOP        = "path_st";
+	public static final String BOTTOM_TO_LEFT  = "path_bl";
+	public static final String BOTTOM_TO_RIGHT = "path_br";
+	public static final String TOP_TO_LEFT     = "path_tl";
+	public static final String TOP_TO_RIGHT    = "path_tr"; 
 	
 	private Entity[][] grid;
 	private int x_tiles, y_tiles;
