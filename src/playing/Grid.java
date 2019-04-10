@@ -93,11 +93,9 @@ public class Grid {
 	}
 	
 	public void update() {
-		// Hides the grid lines if you press g
-		if (window.isKeyReleased(GLFW.GLFW_KEY_G)) { // G
-			draw_lines = !draw_lines;
-		}
+
 	}
+	
 	public void draw() {
 		// Drawing the tiles
 		for (int y = 0; y < grid.length; y++) {
@@ -153,6 +151,15 @@ public class Grid {
 			grid[y][x].setName(tile);
 		}
 	}
+
+	// Hides the grid lines 
+	public void turnOnLines() {
+		draw_lines = true;
+	}
+	
+	public void turnOffLines() {
+		draw_lines = false;
+	}
 	
 	public float getTileSize() {
 		return grid_size;
@@ -166,6 +173,21 @@ public class Grid {
 		{
 			return "";
 		}
+	}
+	
+	public float getCoordX(double x) {
+		return round((float)x-(grid_size/2), grid_size);
+	}
+	
+	public float getCoordY(double y) {
+		return round((float)y-(grid_size/2), grid_size);
+	}
+	
+	// rounds a number n to the nearest point p
+	public static float round( float n, float p ) {
+		float remainder = n % p;
+		if    (remainder > p/2) return n + (p - remainder);
+		else  return n - remainder;
 	}
 	
 }

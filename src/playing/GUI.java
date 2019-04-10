@@ -36,6 +36,7 @@ public class GUI {
 	private GUIButton[] buttons;
 
 	private boolean closed = true;
+	private boolean guiClicked = false;
 	
 	// Colours
 	private static final float[] LINE_COLOUR    = {1.0f, 1.0f, 1.0f, 0.7f};
@@ -67,8 +68,8 @@ public class GUI {
 		buttons[19] = new GUIButton("T XX",    BUTTON_SIZE, BUTTON_SIZE, 20);
 		buttons[20] = new GUIButton("T XXI",   BUTTON_SIZE, BUTTON_SIZE, 21);
 		buttons[21] = new GUIButton("T XXII",  BUTTON_SIZE, BUTTON_SIZE, 22);
-		buttons[22] = new GUIButton("T XXIII", BUTTON_SIZE, BUTTON_SIZE, 23);
-		buttons[23] = new GUIButton("Pause",       BUTTON_SIZE, BUTTON_SIZE, 0);
+		buttons[22] = new GUIButton("Delete",  BUTTON_SIZE, BUTTON_SIZE, 23);
+		buttons[23] = new GUIButton("Pause",   BUTTON_SIZE, BUTTON_SIZE, 0);
 		for (int by = 0; by < buttons.length/2; by++) {
 			for (int bx = 0; bx < 2; bx++){
 				buttons[by*2+bx].setPosition(
@@ -83,23 +84,26 @@ public class GUI {
 		double my = Main.window.getMouseY();
 		int screenWidth = Main.window.getWidth();
 		
-		if (!closed) {		
-			
+		// Updates tower buttons, pause buttons
+		if (!closed) {
 			for (GUIButton button : buttons){
 				int temp_state = button.update();
 				if (temp_state > -1) {
+					guiClicked = true;
 					state = temp_state;
 				}
 			}
 		}
 		
+		// Open and close GUI button
 		if (mx > open_button_x &&
 				mx < open_button_x+open_button_w &&
 				my > open_button_y &&
 				my < open_button_y+open_button_h)
 		{
 			colour = HOVER_COLOUR;
-			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
+			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)
+				&& !guiClicked){
 				close();
 			}
 		}
@@ -112,7 +116,9 @@ public class GUI {
 		return state;
 	}
 	
-	public void draw(){		
+	public void draw(){	
+		guiClicked = false;
+		
 		// Drawing the stats box
 		Main.window.setColour(DEFAULT_COLOUR);
 		Main.window.rectangle(stats_x, stats_y, stats_w, stats_h);
@@ -174,6 +180,10 @@ public class GUI {
 			Main.window.drawLine(x, y, x, (y+h)-stats_h);
 		}
 		
+	}
+	
+	public boolean isClicked() {
+		return guiClicked;
 	}
 	
 	public void close() {
