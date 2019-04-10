@@ -54,28 +54,23 @@ public class Texture {
 		return h;
 	}
 	
-	public void setX(float x)
-	{
+	public void setX(float x){
 		this.x = x;
 	}
 	
-	public void setY(float y)
-	{
+	public void setY(float y){
 		this.y = y;
 	}	
 	
-	public float getX()
-	{
+	public float getX(){
 		return x;
 	}
 	
-	public float getY()
-	{
+	public float getY()	{
 		return y;
 	}
 
-	public void draw()
-	{
+	public void draw(){
 		//Makes sure that the current colour doesn't change the texture drawing
 		float colour[] = new float[4];
 		glGetFloatv(GL_CURRENT_COLOR, colour);
