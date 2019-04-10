@@ -65,7 +65,7 @@ public class Texture {
 	public float getX(){
 		return x;
 	}
-	
+	//gets the Y coord
 	public float getY()	{
 		return y;
 	}
