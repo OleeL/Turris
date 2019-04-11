@@ -62,7 +62,7 @@ public class GUI {
 		buttons[2] = new GUIButton("Tower III",BUTTON_SIZE, BUTTON_SIZE, TOWER_3);
 		buttons[3] = new GUIButton("Pause",    BUTTON_SIZE, BUTTON_SIZE, PAUSE);
 		buttons[4] = new GUIButton("Quit",     BUTTON_SIZE, BUTTON_SIZE, QUIT);
-		int btn_len = (int) Math.ceil(buttons.length/2);
+		int btn_len = (int) Math.ceil(buttons.length/2.0);
 		for (int by = 0; by < btn_len; by++) {
 			for (int bx = 0; bx <= 2; bx++){
 				if ( by*2+bx == buttons.length) break; 
@@ -79,6 +79,7 @@ public class GUI {
 	}
 	
 	public int update(){
+		System.out.println(buttons[3].x);
 		int state = -1;
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
