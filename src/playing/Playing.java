@@ -120,7 +120,6 @@ public class Playing {
 		double my = Main.window.getMouseY();
 		float temp_tile_x = grid.getCoordX(mx);
 		float temp_tile_y = grid.getCoordY(my);
-		
 		Entity turret = null;
 		switch (tower_num) {
 			case TOWER_1:

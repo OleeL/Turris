@@ -8,10 +8,11 @@ import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 
+import gui.Text;
 import main.Main;
 
 /**
- * @author Olee
+ * @author Oliver Legg - sgolegg - 201244658
  *
  */
 public class GUI {
@@ -32,6 +33,8 @@ public class GUI {
 	private float stats_x = Main.window.getWidth() - stats_w;
 	private float stats_y = Main.window.getHeight() - stats_h;
 
+	private Text text_coins;
+	private Text text_round;
 	private final float BUTTON_SIZE = 50;
 	private GUIButton[] buttons;
 
@@ -56,6 +59,8 @@ public class GUI {
 						x-w+(bx*BUTTON_SIZE), by*BUTTON_SIZE);
 			}
 		}
+		text_coins = new Text("Coins: ", (int) stats_x+5, (int) stats_y+12, 12);
+		text_round = new Text("Level: ", (int) stats_x+5, (int) stats_y+24, 12);
 	}
 	
 	public int update(){
@@ -100,13 +105,7 @@ public class GUI {
 		
 		guiClicked = false;
 		
-		// Drawing the stats box
-		Main.window.setColour(DEFAULT_COLOUR);
-		Main.window.rectangle(stats_x, stats_y, stats_w, stats_h);
-		Main.window.setColour(LINE_COLOUR);
-		Main.window.drawLine(stats_x, stats_y, stats_x+stats_w, stats_y);
-		Main.window.drawLine(stats_x, stats_y, stats_x, stats_y+stats_h);
-		
+		draw_statistics();
 		
 		// Setting the colours for the open GUI button
 		Main.window.setColour(colour);
@@ -161,6 +160,21 @@ public class GUI {
 			Main.window.drawLine(x, y, x, (y+h)-stats_h);
 		}
 		
+	}
+	
+	public void draw_statistics(){
+		// Drawing the stats box
+		Main.window.setColour(DEFAULT_COLOUR);
+		Main.window.rectangle(stats_x, stats_y, stats_w, stats_h);
+		Main.window.setColour(LINE_COLOUR);
+		Main.window.drawLine(stats_x, stats_y, stats_x+stats_w, stats_y);
+		Main.window.drawLine(stats_x, stats_y, stats_x, stats_y+stats_h);
+		text_coins.text = "Coins: "+Playing.coins;
+		text_round.text = "Level: "+Playing.round;
+		text_coins.setPosition((int) stats_x+5, (int) stats_y+12);
+		text_round.setPosition((int) stats_x+5, (int) stats_y+24);
+		text_coins.draw();
+		text_round.draw();
 	}
 	
 	public boolean isClicked() {
