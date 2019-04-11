@@ -11,9 +11,8 @@ import gui.Texture;
 public class Entity {
 
 	private Texture texture;
-	private float x;
-	private float y;
-	private String name;
+	protected float x, y, w, h;
+	protected String name;
 	
 	/**
 	 * @param String name
@@ -26,6 +25,12 @@ public class Entity {
 		this.texture = texture;
 		this.x = x;
 		this.y = y;
+		this.w = texture.getWidth();
+		this.h = texture.getHeight();
+		
+	}
+	
+	public void draw() {
 	}
 	
 	// Accessor methods:

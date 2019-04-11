@@ -34,6 +34,10 @@ public class Playing {
 	public static final int GRID_ELEMENT = 99;
 	
 	public static int selected = UNSELECTED;
+	
+	// Player stats
+	public static int coins = 100;
+	public static int round = 1;
 		
 	public static void create(){
 		//grid = new Grid(16,12,50);
@@ -110,20 +114,6 @@ public class Playing {
                 (int)(temp_tile_y / grid.getTileSize())).equals(Grid.BLANK);
 	}
 	
-	// Place function for placing regular tiles
-	public static void place(String tile) {
-		double mx = Main.window.getMouseX();
-		double my = Main.window.getMouseY();
-		float temp_tile_x = grid.getCoordX(mx);
-		float temp_tile_y = grid.getCoordY(my);
-		if (Main.window.isMousePressed(Main.window.LEFT_MOUSE) && 
-				!gui.isClicked() &&
-				canPlace()) {
-			grid.insert((int)(temp_tile_x / grid.getTileSize()), 
-					    (int)(temp_tile_y / grid.getTileSize()), tile);
-		}
-	}
-	
 	// Place function for placing turrets
 	public static void place(String tower, int tower_num, int level) {
 		double mx = Main.window.getMouseX();
@@ -156,11 +146,13 @@ public class Playing {
 		if (Main.window.isMousePressed(Main.window.LEFT_MOUSE) && 
 				!gui.isClicked() &&
 				canPlace()) {
+			coins -= ((Turret) turret).getCost();
 			grid.insert((int)(temp_tile_x / grid.getTileSize()), 
 					    (int)(temp_tile_y / grid.getTileSize()), 
 					    tower,
 					    turret,
 					    level);
+			selected = UNSELECTED;
 		}
 	}
 }

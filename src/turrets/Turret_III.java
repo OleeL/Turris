@@ -15,18 +15,24 @@ public class Turret_III extends Turret {
 	 */
 	public Turret_III(float x, float y, float grid_size){
 		super("tiles/tower_3", x, y, grid_size);
-		range = 60;
+		range = 600;
 		damage = 5;
 		rateOfFire = 0.5f;
+		cost = 500;
+		upgrade_cost = 250;
 	}
 
-	public void upgrade() {
+	public int upgrade() {
+		int cost = 0;
 		if (level < MAX_LEVEL) {
 			level++;
 			range += 0.2;
 			damage += 2;
 			rateOfFire -= 0.002;
+			cost = upgrade_cost;
+			upgrade_cost *= 1.8;
 		}
+		return cost;
 	}
 
 }

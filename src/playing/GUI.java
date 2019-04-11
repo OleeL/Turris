@@ -45,31 +45,11 @@ public class GUI {
 	private static float[]       colour         = DEFAULT_COLOUR;
 	
 	public GUI(){
-		buttons = new GUIButton[24];
+		buttons = new GUIButton[4];
 		buttons[0] = new GUIButton("Tower I",      BUTTON_SIZE, BUTTON_SIZE, 1);
 		buttons[1] = new GUIButton("Tower II",     BUTTON_SIZE, BUTTON_SIZE, 2);
 		buttons[2] = new GUIButton("Tower III",    BUTTON_SIZE, BUTTON_SIZE, 3);
-		buttons[3] = new GUIButton("Tower IV",     BUTTON_SIZE, BUTTON_SIZE, 4);
-		buttons[4] = new GUIButton("Tower V",      BUTTON_SIZE, BUTTON_SIZE, 5);
-		buttons[5] = new GUIButton("Tower VI",     BUTTON_SIZE, BUTTON_SIZE, 6);
-		buttons[6] = new GUIButton("Tower VII",    BUTTON_SIZE, BUTTON_SIZE, 7);
-		buttons[7] = new GUIButton("Tower VIII",   BUTTON_SIZE, BUTTON_SIZE, 8);
-		buttons[8] = new GUIButton("Tower IX",     BUTTON_SIZE, BUTTON_SIZE, 9);
-		buttons[9] = new GUIButton("Tower X",      BUTTON_SIZE, BUTTON_SIZE, 10);
-		buttons[10] = new GUIButton("T XI",    BUTTON_SIZE, BUTTON_SIZE, 11);
-		buttons[11] = new GUIButton("T XII",   BUTTON_SIZE, BUTTON_SIZE, 12);
-		buttons[12] = new GUIButton("T XIII",  BUTTON_SIZE, BUTTON_SIZE, 13);
-		buttons[13] = new GUIButton("T XIV",   BUTTON_SIZE, BUTTON_SIZE, 14);
-		buttons[14] = new GUIButton("T XV",    BUTTON_SIZE, BUTTON_SIZE, 15);
-		buttons[15] = new GUIButton("T XVI",   BUTTON_SIZE, BUTTON_SIZE, 16);
-		buttons[16] = new GUIButton("T XVII",  BUTTON_SIZE, BUTTON_SIZE, 17);
-		buttons[17] = new GUIButton("T XVIII", BUTTON_SIZE, BUTTON_SIZE, 18);
-		buttons[18] = new GUIButton("T XIX",   BUTTON_SIZE, BUTTON_SIZE, 19);
-		buttons[19] = new GUIButton("T XX",    BUTTON_SIZE, BUTTON_SIZE, 20);
-		buttons[20] = new GUIButton("T XXI",   BUTTON_SIZE, BUTTON_SIZE, 21);
-		buttons[21] = new GUIButton("T XXII",  BUTTON_SIZE, BUTTON_SIZE, 22);
-		buttons[22] = new GUIButton("Delete",  BUTTON_SIZE, BUTTON_SIZE, 23);
-		buttons[23] = new GUIButton("Pause",   BUTTON_SIZE, BUTTON_SIZE, 0);
+		buttons[3] = new GUIButton("Pause",   BUTTON_SIZE, BUTTON_SIZE, 0);
 		for (int by = 0; by < buttons.length/2; by++) {
 			for (int bx = 0; bx < 2; bx++){
 				buttons[by*2+bx].setPosition(
@@ -116,7 +96,8 @@ public class GUI {
 		return state;
 	}
 	
-	public void draw(){	
+	public void draw(){
+		
 		guiClicked = false;
 		
 		// Drawing the stats box
@@ -161,7 +142,7 @@ public class GUI {
 					open_button_radius);
 		glEnd();
 		
-		// Drawing a line to draw off the GUI
+		// If the GUI is open, show all of the GUI
 		if (!closed)
 		{
 			// Setting the colours for the GUI

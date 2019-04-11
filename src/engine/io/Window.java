@@ -73,7 +73,6 @@ public class Window {
 
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
-		//glEnable(GL_LINE_SMOOTH);
 		glLineWidth(0.5f);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity(); // Resets any previous projection matrices
@@ -250,10 +249,12 @@ public class Window {
 		return buffer.get(0);
 	}
 	
+	// Draws a rectangle
 	public void rectangle(float x, float y, float w, float h) {
         glRectf(x, y, x+w, y+h);
 	}
 
+	// Draws a rectangle with rounded edges
 	public void roundRectangle( 
 			float x, 
 			float y, 
@@ -278,6 +279,7 @@ public class Window {
 		glEnd();
 	}
 	
+	// Draws a live corner
 	public void DrawGLRoundedCorner(float x, float y, double sa, double arc, float r) {
 	    // centre of the arc, for clockwise sense
 	    float cent_x = (float) (x + r * Math.cos(sa + Math.PI / 2));
@@ -296,6 +298,27 @@ public class Window {
 	    }
 	}
 	
+	// Draws a circle
+	public void circle(boolean fill, float cx, float cy, float r, int n_seg) {
+		glEnable( GL_LINE_SMOOTH );
+		glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
+		if (fill) {
+			glBegin(GL_POLYGON);
+		}
+		else {
+		    glBegin(GL_LINE_LOOP);
+		}
+	    for (int i = 0; i < n_seg; i++)   {
+	        float theta = 2.0f * 3.1415926f * i / n_seg;//get the current angle 
+	        float x = r * (float) Math.cos(theta);//calculate the x component 
+	        float y = r * (float) Math.sin(theta);//calculate the y component 
+	        glVertex2f(x + cx, y + cy);//output vertex 
+	    }
+	    glEnd();
+	    glDisable( GL_LINE_SMOOTH );
+	}
+	
+	// Draws a line from one point to another
 	public void drawLine(float x1, float y1, float x2, float y2)
 	{
 		glBegin(GL_LINES);

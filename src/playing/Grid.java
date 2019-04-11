@@ -107,6 +107,14 @@ public class Grid {
 			}
 		}
 		
+		// Drawing radius on towers
+		for (int y = 0; y < grid.length; y++) {
+			for (int x = 0; x < grid[0].length; x++) {
+				if (grid[y][x] instanceof Turret) {
+					grid[y][x].draw();
+				}
+			}
+		}
 		// Drawing grid lines
 		if (draw_lines) {
 			window.setColour(0.2f, 0.2f, 0.2f, 0.5f);
