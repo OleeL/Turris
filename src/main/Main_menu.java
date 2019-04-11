@@ -91,6 +91,7 @@ public class Main_menu {
 				
 			case NEW_GAME:
 				Main.state = Main.PLAYING;
+				state = MAIN;
 				break;
 				
 			case LOAD_GAME:

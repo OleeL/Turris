@@ -79,7 +79,6 @@ public class GUI {
 	}
 	
 	public int update(){
-		System.out.println(buttons[3].x);
 		int state = -1;
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
