@@ -8,13 +8,13 @@
 package playing;
 
 import gui.Texture;
+import turrets.*;
+
 import static main.Main.window;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
-import org.lwjgl.glfw.GLFW;
 
 public class Grid {
 
@@ -29,7 +29,10 @@ public class Grid {
 	public static final String BOTTOM_TO_LEFT  = "path_bl";
 	public static final String BOTTOM_TO_RIGHT = "path_br";
 	public static final String TOP_TO_LEFT     = "path_tl";
-	public static final String TOP_TO_RIGHT    = "path_tr"; 
+	public static final String TOP_TO_RIGHT    = "path_tr";
+	public static final String TOWER_1         = "tower_1";
+	public static final String TOWER_2         = "tower_2";
+	public static final String TOWER_3         = "tower_3";
 	
 	private Entity[][] grid;
 	private int x_tiles, y_tiles;
@@ -101,7 +104,6 @@ public class Grid {
 		for (int y = 0; y < grid.length; y++) {
 			for (int x = 0; x < grid[0].length; x++) {
 				grid[y][x].getTexture().draw();
-				
 			}
 		}
 		
@@ -123,33 +125,25 @@ public class Grid {
 		}
 	}
 	
+	// inserts non turrets into the board
 	public void insert(int x, int y, String tile) {
-		if (grid[y][x] == null)
-		{
-			grid[y][x] = new Entity(
-					tile, 
-					new Texture(
-							PATH+tile+PNG, 
-							(int) (x*grid_size), 
-							(int) (y*grid_size),
-							grid_size / 100,  // The tiles are 100 x 100
-							grid_size / 100), // The tiles are 100 x 100
-					x*grid_size, 
-					y*grid_size);
-		}
-		else
-		{
-			grid[y][x].setTexture(
-					new Texture(
-						PATH+tile+PNG,
-						x*((int)grid_size),
-						y*((int)grid_size),
-						grid_size / 100, // The tiles are 100 x 100
-						grid_size / 100  // The tiles are 100 x 100
-					)
-				);
-			grid[y][x].setName(tile);
-		}
+		// Creates a new entity on the grid
+		grid[y][x] = new Entity(
+				tile, 
+				new Texture(
+						PATH+tile+PNG, 
+						(int) (x*grid_size), 
+						(int) (y*grid_size),
+						grid_size / 100,  // The tiles are 100 x 100
+						grid_size / 100), // The tiles are 100 x 100
+				x*grid_size, 
+				y*grid_size);
+	}
+	
+	// inserts a turret into the board
+	public void insert(int x, int y, String tile, Entity turret, int level) {
+		grid[y][x] = turret;
+		for (int i = 0; i < level; i++) ((Turret) grid[y][x]).upgrade();
 	}
 
 	// Hides the grid lines 

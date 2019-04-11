@@ -14,7 +14,6 @@ public class Texture {
 	private int id;
 	private float x, y, w, h;;
 	private Image texture;
-	private String filename;
 	
 	/**
 	 * The following parameters to enter:
@@ -25,7 +24,6 @@ public class Texture {
 	 * @param float y scale position (0.0 - 1.0)
 	 */
 	public Texture(String filename, int x, int y, float w, float h) {
-		this.filename = filename;
 		id = glGenTextures();
 		texture = Image.loadImage("./assets/images/"+filename);
 		this.x = x;
@@ -46,26 +44,32 @@ public class Texture {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	// Sets the width of the texture
 	public float getWidth() {
 		return w;
 	}
 
+	// Sets the height of the texture
 	public float getHeight() {
 		return h;
 	}
 	
+	// Sets the X coordinate
 	public void setX(float x){
 		this.x = x;
 	}
 	
+	// Sets the Y coordinate
 	public void setY(float y){
 		this.y = y;
 	}	
 	
+	// Gets the X coordinate
 	public float getX(){
 		return x;
 	}
-	//gets the Y coord
+	
+	// Gets the Y coordinate
 	public float getY()	{
 		return y;
 	}

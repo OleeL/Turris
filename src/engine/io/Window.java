@@ -6,7 +6,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 /**
  * @author Team 62

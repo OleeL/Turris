@@ -7,13 +7,14 @@
 package playing;
 
 import main.Main;
+import turrets.*;
 
 public class Playing {
 	
 	// Different Levels
 	private static final String LEVEL_1 = "assets/levels/level_1.csv";
-	private static final String LEVEL_2 = "assets/levels/level_2.csv";
-	private static final String LEVEL_3 = "assets/levels/level_3.csv";
+	//private static final String LEVEL_2 = "assets/levels/level_2.csv";
+	//private static final String LEVEL_3 = "assets/levels/level_3.csv";
 
 	// Playing states
 	public static final int PLAYING = 0;
@@ -59,11 +60,11 @@ public class Playing {
 				grid.turnOffLines();
 				break;
 			case TOWER_1:
-				place("tower_1");
+				place("tower_1", TOWER_1, 1);
 				grid.turnOnLines();
 				break;
 			case TOWER_2:
-				place("tower_2");
+				place("tower_2", TOWER_2, 1);
 				grid.turnOnLines();
 				break;
 			case TOWER_3:
@@ -109,7 +110,8 @@ public class Playing {
                 (int)(temp_tile_y / grid.getTileSize())).equals(Grid.BLANK);
 	}
 	
-	public static void place(String tower) {
+	// Place function for placing regular tiles
+	public static void place(String tile) {
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		float temp_tile_x = grid.getCoordX(mx);
@@ -118,7 +120,47 @@ public class Playing {
 				!gui.isClicked() &&
 				canPlace()) {
 			grid.insert((int)(temp_tile_x / grid.getTileSize()), 
-					    (int)(temp_tile_y / grid.getTileSize()), tower);
+					    (int)(temp_tile_y / grid.getTileSize()), tile);
 		}
-	}	
+	}
+	
+	// Place function for placing turrets
+	public static void place(String tower, int tower_num, int level) {
+		double mx = Main.window.getMouseX();
+		double my = Main.window.getMouseY();
+		float temp_tile_x = grid.getCoordX(mx);
+		float temp_tile_y = grid.getCoordY(my);
+		
+		Entity turret = null;
+		switch (tower_num) {
+			case TOWER_1:
+				 turret = new Turret_I(
+							(float)(temp_tile_x / grid.getTileSize()),
+							(float)(temp_tile_y / grid.getTileSize()),
+							grid.getTileSize());
+				break;
+			case TOWER_2:
+				 turret = new Turret_II(
+							(float)(temp_tile_x / grid.getTileSize()),
+							(float)(temp_tile_y / grid.getTileSize()),
+							grid.getTileSize());
+				break;
+			case TOWER_3:
+				 turret = new Turret_III(
+							(float)(temp_tile_x / grid.getTileSize()),
+							(float)(temp_tile_y / grid.getTileSize()),
+							grid.getTileSize());
+				break;
+		}
+			
+		if (Main.window.isMousePressed(Main.window.LEFT_MOUSE) && 
+				!gui.isClicked() &&
+				canPlace()) {
+			grid.insert((int)(temp_tile_x / grid.getTileSize()), 
+					    (int)(temp_tile_y / grid.getTileSize()), 
+					    tower,
+					    turret,
+					    level);
+		}
+	}
 }

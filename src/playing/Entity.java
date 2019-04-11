@@ -14,6 +14,13 @@ public class Entity {
 	private float x;
 	private float y;
 	private String name;
+	
+	/**
+	 * @param String name
+	 * @param Texture texture
+	 * @param float x position 
+	 * @param float y position 
+	 */
 	public Entity(String name, Texture texture, float x, float y){
 		this.name = name;
 		this.texture = texture;
@@ -50,8 +57,7 @@ public class Entity {
 		return texture;
 	}
 	
-	public String getName()
-	{
+	public String getName(){
 		return name;
 	}
 	

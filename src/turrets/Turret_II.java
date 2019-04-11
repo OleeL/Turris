@@ -1,7 +1,5 @@
 package turrets;
 
-import gui.Texture;
-
 /**
  * @author Team 62
  * 
@@ -12,12 +10,12 @@ public class Turret_II extends Turret {
 
 	
 	/**
-	 * @param integer x position 
-	 * @param integer y position 
-	 * @param Texture texture 
+	 * @param float x position 
+	 * @param float y position 
+	 * @param float grid_size
 	 */
-	public Turret_II(Texture texture, float x, float y) {
-		super("Turret_II", texture, x, y);
+	public Turret_II(float x, float y, float grid_size) {
+		super("tiles/tower_2", x, y, grid_size);
 		range = 12;
 		damage = 40;
 		rateOfFire = 5;
