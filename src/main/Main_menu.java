@@ -91,7 +91,6 @@ public class Main_menu {
 				
 			case NEW_GAME:
 				Main.state = Main.PLAYING;
-				
 				break;
 				
 			case LOAD_GAME:
@@ -107,10 +106,9 @@ public class Main_menu {
 	public static void button_push(int button)
 	{
 		state = button;
-		switch (button)
-		{
-		case EXIT:
-			System.exit(-1);			
+		switch (button){
+			case EXIT:
+				System.exit(-1);			
 		}
 	}
 	

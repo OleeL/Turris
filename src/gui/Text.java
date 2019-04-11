@@ -25,10 +25,10 @@ public class Text {
 		
 		// Creating the font        
         try {
-			font = new Font("./assets/fonts/SEGOEUI.TTF", size);
+			font = new Font("./assets/fonts/TIMESBD.TTF", size);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 	}	
 	
 	public Font getFont() {
@@ -43,7 +43,12 @@ public class Text {
 	public void setFont(String fontName, int fontStyle, int size)
 	{
 		try {
-			font = new Font(fontName, size);
+			try {
+				font = new Font(fontName, size);
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	

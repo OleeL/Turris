@@ -12,7 +12,6 @@ import static org.lwjgl.opengl.GL11.*;
 public class Font {
    
    //Constants
-   @SuppressWarnings("serial")
    private final Map<Integer,String> CHARS = new HashMap<Integer,String>() {{
         put(0, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         put(1, "abcdefghijklmnopqrstuvwxyz");
@@ -75,12 +74,9 @@ public class Font {
         // Binds the texture to the id.
         glBindTexture(GL_TEXTURE_2D, fontTextureId);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,(int) getFontImageWidth(),(int) getFontImageHeight(),0, GL_RGBA, GL_UNSIGNED_BYTE, asByteBuffer());
- 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        
-        // Unbinds the texture from the id.
-		glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
     
     //Functions
@@ -99,24 +95,21 @@ public class Font {
             float cy = 1f / getFontImageHeight() * getCharY(c);
  
             glTexCoord2f(cx, cy);
-            glVertex2f(xTmp, y);
+            glVertex3f(xTmp, y, 0);
  
             glTexCoord2f(cx + cw, cy);
-            glVertex2f(xTmp + width, y);
+            glVertex3f(xTmp + width, y, 0);
  
             glTexCoord2f(cx + cw, cy + ch);
-            glVertex2f(xTmp + width, y + height);
+            glVertex3f(xTmp + width, y + height, 0);
  
             glTexCoord2f(cx, cy + ch);
-            glVertex2f(xTmp, y + height);
+            glVertex3f(xTmp, y + height, 0);
  
             xTmp += width;
         }
-        
         glEnd();
-        
-		// Unbinds the texture from the id.
-		glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
     
     //Conversions

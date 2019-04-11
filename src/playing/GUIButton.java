@@ -11,7 +11,7 @@ import main.Main;
  */
 public class GUIButton {
 	private Text text;
-	private float x, y, w, h;
+	public float x, y, w, h;
 	private int code;
 	private final float[] FONT_COLOUR           = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private final float[] DEFAULT_BUTTON_COLOUR = { 0.0f, 0.0f, 0.0f, 0.5f };

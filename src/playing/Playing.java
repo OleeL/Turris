@@ -7,6 +7,7 @@
 package playing;
 
 import main.Main;
+import main.Main_menu;
 import turrets.*;
 
 public class Playing {
@@ -31,12 +32,13 @@ public class Playing {
 	public static final int TOWER_1      = 1;
 	public static final int TOWER_2      = 2;
 	public static final int TOWER_3      = 3;
+	public static final int QUIT         = 98;
 	public static final int GRID_ELEMENT = 99;
 	
 	public static int selected = UNSELECTED;
 	
 	// Player stats
-	public static int coins = 100;
+	public static int coins = 1000;
 	public static int round = 1;
 		
 	public static void create(){
@@ -64,16 +66,21 @@ public class Playing {
 				grid.turnOffLines();
 				break;
 			case TOWER_1:
-				place("tower_1", TOWER_1, 1);
+				place(TOWER_1, 1);
 				grid.turnOnLines();
 				break;
 			case TOWER_2:
-				place("tower_2", TOWER_2, 1);
+				place(TOWER_2, 1);
 				grid.turnOnLines();
 				break;
 			case TOWER_3:
+				place(TOWER_3, 1);
 				grid.turnOnLines();
 				break;
+			case QUIT:
+				Main.state = Main.MAIN_MENU;
+				Main_menu.state = Main_menu.MAIN;
+				selected = UNSELECTED;
 			case PAUSE:
 				break;
 		}
@@ -115,7 +122,7 @@ public class Playing {
 	}
 	
 	// Place function for placing turrets
-	public static void place(String tower, int tower_num, int level) {
+	public static void place(int tower_num, int level) {
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		float temp_tile_x = grid.getCoordX(mx);
@@ -144,13 +151,15 @@ public class Playing {
 			
 		if (Main.window.isMousePressed(Main.window.LEFT_MOUSE) && 
 				!gui.isClicked() &&
-				canPlace()) {
+				canPlace() &&
+				coins >= ((Turret) turret).getCost()){
 			coins -= ((Turret) turret).getCost();
 			grid.insert((int)(temp_tile_x / grid.getTileSize()), 
 					    (int)(temp_tile_y / grid.getTileSize()), 
-					    tower,
+					    turret.getName(),
 					    turret,
 					    level);
+			System.out.println("here");
 			selected = UNSELECTED;
 		}
 	}

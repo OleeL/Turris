@@ -15,7 +15,7 @@ public class Turret_III extends Turret {
 	 */
 	public Turret_III(float x, float y, float grid_size){
 		super("turrets/turret_3", x, y, grid_size);
-		range = 600;
+		range = 225;
 		damage = 5;
 		rateOfFire = 0.5f;
 		cost = 500;
