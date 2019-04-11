@@ -15,7 +15,7 @@ public class Turret_II extends Turret {
 	 * @param float grid_size
 	 */
 	public Turret_II(float x, float y, float grid_size) {
-		super("tiles/tower_2", x, y, grid_size);
+		super("turrets/turret_2", x, y, grid_size);
 		range = 100;
 		damage = 40;
 		rateOfFire = 1;
