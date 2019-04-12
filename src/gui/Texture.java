@@ -54,6 +54,25 @@ public class Texture {
 		return h;
 	}
 	
+	// Sets the texture image
+	public void setTexture(String filename) {
+		id = glGenTextures();
+		Image.loadImage("./assets/images/"+filename);
+		texture = Image.loadImage("./assets/images/"+filename);
+		
+		// Binds the texture to the id.
+		glBindTexture(GL_TEXTURE_2D, id);
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
+				texture.getWidth(), texture.getHeight(), 
+				0, GL_RGBA, GL_UNSIGNED_BYTE, texture.getImage());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// Binds the texture to the id.
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	
 	// Sets the X coordinate
 	public void setX(float x){
 		this.x = x;
@@ -62,7 +81,7 @@ public class Texture {
 	// Sets the Y coordinate
 	public void setY(float y){
 		this.y = y;
-	}	
+	}
 	
 	// Gets the X coordinate
 	public float getX(){
@@ -74,6 +93,7 @@ public class Texture {
 		return y;
 	}
 
+	// Draws the texture on a frame
 	public void draw(){
 		//Makes sure that the current colour doesn't change the texture drawing
 		float colour[] = new float[4];
@@ -112,7 +132,8 @@ public class Texture {
 		glColor4f(colour[0], colour[1], colour[2], colour[3]);
 	}
 	
-	public void draw_2(float rotation) {
+	// draws but with a rotation (in degrees, not radians)
+	public void draw(float rotation) {
 		//Makes sure that the current colour doesn't change the texture drawing
 		float colour[] = new float[4];
 		glGetFloatv(GL_CURRENT_COLOR, colour);
