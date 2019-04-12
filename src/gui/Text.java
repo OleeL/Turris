@@ -25,7 +25,7 @@ public class Text {
 		
 		// Creating the font        
         try {
-			font = new Font("./assets/fonts/TIMESBD.TTF", size);
+			font = new Font("./assets/fonts/DroidSans.ttf", size);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 

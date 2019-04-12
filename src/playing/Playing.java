@@ -6,6 +6,7 @@
  */
 package playing;
 
+import enemies.Enemy_1;
 import main.Main;
 import main.Main_menu;
 import turrets.*;
@@ -40,11 +41,15 @@ public class Playing {
 	// Player stats
 	public static int coins = 1000;
 	public static int round = 1;
+	
+	//Delete
+	private static Enemy_1 enemy;
 		
 	public static void create(){
 		//grid = new Grid(16,12,50);
 		grid = new Grid(LEVEL_1);
 		gui  = new GUI();
+		enemy = new Enemy_1(8.5015f, 8.5015f, grid.getTileSize()); // delete
 	}
 	
 	public static void update(){
@@ -93,6 +98,7 @@ public class Playing {
 	public static void draw() {
 		grid.draw();
 		gui.draw();
+		enemy.draw();
 		
 		if (selected != PAUSE && selected != UNSELECTED) {
 			if (!gui.isClosed()) {

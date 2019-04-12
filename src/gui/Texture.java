@@ -23,7 +23,7 @@ public class Texture {
 	 * @param float x scale position (0.0 - 1.0)
 	 * @param float y scale position (0.0 - 1.0)
 	 */
-	public Texture(String filename, int x, int y, float w, float h) {
+	public Texture(String filename, float x, float y, float w, float h) {
 		id = glGenTextures();
 		texture = Image.loadImage("./assets/images/"+filename);
 		this.x = x;
@@ -84,7 +84,6 @@ public class Texture {
 		glBindTexture(GL_TEXTURE_2D, id);
 		
 		// Draws the texture
-		//glTranslatef(x, y, 0);
 		glBegin(GL_QUADS);
 			
 			// Top Left
@@ -106,6 +105,48 @@ public class Texture {
 	        glLoadIdentity();
 		glEnd();
 
+		// Binds the texture to the id.
+		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		// Sets it back to it's original colour
+		glColor4f(colour[0], colour[1], colour[2], colour[3]);
+	}
+	
+	public void draw_2(float rotation) {
+		//Makes sure that the current colour doesn't change the texture drawing
+		float colour[] = new float[4];
+		glGetFloatv(GL_CURRENT_COLOR, colour);
+		glColor4f(1, 1, 1, 1);
+		
+		// Binds the texture to the id.
+		glBindTexture(GL_TEXTURE_2D, id);
+		glPushMatrix(); //Save the current matrix.
+		//Change the current matrix.
+		glTranslatef(x+(w/2), y+(h/2), 0);
+		glRotatef(rotation, 0, 0, 1);
+		
+		glBegin(GL_QUADS);
+		
+		// Top Left
+		glTexCoord2d(0,0);
+		glVertex2f(-w/2, -h/2);
+
+		// Top Right
+		glTexCoord2d(1,0);
+		glVertex2f(w/2, -h/2);
+
+		// Bottom Right
+		glTexCoord2d(1,1); 
+		glVertex2f(w/2, h/2);
+
+		// Bottom Left
+		glTexCoord2d(0,1);
+		glVertex2f(-w/2, h/2);
+
+		glEnd();
+
+		//Reset the current matrix to the one that was saved.
+		glPopMatrix();
 		// Binds the texture to the id.
 		glBindTexture(GL_TEXTURE_2D, 0);
 		
