@@ -36,33 +36,8 @@ public class Grid {
 	
 	private Entity[][] grid;
 	private int x_tiles, y_tiles;
-	private float grid_size;
+	private float grid_size, starting_x, starting_y;
 	private boolean draw_lines = true;
-	
-	public Grid(int x_tiles, int y_tiles, float grid_size){
-		this.x_tiles = x_tiles;
-		this.y_tiles = y_tiles;
-		this.grid_size = grid_size;
-		// Setting up the grid
-		grid = new Entity[y_tiles][x_tiles];
-		
-		// Creates an empty grid
-		for (int y = 0; y < y_tiles; y++) {
-			for (int x = 0; x < x_tiles; x++){
-				grid[y][x] = new Entity(
-						"blank", 
-						new Texture(
-								PATH+BLANK+PNG, 
-								(int) (x*grid_size), 
-								(int) (y*grid_size),
-								grid_size / 100,  // The tiles are 100 x 100
-								grid_size / 100), // The tiles are 100 x 100
-						x*grid_size, 
-						y*grid_size);
-			}
-		}
-		insert(0,0, STOP_TOP);
-	}
 	
 	public Grid(String level) {
 		try {
@@ -75,7 +50,9 @@ public class Grid {
 				String[] values = data.split(",");
 				x_tiles = Integer.parseInt(values[0]);
 				y_tiles = Integer.parseInt(values[1]);
-				grid_size = Integer.parseInt(values[2]);
+				grid_size = Float.parseFloat(values[2]);
+				starting_x = Float.parseFloat(values[3]);
+				starting_y = Float.parseFloat(values[4]);
 				break;
 			}
 			// Setting up the grid
@@ -177,6 +154,14 @@ public class Grid {
 		}
 	}
 	
+	public float getStarting_x() {
+		return starting_x;
+	}
+
+	public float getStarting_y() {
+		return starting_y;
+	}
+
 	public float getCoordX(double x) {
 		return round((float)x-(grid_size/2), grid_size);
 	}
