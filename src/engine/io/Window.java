@@ -255,7 +255,7 @@ public class Window {
 	}
 
 	// Draws a rectangle with rounded edges
-	public void roundRectangle( 
+	public void rectangle( 
 			float x, 
 			float y, 
 			float width, 

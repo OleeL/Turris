@@ -31,7 +31,6 @@ public class Main {
 		
 		// Creates the main menu
 		Main_menu.create();
-		Playing.create();
 		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {

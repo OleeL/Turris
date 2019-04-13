@@ -94,7 +94,7 @@ public class Button {
 	public void draw()
 	{
 		Main.window.setColour(r, g, b, BOX_ALPHA);
-		Main.window.roundRectangle(x, y, width, height, corner_radius);
+		Main.window.rectangle(x, y, width, height, corner_radius);
 		Main.window.setColour(font_r, font_g, font_b, FONT_ALPHA);
 		text.draw();
 	}

@@ -1,8 +1,11 @@
 package main;
 
+import org.lwjgl.glfw.GLFW;
+
 import gui.Button;
 import gui.Cloud;
 import gui.Texture;
+import playing.Playing;
 
 /**
  * @author Team 62
@@ -62,16 +65,31 @@ public class Main_menu {
 					}
 				}
 				break;
-				
 			case NEW_GAME:
+				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+					state = MAIN;
+				}
 				break;
-				
 			case LOAD_GAME:
+				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+					state = MAIN;
+				}
 				break;
-				
+			case HELP:
+				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+					state = MAIN;
+				}
+				break;
+			case ABOUT:
+				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+					state = MAIN;
+				}
+				break;
 			case SETTINGS:
+				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+					state = MAIN;
+				}
 				break;
-				
 		}
 		
 	}
@@ -108,8 +126,12 @@ public class Main_menu {
 	{
 		state = button;
 		switch (button){
+			case NEW_GAME:
+				Playing.create();
+				break;
 			case EXIT:
-				System.exit(-1);			
+				System.exit(-1);
+				break;
 		}
 	}
 	
