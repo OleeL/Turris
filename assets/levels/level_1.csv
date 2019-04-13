@@ -1,4 +1,4 @@
-16,12,50,25,-25,,,,,,,,,,,
+16,12,50,10,-25,825,150,0,0,,,,,,,
 path_ds,path_br,path_as,path_bl,path_br,path_as,path_bl,x,x,x,x,x,x,x,x,x
 path_ds,path_ds,x,path_ds,path_ds,x,path_tr,path_bl,x,x,x,x,x,x,x,x
 path_ds,path_tr,path_bl,path_ds,path_ds,x,x,path_ds,x,x,x,x,x,x,x,x

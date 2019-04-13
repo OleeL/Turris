@@ -36,7 +36,9 @@ public class Grid {
 	
 	private Entity[][] grid;
 	private int x_tiles, y_tiles;
-	private float grid_size, starting_x, starting_y;
+	private float grid_size;
+	public float spawn_x, spawn_y, finish_x, finish_y;
+	public int start_tileX, start_tileY;
 	private boolean draw_lines = true;
 	
 	public Grid(String level) {
@@ -51,8 +53,12 @@ public class Grid {
 				x_tiles = Integer.parseInt(values[0]);
 				y_tiles = Integer.parseInt(values[1]);
 				grid_size = Float.parseFloat(values[2]);
-				starting_x = Float.parseFloat(values[3]);
-				starting_y = Float.parseFloat(values[4]);
+				spawn_x = Float.parseFloat(values[3]);
+				spawn_y = Float.parseFloat(values[4]);
+				finish_x = Float.parseFloat(values[5]);
+				finish_y = Float.parseFloat(values[6]);
+				start_tileX = Integer.parseInt(values[7]);
+				start_tileY = Integer.parseInt(values[8]);
 				break;
 			}
 			// Setting up the grid
@@ -152,14 +158,6 @@ public class Grid {
 		{
 			return "";
 		}
-	}
-	
-	public float getStarting_x() {
-		return starting_x;
-	}
-
-	public float getStarting_y() {
-		return starting_y;
 	}
 
 	public float getCoordX(double x) {

@@ -6,6 +6,8 @@
  */
 package playing;
 
+import java.util.ArrayList;
+import enemies.Enemy;
 import enemies.Enemy_1;
 import main.Main;
 import main.Main_menu;
@@ -42,14 +44,17 @@ public class Playing {
 	public static int coins = 1000;
 	public static int round = 1;
 	
-	//Delete
-	private static Enemy_1 enemy;
+
+	private static ArrayList<Enemy> enemies;
 		
 	public static void create(){
-		//grid = new Grid(16,12,50);
-		grid = new Grid(LEVEL_1);
-		gui  = new GUI();
-		enemy = new Enemy_1(8.5015f, 8.5015f, grid.getTileSize()); // delete
+		grid  = new Grid(LEVEL_1);
+		gui   = new GUI();
+
+		Enemy.find_path(grid.start_tileX, grid.start_tileY);
+		enemies = new ArrayList<Enemy>();
+		enemies.add(new Enemy_1(grid.spawn_x, grid.spawn_y, grid.getTileSize())); 
+		
 	}
 	
 	public static void update(){
@@ -57,6 +62,11 @@ public class Playing {
 		// Updates the gui and gets the button if it is pushed
 		int btn = gui.update();
 		grid.update(); // Updates the grid
+
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).update();
+			if (enemies.get(i).reached) enemies.remove(i);
+		}
 		
 		// If the gui is clicked and there is something selected: unselect item
 		if (gui.isClicked() && selected != UNSELECTED) selected = UNSELECTED;
@@ -98,11 +108,13 @@ public class Playing {
 	public static void draw() {
 		grid.draw();
 		gui.draw();
-		enemy.draw();
+		
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).draw();
+		}
 		
 		if (selected != PAUSE && selected != UNSELECTED) {
-			if (!gui.isClosed()) {
-				gui.close();}
+			if (!gui.isClosed()) gui.close();
 			
 			// If you can place the tile in that place, then 
 			if (canPlace())Main.window.setColour(0f, 1f, 0f, 0.5f); //show green
@@ -164,7 +176,6 @@ public class Playing {
 					    turret.getName(),
 					    turret,
 					    level);
-			System.out.println("here");
 			selected = UNSELECTED;
 		}
 	}
