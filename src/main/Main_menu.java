@@ -30,6 +30,7 @@ public class Main_menu {
 	private static float h = 580;
 	private static float helpboxX = (Main.window.getWidth() / 2) - (w/2);
 	private static float helpboxY = (Main.window.getHeight() / 2) - (h/2);
+	private static Button backToMenu = new Button("Back to Menu", 580, 535, 100, 50, MAIN);
 	
 	
 	
@@ -124,11 +125,11 @@ public class Main_menu {
 			case SETTINGS:
 				break;
 			case HELP:
-				
 				Main.window.setColour(0f, 0f, 0f, 0.5f);
-				//howtoplay.draw();
 				Main.window.rectangle(helpboxX, helpboxY, w, h, 20);
 				howtoplay.draw();
+				backToMenu.setFontColour(1f, 1f, 1f);
+				backToMenu.draw();
 				break;
 				
 				
@@ -144,7 +145,7 @@ public class Main_menu {
 				break;
 			case EXIT:
 				System.exit(-1);
-				break;
+				break;	
 		}
 	}
 	
