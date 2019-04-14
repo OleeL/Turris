@@ -11,7 +11,7 @@ import playing.Playing;
  * @author Team 62
  * 
  * Oliver Legg - sgolegg - 201244658
- *
+ * Thomas Coupe - sgtcoupe - 201241037
  */
 public class Main_menu {
 
@@ -24,13 +24,19 @@ public class Main_menu {
 	public static final int EXIT = 6;
 	public static int state = 0;
 	private static Button[] buttons = new Button[4];
-	private static Texture title, background;
+	private static Texture title, background, howtoplay;
 	private static Cloud clouds[] = new Cloud[2];
+	private static float w = 580;
+	private static float h = 580;
+	private static float helpboxX = (Main.window.getWidth() / 2) - (w/2);
+	private static float helpboxY = (Main.window.getHeight() / 2) - (h/2);
+	private static Button backToMenu = new Button("Back to Menu", 580, 535, 100, 50, MAIN);
 	
 	
 	public static void create(){
 		background = new Texture("background_small.jpg", 0, 0, 1f, 1f);
 		title = new Texture("turris_text.png", 283, 25, 1f, 1f);
+		howtoplay = new Texture("howtoplay.png", helpboxX, helpboxY, 1f, 1f);
 		for (int i = 0; i < clouds.length; i++){
 			clouds[i] = new Cloud(i+1);
 		}
@@ -76,7 +82,7 @@ public class Main_menu {
 				}
 				break;
 			case HELP:
-				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+				if (backToMenu.updateClick()) {
 					state = MAIN;
 				}
 				break;
@@ -117,6 +123,14 @@ public class Main_menu {
 				
 			case SETTINGS:
 				break;
+			case HELP:
+				Main.window.setColour(0f, 0f, 0f, 0.5f);
+				Main.window.rectangle(helpboxX, helpboxY, w, h, 20);
+				howtoplay.draw();
+				backToMenu.setFontColour(1f, 1f, 1f);
+				backToMenu.getText().setPosition(580 , 550);
+				backToMenu.draw();
+				break;
 				
 				
 		}
@@ -131,7 +145,7 @@ public class Main_menu {
 				break;
 			case EXIT:
 				System.exit(-1);
-				break;
+				break;	
 		}
 	}
 	
