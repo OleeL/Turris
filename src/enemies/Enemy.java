@@ -24,7 +24,6 @@ public abstract class Enemy {
 	private int prev_t_num = 0;
 	private String path;
 	private float radius;
-	private boolean dead = false;
 	
 	// The center of the enemy
 	private float cx;

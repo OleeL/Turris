@@ -71,7 +71,7 @@ public class Playing {
 			if (enemies.get(i).reached) enemies.remove(i);
 		}
 		
-		// Updates the enemies
+		// Fires arrows at the enemies 
 		for (int turret = 0; turret < grid.turrets.size(); turret++) {
 			for (int enemy = 0; enemy < enemies.size(); enemy++) {
 				Enemy e = enemies.get(enemy);
@@ -85,8 +85,19 @@ public class Playing {
 			}
 		}
 		
-		// Updates the arrows
-		for (int i = 0; i < arrows.size(); i++) arrows.get(i).update();
+		// Updates the arrows & checks if the enemies are hit by the arrows
+		for (int arrow = 0; arrow < arrows.size(); arrow++) {
+			arrows.get(arrow).update();
+			for (int enemy = 0; enemy < enemies.size(); enemy++) {
+				if (arrows.get(arrow).collidesWith(
+						enemies.get(enemy).getCX(), 
+						enemies.get(enemy).getCY(), 
+						enemies.get(enemy).getRadius())) {
+					enemies.remove(enemy);
+					arrows.remove(arrow);
+				}
+			}
+		}
 				
 		// If the gui is clicked and there is something selected: unselect item
 		if (gui.isClicked() && selected != UNSELECTED) selected = UNSELECTED;
