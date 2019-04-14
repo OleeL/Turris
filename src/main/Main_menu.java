@@ -11,7 +11,7 @@ import playing.Playing;
  * @author Team 62
  * 
  * Oliver Legg - sgolegg - 201244658
- *
+ * Thomas Coupe - sgtcoupe - 201241037
  */
 public class Main_menu {
 
@@ -31,7 +31,6 @@ public class Main_menu {
 	private static float helpboxX = (Main.window.getWidth() / 2) - (w/2);
 	private static float helpboxY = (Main.window.getHeight() / 2) - (h/2);
 	private static Button backToMenu = new Button("Back to Menu", 580, 535, 100, 50, MAIN);
-	
 	
 	
 	public static void create(){
@@ -83,7 +82,7 @@ public class Main_menu {
 				}
 				break;
 			case HELP:
-				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+				if (backToMenu.updateClick()) {
 					state = MAIN;
 				}
 				break;
@@ -129,6 +128,7 @@ public class Main_menu {
 				Main.window.rectangle(helpboxX, helpboxY, w, h, 20);
 				howtoplay.draw();
 				backToMenu.setFontColour(1f, 1f, 1f);
+				backToMenu.getText().setPosition(580 , 550);
 				backToMenu.draw();
 				break;
 				

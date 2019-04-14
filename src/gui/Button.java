@@ -2,6 +2,7 @@
  * @author Team 62
  * 
  * Oliver Legg - sgolegg - 201244658
+ * Thomas Coupe - sgtcoupe - 201241037
  *
  */
 
@@ -117,5 +118,13 @@ public class Button {
 	// Sets the name of the button.
 	public void setName(String name) {
 		this.name = name;
+	}
+	// returns button width
+	public int getWidth() {
+		return width;
+	}
+	//returns button height
+	public int getHeight() {
+		return height;
 	}
 }

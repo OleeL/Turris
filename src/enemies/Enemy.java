@@ -12,7 +12,7 @@ import engine.io.Node;
  * @author Team 62
  * 
  * Oliver Legg - sgolegg - 201244658
- * Thomas Coupe - sgtcoupe - 
+ * Thomas Coupe - sgtcoupe - 201241037
  *
  */
 public abstract class Enemy {
