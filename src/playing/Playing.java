@@ -75,7 +75,10 @@ public class Playing {
 		for (int turret = 0; turret < grid.turrets.size(); turret++) {
 			for (int enemy = 0; enemy < enemies.size(); enemy++) {
 				Enemy e = enemies.get(enemy);
-				Arrow arrow = grid.turrets.get(turret).shootAt(e.getX(), e.getY());
+				Arrow arrow = grid.turrets.get(turret).shootAt(
+						e.getCX(),
+						e.getCY()
+					);
 				if (arrow != null) {
 					arrows.add(arrow);
 				}

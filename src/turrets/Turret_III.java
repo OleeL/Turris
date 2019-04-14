@@ -17,8 +17,9 @@ public class Turret_III extends Turret {
 		super("turrets/turret_3", x, y, grid_size);
 		range = 225;
 		damage = 5;
-		rateOfFire = 0.5f;
+		rateOfFire = 100;
 		cost = 500;
+		arrowSpeed = 10;
 		upgrade_cost = 250;
 	}
 
