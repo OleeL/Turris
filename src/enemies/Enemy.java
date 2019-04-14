@@ -85,6 +85,7 @@ public abstract class Enemy {
         }
 	}
 	
+	// Processes the movement of the object
 	public void physics() {
 		// ORB CODE
 		// Orb follows path
