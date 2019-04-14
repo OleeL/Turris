@@ -46,6 +46,7 @@ public class Playing {
 	
 
 	private static ArrayList<Enemy> enemies;
+	private static ArrayList<Arrow> arrows;
 		
 	public static void create(){
 		grid  = new Grid(LEVEL_1);
@@ -67,6 +68,15 @@ public class Playing {
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).update();
 			if (enemies.get(i).reached) enemies.remove(i);
+		}
+		
+		// Updates the enemies
+		for (int turret = 0; turret < grid.turrets.size(); turret++) {
+			for (int enemy = 0; enemy < enemies.size(); enemy++) {
+				Enemy e = enemies.get(enemy);
+				Arrow arrow = grid.turrets.get(turret).kill(e.getX(), e.getY());
+				if (arrow != null) arrows.add(arrow);
+			}
 		}
 		
 		// If the gui is clicked and there is something selected: unselect item

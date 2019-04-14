@@ -10,7 +10,7 @@ import gui.Texture;
  */
 public class Entity {
 
-	private Texture texture;
+	protected Texture texture;
 	protected float x, y, w, h;
 	protected String name;
 	

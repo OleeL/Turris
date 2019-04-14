@@ -1,6 +1,5 @@
 package turrets;
 
-import enemies.Enemy;
 import main.Main;
 
 public class Arrow {
@@ -12,15 +11,11 @@ public class Arrow {
 	private float xvel;
 	private float yvel;
 	private float damage;
-	// Target stats
-	private float tx, ty;
+	
 	public Arrow(float x, float y, float tx, float ty, float damage) {
 		this.x = x;
 		this.y = y;
 		this.damage = damage;
-		
-		this.tx = tx;
-		this.ty = ty;
     	
 		float direction = (float) Math.toDegrees(Math.atan2(ty-y, tx-x));
         
@@ -50,6 +45,18 @@ public class Arrow {
 	public void draw() {
 		Main.window.setColour(0,0,0,1);
 		Main.window.circle(true, x, y, radius, 16);
+	}
+	
+	public boolean collidesWith(float ex, float ey, float er) {
+		return radius+er > Math.sqrt(Math.pow(y - ey, 2)+Math.pow(x - ex, 2));
+	}
+	
+	public boolean isDestroyed() {
+		return destroy;
+	}
+	
+	public float getDamage() {
+		return damage;
 	}
 
 }

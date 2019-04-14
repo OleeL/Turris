@@ -23,6 +23,7 @@ public abstract class Enemy {
 	private int t_num = 0; // Texture number
 	private int prev_t_num = 0;
 	private String path;
+	private float radius;
 	
 	// The center of the enemy
 	private float cx;
@@ -53,6 +54,7 @@ public abstract class Enemy {
 		this.orb_x = head.x;
 		this.orb_y = head.y;
 		this.direction = (float) Math.toDegrees(Math.atan2(orb_y-cy, orb_x-cx));
+		this.radius = ((w - h)/2) + h;
 	}
 	
 	public void update(){
@@ -214,5 +216,13 @@ public abstract class Enemy {
 			return new Node(x-1, y);
 		}
 		return null;
+	}
+	
+	public float getX() {
+		return x;
+	}
+	
+	public float getY() {
+		return y;
 	}
 }

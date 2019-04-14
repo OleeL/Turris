@@ -41,10 +41,11 @@ public abstract class Turret extends Entity {
 	public abstract int upgrade();
 	
 	// Pass the target x and target y
-	public void kill(float tx, float ty) {
+	public Arrow kill(float tx, float ty) {
 		if (inRange(tx, ty)){
-			fire_at(tx, ty);
+			return fire_at(tx, ty);
 		}
+		return null;
 	}
 	
 	private boolean inRange(float tx, float ty) {
@@ -55,12 +56,13 @@ public abstract class Turret extends Entity {
 			return false;
 	}
 	
-	private void fire_at(float tx, float ty) {
-		new Arrow(x, y, tx, ty, damage);
+	private Arrow fire_at(float tx, float ty) {
+		return new Arrow(x, y, tx, ty, damage);
 	}
 	
 	@Override
 	public void draw() {
+		texture.draw();
 		// Line segments on circle of visualised radius
 		int line_segments = 64;
 		double mx = Main.window.getMouseX();

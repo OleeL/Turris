@@ -14,6 +14,7 @@ import static main.Main.window;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Grid {
@@ -35,6 +36,7 @@ public class Grid {
 	public static final String TOWER_3         = "tower_3";
 	
 	private Entity[][] grid;
+	public ArrayList<Turret> turrets = new ArrayList<Turret>();
 	private int x_tiles, y_tiles;
 	private float grid_size;
 	public float spawn_x, spawn_y, finish_x, finish_y;
@@ -79,25 +81,23 @@ public class Grid {
 	}
 	
 	public void update() {
-
+		
 	}
 	
 	public void draw() {
 		// Drawing the tiles
 		for (int y = 0; y < grid.length; y++) {
 			for (int x = 0; x < grid[0].length; x++) {
-				grid[y][x].getTexture().draw();
+				if (!(grid[y][x] instanceof Turret))
+					grid[y][x].getTexture().draw();
 			}
 		}
 		
-		// Drawing radius on towers
-		for (int y = 0; y < grid.length; y++) {
-			for (int x = 0; x < grid[0].length; x++) {
-				if (grid[y][x] instanceof Turret) {
-					grid[y][x].draw();
-				}
-			}
+		// Drawing the towers
+		for (int turret = 0; turret < turrets.size(); turret++) {
+			turrets.get(turret).draw();
 		}
+		
 		// Drawing grid lines
 		if (draw_lines) {
 			window.setColour(0.2f, 0.2f, 0.2f, 0.5f);
@@ -134,6 +134,7 @@ public class Grid {
 	// inserts a turret into the board
 	public void insert(int x, int y, String tile, Entity turret, int level) {
 		grid[y][x] = turret;
+		turrets.add((Turret) turret);
 		for (int i = 0; i < level; i++) ((Turret) grid[y][x]).upgrade();
 	}
 
