@@ -12,11 +12,11 @@ import engine.io.Node;
  * @author Team 62
  * 
  * Oliver Legg - sgolegg - 201244658
- * Thomas Coupe - sgtcoupe - 
+ * Thomas Coupe - sgtcoupe - 201241037
  *
  */
 public abstract class Enemy {
-	protected int healthpoints;
+	public int health;
 	protected float x, y, w, h, scale, xvel, yvel, end_time, speed;
 	private float time = 90000000;
 	protected Texture texture;
