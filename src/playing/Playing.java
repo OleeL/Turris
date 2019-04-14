@@ -63,6 +63,7 @@ public class Playing {
 		int btn = gui.update();
 		grid.update(); // Updates the grid
 
+		// Updates the enemies
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).update();
 			if (enemies.get(i).reached) enemies.remove(i);

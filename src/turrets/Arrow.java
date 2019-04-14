@@ -6,15 +6,15 @@ import main.Main;
 public class Arrow {
 
 	public float x, y;
-	private int damage;
 	private boolean destroy = false;
 	private int radius = 5;
 	private int speed = 5;
 	private float xvel;
 	private float yvel;
+	private float damage;
 	// Target stats
 	private float tx, ty;
-	public Arrow(float x, float y, float tx, float ty, int damage) {
+	public Arrow(float x, float y, float tx, float ty, float damage) {
 		this.x = x;
 		this.y = y;
 		this.damage = damage;

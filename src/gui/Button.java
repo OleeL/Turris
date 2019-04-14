@@ -34,19 +34,25 @@ public class Button {
 		this.width = width;
 		this.height = height;
 		this.state = state;
+		
+		// Creates text to go on the button
 		text = new Text(name, x, y, 16);
 	}
 	
+	// Returns the number put into the button on creation
+	// The number corresponds to the action that you want carried out next
 	public int getState()
 	{
 		return state;
 	}
 	
+	// Gets the text on the button
 	public Text getText()
 	{
 		return text;
 	}
 	
+	// Sets the button colour
 	public void setButtonColour(float r, float g, float b)
 	{
 		this.r = r;
@@ -54,6 +60,7 @@ public class Button {
 		this.b = b;
 	}
 	
+	// Sets the fonts colour
 	public void setFontColour(float r, float g, float b)
 	{
 		this.font_r = r;
@@ -61,12 +68,14 @@ public class Button {
 		this.font_b = b;
 	}
 	
+	// Sets the position of the button
 	public void setPosition(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
 	}
 	
+	// Checks if the button is pressed (update this every frame)
 	public boolean updateClick()
 	{
 		if (Main.window.getMouseX() > x &&
@@ -91,6 +100,7 @@ public class Button {
 		return false;
 	}
 	
+	// draws the button (update this every frame in the draw function)
 	public void draw()
 	{
 		Main.window.setColour(r, g, b, BOX_ALPHA);
@@ -99,10 +109,12 @@ public class Button {
 		text.draw();
 	}
 
+	// Gets the name of the button
 	public String getName() {
 		return name;
 	}
 
+	// Sets the name of the button.
 	public void setName(String name) {
 		this.name = name;
 	}

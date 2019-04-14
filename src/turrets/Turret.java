@@ -40,6 +40,25 @@ public abstract class Turret extends Entity {
 
 	public abstract int upgrade();
 	
+	// Pass the target x and target y
+	public void kill(float tx, float ty) {
+		if (inRange(tx, ty)){
+			fire_at(tx, ty);
+		}
+	}
+	
+	private boolean inRange(float tx, float ty) {
+		double dist = Math.sqrt(Math.pow(tx-x,2) + Math.pow(ty-y,2));
+		if (dist < range)
+			return true;
+		else
+			return false;
+	}
+	
+	private void fire_at(float tx, float ty) {
+		new Arrow(x, y, tx, ty, damage);
+	}
+	
 	@Override
 	public void draw() {
 		// Line segments on circle of visualised radius

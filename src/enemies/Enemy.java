@@ -50,9 +50,9 @@ public abstract class Enemy {
 		this.end_time = 0;
 		this.target = head;
 		this.grid_size = grid_size;
-		this.direction = (float) Math.toDegrees(Math.atan2(dest_y-cy, dest_x-cx));
 		this.orb_x = head.x;
 		this.orb_y = head.y;
+		this.direction = (float) Math.toDegrees(Math.atan2(orb_y-cy, orb_x-cx));
 	}
 	
 	public void update(){
@@ -94,8 +94,8 @@ public abstract class Enemy {
         
 
         double dist = Math.sqrt(Math.pow(cx-orb_x,2) + Math.pow(cy-orb_y,2));
-        if (dist < 20)
-        	orb_speed += 0.05;
+        if (dist < 30)
+        	orb_speed += 0.001;
         else
         	orb_speed = speed;
         
