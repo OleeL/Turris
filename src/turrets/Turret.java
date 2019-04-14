@@ -12,10 +12,14 @@ import playing.Entity;
 
 public abstract class Turret extends Entity {
 
-	protected float rateOfFire, range, damage;
+	protected float range, damage;
 	protected int level, cost, upgrade_cost;
 	public final int MAX_LEVEL = 3;
 	private float game_x, game_y;
+	
+	protected float rateOfFire;
+	private long time, end;
+	private boolean arrowReady;
 	
 	/**
 	 * @param String filename
@@ -41,7 +45,7 @@ public abstract class Turret extends Entity {
 	public abstract int upgrade();
 	
 	// Pass the target x and target y
-	public Arrow kill(float tx, float ty) {
+	public Arrow shootAt(float tx, float ty) {
 		if (inRange(tx, ty)){
 			return fire_at(tx, ty);
 		}
@@ -50,18 +54,28 @@ public abstract class Turret extends Entity {
 	
 	private boolean inRange(float tx, float ty) {
 		double dist = Math.sqrt(Math.pow(tx-x,2) + Math.pow(ty-y,2));
-		if (dist < range)
+		if (dist < range && arrowReady)
 			return true;
 		else
 			return false;
 	}
 	
 	private Arrow fire_at(float tx, float ty) {
+		arrowReady = false;
+		end = (long) ((System.currentTimeMillis( ) / 1000f) + time);
 		return new Arrow(x, y, tx, ty, damage);
 	}
 	
 	@Override
 	public void draw() {
+		// finding the time before the operation is executed
+		time = (long) (System.currentTimeMillis( ) / 1000f);
+		
+		// finding the time after the operation is executed
+		if (time > end) {
+			arrowReady = true;
+		}
+		
 		texture.draw();
 		// Line segments on circle of visualised radius
 		int line_segments = 64;
