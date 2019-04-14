@@ -53,6 +53,7 @@ public class Playing {
 		gui   = new GUI();
 
 		Enemy.find_path(grid.start_tileX, grid.start_tileY);
+		arrows = new ArrayList<Arrow>();
 		enemies = new ArrayList<Enemy>();
 		enemies.add(new Enemy_1(grid.spawn_x, grid.spawn_y, grid.getTileSize())); 
 		
@@ -74,11 +75,16 @@ public class Playing {
 		for (int turret = 0; turret < grid.turrets.size(); turret++) {
 			for (int enemy = 0; enemy < enemies.size(); enemy++) {
 				Enemy e = enemies.get(enemy);
-				Arrow arrow = grid.turrets.get(turret).kill(e.getX(), e.getY());
-				if (arrow != null) arrows.add(arrow);
+				Arrow arrow = grid.turrets.get(turret).shootAt(e.getX(), e.getY());
+				if (arrow != null) {
+					arrows.add(arrow);
+				}
 			}
 		}
 		
+		// Updates the arrows
+		for (int i = 0; i < arrows.size(); i++) arrows.get(i).update();
+				
 		// If the gui is clicked and there is something selected: unselect item
 		if (gui.isClicked() && selected != UNSELECTED) selected = UNSELECTED;
 		
@@ -120,9 +126,10 @@ public class Playing {
 		grid.draw();
 		gui.draw();
 		
-		for (int i = 0; i < enemies.size(); i++) {
+		for (int i = 0; i < enemies.size(); i++)
 			enemies.get(i).draw();
-		}
+		for (int i = 0; i < arrows.size(); i++)
+			arrows.get(i).draw();
 		
 		if (selected != PAUSE && selected != UNSELECTED) {
 			if (!gui.isClosed()) gui.close();
