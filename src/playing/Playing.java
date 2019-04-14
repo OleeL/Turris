@@ -93,7 +93,12 @@ public class Playing {
 						enemies.get(enemy).getCX(), 
 						enemies.get(enemy).getCY(), 
 						enemies.get(enemy).getRadius())) {
-					enemies.remove(enemy);
+					if (enemies.get(enemy).health < 0) {
+						enemies.remove(enemy);
+					}
+					else {
+						enemies.get(enemy).health -= arrows.get(arrow).getDamage();
+					}
 					arrows.remove(arrow);
 				}
 			}

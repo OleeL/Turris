@@ -88,8 +88,7 @@ public class Grid {
 		// Drawing the tiles
 		for (int y = 0; y < grid.length; y++) {
 			for (int x = 0; x < grid[0].length; x++) {
-				if (!(grid[y][x] instanceof Turret))
-					grid[y][x].getTexture().draw();
+				grid[y][x].getTexture().draw();
 			}
 		}
 		

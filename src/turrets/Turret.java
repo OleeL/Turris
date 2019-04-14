@@ -83,7 +83,6 @@ public abstract class Turret extends Entity {
 			arrowReady = true;
 		}
 		
-		texture.draw();
 		// Line segments on circle of visualised radius
 		int line_segments = 64;
 		double mx = Main.window.getMouseX();
