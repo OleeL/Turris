@@ -17,7 +17,8 @@ public abstract class Turret extends Entity {
 	public final int MAX_LEVEL = 3;
 	private float game_x, game_y;
 	
-	protected float rateOfFire;
+	protected float arrowSpeed = 5;
+	protected long rateOfFire;
 	private long time, end;
 	private boolean arrowReady;
 	
@@ -40,6 +41,7 @@ public abstract class Turret extends Entity {
 			y);
 		this.game_x = x * grid_size;
 		this.game_y = y * grid_size;
+		arrowReady = true;
 	}
 
 	public abstract int upgrade();
@@ -49,27 +51,32 @@ public abstract class Turret extends Entity {
 		if (inRange(tx, ty)){
 			return fire_at(tx, ty);
 		}
+		
 		return null;
 	}
 	
 	private boolean inRange(float tx, float ty) {
-		double dist = Math.sqrt(Math.pow(tx-x,2) + Math.pow(ty-y,2));
-		if (dist < range && arrowReady)
+		double dist = Math.sqrt(
+				Math.pow(tx-(game_x+(w/2)),2) + 
+				Math.pow(ty-(game_y+(h/2)),2));
+		if (dist <= range && arrowReady) {
 			return true;
-		else
+		}
+		else {
 			return false;
+			}
 	}
 	
 	private Arrow fire_at(float tx, float ty) {
 		arrowReady = false;
-		end = (long) ((System.currentTimeMillis( ) / 1000f) + time);
-		return new Arrow(x, y, tx, ty, damage);
+		end = (long) (System.currentTimeMillis( ) + rateOfFire);
+		return new Arrow(game_x+(w/2), game_y+(h/2), tx, ty, damage, arrowSpeed);
 	}
 	
 	@Override
 	public void draw() {
 		// finding the time before the operation is executed
-		time = (long) (System.currentTimeMillis( ) / 1000f);
+		time = (long) System.currentTimeMillis( );
 		
 		// finding the time after the operation is executed
 		if (time > end) {

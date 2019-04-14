@@ -24,6 +24,7 @@ public abstract class Enemy {
 	private int prev_t_num = 0;
 	private String path;
 	private float radius;
+	private boolean dead = false;
 	
 	// The center of the enemy
 	private float cx;
@@ -94,7 +95,6 @@ public abstract class Enemy {
         float orb_dx = (float) Math.cos(orb_dir * Math.PI / 180);
         float orb_dy = (float) Math.sin(orb_dir * Math.PI / 180);
         
-
         double dist = Math.sqrt(Math.pow(cx-orb_x,2) + Math.pow(cy-orb_y,2));
         if (dist < 30)
         	orb_speed += 0.001;
@@ -218,11 +218,28 @@ public abstract class Enemy {
 		return null;
 	}
 	
+	// Gets the x of the enemy
 	public float getX() {
 		return x;
 	}
 	
+	// Gets the y of the enemy
 	public float getY() {
 		return y;
+	}
+	
+	// Gets the center x
+	public float getCX() {
+		return cx;
+	}
+	
+	// Gets the center y
+	public float getCY() {
+		return cy;
+	}
+	
+	// Returns the hitbox (radius) of the enemy.
+	public float getRadius() {
+		return radius;
 	}
 }

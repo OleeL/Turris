@@ -7,12 +7,12 @@ public class Arrow {
 	public float x, y;
 	private boolean destroy = false;
 	private int radius = 5;
-	private int speed = 5;
+	private float speed = 5;
 	private float xvel;
 	private float yvel;
 	private float damage;
 	
-	public Arrow(float x, float y, float tx, float ty, float damage) {
+	public Arrow(float x, float y, float tx, float ty, float damage, float speed) {
 		this.x = x;
 		this.y = y;
 		this.damage = damage;
@@ -48,7 +48,13 @@ public class Arrow {
 	}
 	
 	public boolean collidesWith(float ex, float ey, float er) {
-		return radius+er > Math.sqrt(Math.pow(y - ey, 2)+Math.pow(x - ex, 2));
+		if (radius+er > Math.sqrt(Math.pow(y - ey, 2)+Math.pow(x - ex, 2))){
+			destroy = true;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	public boolean isDestroyed() {
