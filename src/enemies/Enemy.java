@@ -17,7 +17,7 @@ import engine.io.Node;
  */
 public abstract class Enemy {
 	protected int healthpoints;
-	protected float x, y, w, h, scale, speed, xvel, yvel, end_time;
+	protected float x, y, w, h, scale, xvel, yvel, end_time, speed;
 	private float time = 90000000;
 	protected Texture texture;
 	private int t_num = 0; // Texture number
@@ -34,6 +34,8 @@ public abstract class Enemy {
 	private float dest_x, dest_y, grid_size;
 	public boolean reached = false;
 	public float direction;
+	private float orb_x, orb_y, orb_xvel, orb_yvel, orb_speed;
+	
 	public Enemy(String path, float x, float y, float grid_size) {
 		this.x = x;
 		this.y = y;
@@ -49,6 +51,8 @@ public abstract class Enemy {
 		this.target = head;
 		this.grid_size = grid_size;
 		this.direction = (float) Math.toDegrees(Math.atan2(dest_y-cy, dest_x-cx));
+		this.orb_x = head.x;
+		this.orb_y = head.y;
 	}
 	
 	public void update(){
@@ -66,7 +70,7 @@ public abstract class Enemy {
 		physics();
 		
         // Checks the distance from the enemy and the target destination
-        double dist = Math.sqrt(Math.pow(dest_x-cx,2) + Math.pow(dest_y-cy,2));
+        double dist = Math.sqrt(Math.pow(dest_x-orb_x,2) + Math.pow(dest_y-orb_y,2));
         
         // If the enemy is there, move to the next destination
         if ( dist < 5 && dist > -5) {
@@ -80,14 +84,33 @@ public abstract class Enemy {
 	}
 	
 	public void physics() {
+		// ORB CODE
+		// Orb follows path
+    	float orb_dir = (float) Math.toDegrees(Math.atan2(dest_y-orb_y, dest_x-orb_x));
+    	
+        // Sends the orb in the correct direction given the right speed
+        float orb_dx = (float) Math.cos(orb_dir * Math.PI / 180);
+        float orb_dy = (float) Math.sin(orb_dir * Math.PI / 180);
+        
+
+        double dist = Math.sqrt(Math.pow(cx-orb_x,2) + Math.pow(cy-orb_y,2));
+        if (dist < 20)
+        	orb_speed += 0.05;
+        else
+        	orb_speed = speed;
+        
+        // Moves the invisible orb the enemy is following
+        orb_xvel = (orb_speed * orb_dx);
+        orb_yvel = (orb_speed * orb_dy);
+        orb_x += orb_xvel;
+        orb_y += orb_yvel;
+        
+        // ENEMY CODE
         // Gets the center of the enemy
 		cx = x+(w/2);
 		cy = y+(h/2);
-		
-		float t = (float) Math.toDegrees(Math.atan2(dest_y-cy, dest_x-cx));
-    	
-		direction = t;
         
+    	direction = (float) Math.toDegrees(Math.atan2(orb_y-cy, orb_x-cx));
         // Sends the enemy in the correct direction given the right speed
         float direction_x = (float) Math.cos(direction * Math.PI / 180);
         float direction_y = (float) Math.sin(direction * Math.PI / 180);
@@ -95,7 +118,6 @@ public abstract class Enemy {
         // Moves the enemy
         xvel = (speed * direction_x);
         yvel = (speed * direction_y);
-        
         x += xvel;
         y += yvel;
 	}
@@ -131,6 +153,9 @@ public abstract class Enemy {
 		
 		// Draw the enemy (at a rotation too)
 		texture.draw(-((float) Math.toDegrees(rotation)));
+		
+		// Shows the invisible orb
+		//Main.window.circle(true, orb_x, orb_y, 10, 10);
 	}
 	
 	// finds the path for the enemies to go.
