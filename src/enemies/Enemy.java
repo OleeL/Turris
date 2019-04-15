@@ -1,11 +1,8 @@
 package enemies;
 
 import gui.Texture;
-import main.Main;
 import playing.Grid;
 import playing.Playing;
-
-import java.util.ArrayList;
 import engine.io.Node;
 
 /**
@@ -54,7 +51,7 @@ public abstract class Enemy {
 		this.orb_x = head.x;
 		this.orb_y = head.y;
 		this.direction = (float) Math.toDegrees(Math.atan2(orb_y-cy, orb_x-cx));
-		this.radius = ((w - h)/2) + h;
+		this.radius = ((w - h)/2);
 	}
 	
 	public void update(){
