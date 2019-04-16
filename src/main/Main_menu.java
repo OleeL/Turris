@@ -23,20 +23,20 @@ public class Main_menu {
 	public static final int ABOUT = 5;
 	public static final int EXIT = 6;
 	public static int state = 0;
-	private static Button[] buttons = new Button[4];
+	private static Button[] buttons = new Button[5];
 	private static Texture title, background, howtoplay;
 	private static Cloud clouds[] = new Cloud[2];
 	private static float w = 580;
 	private static float h = 580;
-	private static float helpboxX = (Main.window.getWidth() / 2) - (w/2);
-	private static float helpboxY = (Main.window.getHeight() / 2) - (h/2);
+	private static float boxX = (Main.window.getWidth() / 2) - (w/2);
+	private static float boxY = (Main.window.getHeight() / 2) - (h/2);
 	private static Button backToMenu = new Button("Back to Menu", 580, 535, 100, 50, MAIN);
 	
 	
 	public static void create(){
 		background = new Texture("background_small.jpg", 0, 0, 1f, 1f);
 		title = new Texture("turris_text.png", 283, 25, 1f, 1f);
-		howtoplay = new Texture("howtoplay.png", helpboxX, helpboxY, 1f, 1f);
+		howtoplay = new Texture("howtoplay.png", boxX, boxY, 1f, 1f);
 		for (int i = 0; i < clouds.length; i++){
 			clouds[i] = new Cloud(i+1);
 		}
@@ -46,9 +46,9 @@ public class Main_menu {
 		int b_h = 50;
 		int b_yIncrement = 60;
 		
-		String[] names  = {"New Game", "Load Game", "How To Play", "Exit"};
-		int[]    states = { NEW_GAME,   LOAD_GAME,   HELP,          EXIT};
-		for (int i = 0; i < 4; i++){
+		String[] names  = {"New Game", "Load Game","Settings", "How To Play", "Exit"};
+		int[]    states = { NEW_GAME,   LOAD_GAME,  SETTINGS,   HELP,          EXIT};
+		for (int i = 0; i < buttons.length; i++){
 			buttons[i] = new Button(names[i], b_x, b_y, b_w, b_h, states[i]);
 			int text_w= (int) buttons[i].getText().getFont().getTextWidth(
 					buttons[i].getText().getText());
@@ -92,7 +92,7 @@ public class Main_menu {
 				}
 				break;
 			case SETTINGS:
-				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+				if (backToMenu.updateClick()) {
 					state = MAIN;
 				}
 				break;
@@ -122,10 +122,17 @@ public class Main_menu {
 				break;
 				
 			case SETTINGS:
+				Main.window.setColour(0f, 0f, 0f, 0.5f);
+				Main.window.rectangle(boxX, boxY, w, h, 20);
+				backToMenu.setFontColour(1f, 1f, 1f);
+				backToMenu.getText().setPosition(580 , 550);
+				backToMenu.draw();
+				
 				break;
+				
 			case HELP:
 				Main.window.setColour(0f, 0f, 0f, 0.5f);
-				Main.window.rectangle(helpboxX, helpboxY, w, h, 20);
+				Main.window.rectangle(boxX, boxY, w, h, 20);
 				howtoplay.draw();
 				backToMenu.setFontColour(1f, 1f, 1f);
 				backToMenu.getText().setPosition(580 , 550);
