@@ -41,14 +41,16 @@ public class Playing {
 	public static int selected = UNSELECTED;
 	
 	// Player stats
-	public static int coins = 1000;
-	public static int round = 1;
-	
+	public static int coins;
+	public static int round;
 
 	private static ArrayList<Enemy> enemies;
 	private static ArrayList<Arrow> arrows;
 		
 	public static void create(){
+		coins = 1000;
+		round = 1;
+		
 		grid  = new Grid(LEVEL_1);
 		gui   = new GUI();
 
