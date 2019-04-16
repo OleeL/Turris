@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import enemies.Enemy;
 import enemies.Enemy_1;
 import main.Main;
-import main.Main_menu;
 import turrets.*;
 
 public class Playing {
@@ -186,19 +185,19 @@ public class Playing {
 		Entity turret = null;
 		switch (tower_num) {
 			case TOWER_1:
-				 turret = new Turret_I(
+				 turret = new Turret_1(
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());
 				break;
 			case TOWER_2:
-				 turret = new Turret_II(
+				 turret = new Turret_2(
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());
 				break;
 			case TOWER_3:
-				 turret = new Turret_III(
+				 turret = new Turret_3(
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());

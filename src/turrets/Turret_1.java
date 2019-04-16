@@ -2,10 +2,11 @@ package turrets;
 
 /**
  * @author Team 62
+ * 
  * Oliver Legg - sgolegg - 201244658
  *
  */
-public class Turret_III extends Turret {
+public class Turret_1 extends Turret {
 
 	
 	/**
@@ -13,14 +14,14 @@ public class Turret_III extends Turret {
 	 * @param float y position 
 	 * @param float grid_size
 	 */
-	public Turret_III(float x, float y, float grid_size){
-		super("turrets/turret_3", x, y, grid_size);
-		range = 225;
-		damage = 5;
-		rateOfFire = 100;
-		cost = 500;
-		arrowSpeed = 10;
-		upgrade_cost = 250;
+	public Turret_1(float x, float y, float grid_size) {
+		super("turrets/turret_1", x, y, grid_size);
+		range = 150;
+		damage = 20;
+		rateOfFire = 500;
+		cost = 50;
+		arrowSpeed = 12f;
+		upgrade_cost = 30;
 	}
 
 	public int upgrade() {
@@ -29,7 +30,7 @@ public class Turret_III extends Turret {
 			level++;
 			range += 0.2;
 			damage += 2;
-			rateOfFire -= 0.002;
+			rateOfFire -= 0.2;
 			cost = upgrade_cost;
 			upgrade_cost *= 1.8;
 		}
