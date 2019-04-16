@@ -56,6 +56,8 @@ public class Playing {
 		Enemy.find_path(grid.start_tileX, grid.start_tileY);
 		arrows = new ArrayList<Arrow>();
 		enemies = new ArrayList<Enemy>();
+		
+		
 		enemies.add(new Enemy_1(grid.spawn_x, grid.spawn_y, grid.getTileSize())); 
 		
 	}
