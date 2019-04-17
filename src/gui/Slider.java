@@ -12,10 +12,10 @@ public class Slider {
 	private int max;
 	private int sliderWidth;
 	
-	public Slider(String name, int min, int max, int width, int height, int xPos, int yPos, int sliderWidth) {
+	public Slider(String name, int width, int height, int xPos, int yPos, int sliderWidth) {
 		this.name = name;
-		this.min = min;
-		this.max = max;
+		this.min = 0;
+		this.max = width;
 		this.width = width;
 		this.height = height;
 		this.xPos = xPos;
@@ -30,8 +30,7 @@ public class Slider {
 				
 			if(Main.window.isMouseDown(Main.window.LEFT_MOUSE)) {
 				sliderWidth = (int) Main.window.getMouseX() - xPos;
-				if(sliderWidth > max) sliderWidth = max;
-				else if (sliderWidth < min) sliderWidth = min;
+				sliderWidth = Math.min(sliderWidth, max); sliderWidth = Math.max(sliderWidth, min);
 			}
 		}
 	}
