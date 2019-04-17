@@ -35,7 +35,8 @@ public class GUI {
 	private float stats_y = Main.window.getHeight() - stats_h;
 	private Text text_coins;
 	private Text text_round;
-	private int text_size = 24;
+	private Text text_lives;
+	private int text_size = 20;
 
 	// Button variables
 	private final float BUTTON_SIZE = 50;
@@ -76,6 +77,9 @@ public class GUI {
 		text_round = new Text(
 				"Level: ", 
 				(int) stats_x+text_size, (int) stats_y+(text_size*2), text_size);
+		text_lives = new Text(
+				"Lives: ", 
+				(int) stats_x+text_size, (int) stats_y+(text_size*3), text_size);
 	}
 	
 	public int update(){
@@ -95,7 +99,7 @@ public class GUI {
 			}
 		}
 		
-		// Open and close GUI button
+		// The button that open and closes the GUI
 		if (mx > open_button_x &&
 				mx < open_button_x+open_button_w &&
 				my > open_button_y &&
@@ -184,12 +188,17 @@ public class GUI {
 		Main.window.setColour(LINE_COLOUR);
 		Main.window.drawLine(stats_x, stats_y, stats_x+stats_w, stats_y);
 		Main.window.drawLine(stats_x, stats_y, stats_x, stats_y+stats_h);
+		
+		// Statistics
 		text_coins.text = "Coins: "+Playing.coins;
 		text_round.text = "Level: "+Playing.round;
-		text_coins.setPosition((int)stats_x+text_size, (int)stats_y+text_size);
-		text_round.setPosition((int)stats_x+text_size, (int)stats_y+text_size*2);
+		text_lives.text = "Lives: "+Playing.lives;
+		text_coins.setPosition(stats_x+text_size, stats_y+text_size);
+		text_round.setPosition(stats_x+text_size, stats_y+text_size*2);
+		text_lives.setPosition(stats_x+text_size, stats_y+text_size*3);
 		text_coins.draw();
 		text_round.draw();
+		text_lives.draw();
 	}
 	
 	public boolean isClicked() {

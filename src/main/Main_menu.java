@@ -154,7 +154,7 @@ public class Main_menu {
 		state = button;
 		switch (button){
 			case NEW_GAME:
-				Playing.create();
+				Playing.create(Playing.EASY, 1, Playing.LEVEL_1);
 				break;
 			case EXIT:
 				System.exit(-1);

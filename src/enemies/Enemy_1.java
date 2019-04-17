@@ -13,6 +13,7 @@ public class Enemy_1 extends Enemy{
 		super("enemies/enemy_1/", x, y, grid_size);
 		speed = 1.5f;
 		health = 25;
+		value = 5;
 	}
 	
 }

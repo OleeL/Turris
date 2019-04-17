@@ -201,14 +201,6 @@ public class Window {
 		glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);
 	}
 	
-	// Returns true if a certain mouse button is down
-	// 0 = lmb
-	// 1 = rmb
-	public boolean isMouseDown(int mouseButton)
-	{
-		return GLFW.glfwGetMouseButton(window, mouseButton) == 1;
-	}
-	
 	// If a certain key is down, return true
 	public boolean isKeyPressed(int keyCode)
 	{
@@ -219,6 +211,14 @@ public class Window {
 	public boolean isKeyReleased(int keyCode)
 	{
 		return !isKeyDown(keyCode) && keys[keyCode];
+	}
+	
+	// Returns true if a certain mouse button is down
+	// 0 = lmb
+	// 1 = rmb
+	public boolean isMouseDown(int mouseButton)
+	{
+		return GLFW.glfwGetMouseButton(window, mouseButton) == 1;
 	}
 	
 	// If a mouse btn is down, return true

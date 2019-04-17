@@ -8,16 +8,15 @@ package playing;
 
 import java.util.ArrayList;
 import enemies.Enemy;
-import enemies.Enemy_1;
 import main.Main;
 import turrets.*;
 
 public class Playing {
 	
 	// Different Levels
-	private static final String LEVEL_1 = "assets/levels/level_1.csv";
-	//private static final String LEVEL_2 = "assets/levels/level_2.csv";
-	//private static final String LEVEL_3 = "assets/levels/level_3.csv";
+	public static final String LEVEL_1 = "assets/levels/level_1.csv";
+	public static final String LEVEL_2 = "assets/levels/level_2.csv";
+	public static final String LEVEL_3 = "assets/levels/level_3.csv";
 
 	// Playing states
 	public static final int PLAYING = 0;
@@ -37,33 +36,70 @@ public class Playing {
 	public static final int QUIT         = 98;
 	public static final int GRID_ELEMENT = 99;
 	
+	// Difficulty
+	public static final int EASY   = 1;
+	public static final int MEDIUM = 2;
+	public static final int HARD   = 3;
+	
 	public static int selected = UNSELECTED;
 	
 	// Player stats
 	public static int coins;
 	public static int round;
-
+	public static int lives;
+	
+	// Waves | Rounds
+	private static Wave wave;
+	private static long time_end;
+	private static int spawn_num;
+	
 	private static ArrayList<Enemy> enemies;
 	private static ArrayList<Arrow> arrows;
 		
-	public static void create(){
-		coins = 1000;
-		round = 1;
+	public static void create(int difficulty, int round, String level){
 		
-		grid  = new Grid(LEVEL_1);
-		gui   = new GUI();
+		Playing.round = round;
 
+		// Coins and lives depends on the difficulty
+		switch (difficulty) {
+			case HARD:
+				coins = 100;
+				lives = 1;
+				break;
+			case MEDIUM:
+				coins = 250;
+				lives = 10;
+				break;
+			default:
+				coins = 300;
+				lives = 20;
+				break;
+		}
+		
+		// Instantiating for the GUI and grid interface
+		grid = new Grid(level);
+		gui  = new GUI();
+
+		// Instantiates dependencies for the enemy
 		Enemy.find_path(grid.start_tileX, grid.start_tileY);
-		arrows = new ArrayList<Arrow>();
-		enemies = new ArrayList<Enemy>();
+		enemies = new ArrayList<Enemy>(); // Enemy list
+		arrows = new ArrayList<Arrow>();  // Arrow list
 		
-		
-		enemies.add(new Enemy_1(grid.spawn_x, grid.spawn_y, grid.getTileSize())); 
-		
+		// Initialising for the rounds
+		wave = new Wave();
+		time_end = 0;
+		spawn_num = 0;
+		wave.produceWave(round, Wave.EASY);
 	}
 	
 	public static void update(){
 		
+		//Spawning
+		long time = System.currentTimeMillis();
+		if ( time > time_end && spawn_num < wave.enemies.length) {
+			enemies.add(wave.enemies[spawn_num]);
+			time_end = time + ((long) (wave.spawn_delays[spawn_num++]*1000F));
+		}
 		// Updates the gui and gets the button if it is pushed
 		int btn = gui.update();
 		grid.update(); // Updates the grid
@@ -71,7 +107,10 @@ public class Playing {
 		// Updates the enemies
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).update();
-			if (enemies.get(i).reached) enemies.remove(i);
+			if (enemies.get(i).reached) {
+				lives--;
+				enemies.remove(i);
+			}
 		}
 		
 		// Fires arrows at the enemies 
@@ -92,17 +131,19 @@ public class Playing {
 		for (int arrow = 0; arrow < arrows.size(); arrow++) {
 			arrows.get(arrow).update();
 			for (int enemy = 0; enemy < enemies.size(); enemy++) {
-				if (arrows.get(arrow).collidesWith(
-						enemies.get(enemy).getCX(), 
-						enemies.get(enemy).getCY(), 
-						enemies.get(enemy).getRadius())) {
+				float x = enemies.get(enemy).getCX();
+				float y = enemies.get(enemy).getCY();
+				float r = enemies.get(enemy).getRadius();
+				if (arrows.get(arrow).collidesWith(x, y, r)) {
 					if (enemies.get(enemy).health < 0) {
+						coins += enemies.get(enemy).getReward();
 						enemies.remove(enemy);
 					}
 					else {
 						enemies.get(enemy).health -= arrows.get(arrow).getDamage();
 					}
 					arrows.remove(arrow);
+					break;
 				}
 			}
 		}

@@ -14,13 +14,15 @@ import engine.io.Node;
  */
 public abstract class Enemy {
 	public int health;
-	protected float x, y, w, h, scale, xvel, yvel, end_time, speed;
+	protected float x, y, w, h, scale, xvel, yvel, end_time, speed, radius;
 	private float time = 90000000;
 	protected Texture texture;
+	protected int value = 5;
+	
+	// Used for animation
 	private int t_num = 0; // Texture number
 	private int prev_t_num = 0;
 	private String path;
-	private float radius;
 	
 	// The center of the enemy
 	private float cx;
@@ -238,5 +240,9 @@ public abstract class Enemy {
 	// Returns the hitbox (radius) of the enemy.
 	public float getRadius() {
 		return radius;
+	}
+	
+	public int getReward() {
+		return value;
 	}
 }
