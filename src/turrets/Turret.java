@@ -57,6 +57,8 @@ public abstract class Turret extends Entity {
 		return null;
 	}
 	
+	// If the enemy tx and ty is in range of the turret and the arrow is ready,
+	// this function then returns true
 	private boolean inRange(float tx, float ty) {
 		double dist = Math.sqrt(
 				Math.pow(tx-(game_x+(w/2)),2) + 
@@ -69,7 +71,9 @@ public abstract class Turret extends Entity {
 			}
 	}
 	
+	// fires an arrow at the tx and ty
 	private Arrow fire_at(float tx, float ty) {
+		// Arrows are no longer made ready and the reload timer has started
 		arrowReady = false;
 		end = (long) (System.currentTimeMillis( ) + rateOfFire);
 		return new Arrow(
@@ -107,6 +111,7 @@ public abstract class Turret extends Entity {
 		}
 	}
 	
+	// Gets the cost of building the turret.
 	public int getCost() {
 		return cost;
 	}
