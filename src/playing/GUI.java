@@ -8,6 +8,7 @@ import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 
+import gui.Button;
 import gui.Text;
 import main.Main;
 
@@ -22,11 +23,21 @@ public class GUI {
 	private float w = 100;
 	private float h = Main.window.getHeight();
 	
+	// Button that opens and closes the GUI
 	private float open_button_w = 25;
 	private float open_button_h = 50;
 	private float open_button_x = Main.window.getWidth() - open_button_w;
 	private float open_button_y;
 	private float open_button_radius = 6;
+	
+	// Button that stops and starts the rounds
+	public Button button_round = new Button(
+			"Start",
+			10f, 
+			Main.window.getHeight()-30f, 
+			100f, 
+			25f, 
+			1);
 	
 	// Statistics GUI panel variables
 	private float stats_w = 200f;
@@ -52,17 +63,16 @@ public class GUI {
 	private static float[]       colour         = DEFAULT_COLOUR;
 	
 	public GUI(){
-		final int TOWER_1 = 1;
-		final int TOWER_2 = 2;
-		final int TOWER_3 = 3;
-		final int QUIT    = 98;
-		final int PAUSE   = 0;
-		buttons = new GUIButton[5];
-		buttons[0] = new GUIButton("Tower I",  BUTTON_SIZE, BUTTON_SIZE, TOWER_1);
-		buttons[1] = new GUIButton("Tower II", BUTTON_SIZE, BUTTON_SIZE, TOWER_2);
-		buttons[2] = new GUIButton("Tower III",BUTTON_SIZE, BUTTON_SIZE, TOWER_3);
-		buttons[3] = new GUIButton("Pause",    BUTTON_SIZE, BUTTON_SIZE, PAUSE);
-		buttons[4] = new GUIButton("Quit",     BUTTON_SIZE, BUTTON_SIZE, QUIT);
+		buttons = new GUIButton[4];
+		buttons[0] = new GUIButton(
+				"Tower 1",  BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_1);
+		buttons[1] = new GUIButton(
+				"Tower 2", BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_2);
+		buttons[2] = new GUIButton(
+				"Tower 3",BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_3);
+		buttons[3] = new GUIButton(
+				"Quit",     BUTTON_SIZE, BUTTON_SIZE, Playing.QUIT);
+		
 		int btn_len = (int) Math.ceil(buttons.length/2.0);
 		for (int by = 0; by < btn_len; by++) {
 			for (int bx = 0; bx <= 2; bx++){
@@ -80,6 +90,8 @@ public class GUI {
 		text_lives = new Text(
 				"Lives: ", 
 				(int) stats_x+text_size, (int) stats_y+(text_size*3), text_size);
+		
+		button_round_resetPosition();
 	}
 	
 	public int update(){
@@ -116,12 +128,45 @@ public class GUI {
 			colour = DEFAULT_COLOUR;
 		}
 		
+		// The button that starts and stops the rounds
+		if (mx > open_button_x &&
+				mx < open_button_x+open_button_w &&
+				my > open_button_y &&
+				my < open_button_y+open_button_h)
+		{
+			colour = HOVER_COLOUR;
+			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)
+				&& !guiClicked){
+				close();
+			}
+		}
+		else
+		{
+			colour = DEFAULT_COLOUR;
+		}
+		
+		if (button_round.updateClick()){
+			if (button_round.getName().equals("Start")) {
+				button_round.setName("Pause");
+				Playing.roundEnded = false;
+				Playing.state = Playing.PAUSE;
+			}
+			else if (button_round.getName().equals("Pause")){
+				button_round.setName("Play");
+				Playing.toggle_pause();
+			}
+			else {
+				button_round.setName("Pause");
+				Playing.toggle_pause();
+			}
+			button_round_resetPosition();
+		}
 		stats_x = (screenWidth - stats_w) - (screenWidth - x);
 		return state;
 	}
 	
 	public void draw(){
-		
+		button_round.draw();
 		guiClicked = false;
 		
 		draw_statistics();
@@ -219,5 +264,16 @@ public class GUI {
 	
 	public boolean isClosed() {
 		return closed;
+	}
+	
+	public void button_round_resetPosition() {
+		String bname = button_round.getName();
+		float btw = button_round.getText().getFont().getTextWidth(bname)/2;
+		float bw = button_round.getWidth()/2;
+		float bx = button_round.getX();
+		float bth = button_round.getText().getFont().getCharHeight()/2;
+		float bh = button_round.getHeight()/2;
+		float by = button_round.getY();
+		button_round.getText().setPosition((bx+(bw))-(btw), (by+(bh))-(bth));
 	}
 }

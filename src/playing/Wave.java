@@ -30,10 +30,14 @@ public class Wave {
 	public static final String MEDIUM  = "assets/rounds/medium.csv";
 	public static final String HARD    = "assets/rounds/hard.csv";
 	
-	public Enemy[] enemies;
+	public Enemy[] enemies = null;
 	public double[] spawn_delays;
+	public boolean win;
+	
+	public Wave() {
+		win = false;
+	}
 
-	@SuppressWarnings("resource")
 	public void produceWave(int round, String difficulty) {
 		try {
 			String[] string_enemies = null;
@@ -52,38 +56,40 @@ public class Wave {
 				}
 			}
 			if (string_enemies == null) {
-				System.err.println("Level does not exist!!");
-				throw new FileNotFoundException();
+				win = true;
 			}
-			inputStream.close();
-			enemies = new Enemy[string_enemies.length];
-			float spawn_x = Playing.grid.spawn_x;
-			float spawn_y = Playing.grid.spawn_y;
-			float tile_size = Playing.grid.getTileSize();
-			for (int i = 0; i < string_enemies.length; i++){
-				if (string_enemies[i].equals("1")) {
-					enemies[i] = new Enemy_1(
-							spawn_x, 
-							spawn_y, 
-							tile_size);
+			else
+			{
+				inputStream.close();
+				enemies = new Enemy[string_enemies.length];
+				float spawn_x = Playing.grid.spawn_x;
+				float spawn_y = Playing.grid.spawn_y;
+				float tile_size = Playing.grid.getTileSize();
+				for (int i = 0; i < string_enemies.length; i++){
+					if (string_enemies[i].equals("1")) {
+						enemies[i] = new Enemy_1(
+								spawn_x, 
+								spawn_y, 
+								tile_size);
+					}
+					if (string_enemies[i].equals("2")) {
+						enemies[i] = new Enemy_2(
+								spawn_x, 
+								spawn_y, 
+								tile_size);
+					}
+					if (string_enemies[i].equals("3")) {
+						enemies[i] = new Enemy_3(
+								spawn_x, 
+								spawn_y, 
+								tile_size);
+					}
 				}
-				if (string_enemies[i].equals("2")) {
-					enemies[i] = new Enemy_2(
-							spawn_x, 
-							spawn_y, 
-							tile_size);
+				
+				spawn_delays = new double[string_spawn_delays.length];
+				for (int i = 0; i < string_spawn_delays.length; i++){
+					spawn_delays[i] =  Float.parseFloat(string_spawn_delays[i]);
 				}
-				if (string_enemies[i].equals("3")) {
-					enemies[i] = new Enemy_3(
-							spawn_x, 
-							spawn_y, 
-							tile_size);
-				}
-			}
-			
-			spawn_delays = new double[string_spawn_delays.length];
-			for (int i = 0; i < string_spawn_delays.length; i++){
-				spawn_delays[i] =  Float.parseFloat(string_spawn_delays[i]);
 			}
 		} 
 		catch (FileNotFoundException e) {

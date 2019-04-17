@@ -116,6 +116,7 @@ public class Button {
 	// Sets the name of the button.
 	public void setName(String name) {
 		this.name = name;
+		text.text = name;
 	}
 	// returns button width
 	public float getWidth() {

@@ -19,7 +19,7 @@ public class Turret_3 extends Turret {
 		damage = 5;
 		rateOfFire = 100;
 		cost = 500;
-		arrowSpeed = 10;
+		arrowSpeed = 10f;
 		upgrade_cost = 250;
 	}
 

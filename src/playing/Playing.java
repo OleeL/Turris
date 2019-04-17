@@ -21,7 +21,7 @@ public class Playing {
 	// Playing states
 	public static final int PLAYING = 0;
 	public static final int PAUSED  = 1;
-	public static int state = PLAYING;
+	public static int state = PAUSED;
 	
 	// Graphics
 	public static Grid grid;
@@ -33,14 +33,12 @@ public class Playing {
 	public static final int TOWER_1      = 1;
 	public static final int TOWER_2      = 2;
 	public static final int TOWER_3      = 3;
-	public static final int QUIT         = 98;
-	public static final int GRID_ELEMENT = 99;
+	public static final int QUIT         = 99;
 	
 	// Difficulty
 	public static final int EASY   = 1;
 	public static final int MEDIUM = 2;
 	public static final int HARD   = 3;
-	
 	public static int selected = UNSELECTED;
 	
 	// Player stats
@@ -52,6 +50,7 @@ public class Playing {
 	private static Wave wave;
 	private static long time_end;
 	private static int spawn_num;
+	public static boolean roundEnded;
 	
 	private static ArrayList<Enemy> enemies;
 	private static ArrayList<Arrow> arrows;
@@ -87,71 +86,77 @@ public class Playing {
 		
 		// Initialising for the rounds
 		wave = new Wave();
-		time_end = 0;
-		spawn_num = 0;
-		wave.produceWave(round, Wave.EASY);
+		roundEnded = true;
+		start_new_round(round);
 	}
 	
 	public static void update(){
-		
-		//Spawning
-		long time = System.currentTimeMillis();
-		if ( time > time_end && spawn_num < wave.enemies.length) {
-			enemies.add(wave.enemies[spawn_num]);
-			time_end = time + ((long) (wave.spawn_delays[spawn_num++]*1000F));
+		if (state == PLAYING) {
+			//Spawning
+			long time = System.currentTimeMillis();
+			if ( time > time_end && spawn_num < wave.enemies.length) {
+				enemies.add(wave.enemies[spawn_num]);
+				time_end = time+(long)(wave.spawn_delays[spawn_num++]*1000F);
+			}
+			if (enemies.isEmpty() && !roundEnded) {
+				state = PAUSED;
+				gui.button_round.setName("Start");
+				start_new_round(++round);
+				roundEnded = true;
+			}
+			grid.update(); // Updates the grid
+	
+			// Updates the enemies
+			for (int i = 0; i < enemies.size(); i++) {
+				enemies.get(i).update();
+				if (enemies.get(i).reached) {
+					lives--;
+					enemies.remove(i);
+				}
+			}
+			
+			// Fires arrows at the enemies 
+			for (int turret = 0; turret < grid.turrets.size(); turret++) {
+				for (int e = 0; e < enemies.size(); e++) {
+					Enemy enemy = enemies.get(e);
+					Arrow arrow = grid.turrets.get(turret).shootAt(
+							enemy.getCX(),
+							enemy.getCY()
+						);
+					if (arrow != null) {
+						arrows.add(arrow);
+					}
+				}
+			}
+			
+			// Updates the arrows & checks if the enemies are hit by the arrows
+			for (int arrow = 0; arrow < arrows.size(); arrow++) {
+				arrows.get(arrow).update();
+				for (int e = 0; e < enemies.size(); e++) {
+					float x = enemies.get(e).getCX();
+					float y = enemies.get(e).getCY();
+					float r = enemies.get(e).getRadius();
+					if (arrows.get(arrow).collidesWith(x, y, r)) {
+						if (enemies.get(e).health < 0) {
+							coins += enemies.get(e).getReward();
+							enemies.remove(e);
+						}
+						else {
+							enemies.get(e).health-=arrows.get(arrow).getDamage();
+						}
+						arrows.remove(arrow);
+						break;
+					}
+				}
+			}
 		}
 		// Updates the gui and gets the button if it is pushed
 		int btn = gui.update();
-		grid.update(); // Updates the grid
-
-		// Updates the enemies
-		for (int i = 0; i < enemies.size(); i++) {
-			enemies.get(i).update();
-			if (enemies.get(i).reached) {
-				lives--;
-				enemies.remove(i);
-			}
-		}
 		
-		// Fires arrows at the enemies 
-		for (int turret = 0; turret < grid.turrets.size(); turret++) {
-			for (int enemy = 0; enemy < enemies.size(); enemy++) {
-				Enemy e = enemies.get(enemy);
-				Arrow arrow = grid.turrets.get(turret).shootAt(
-						e.getCX(),
-						e.getCY()
-					);
-				if (arrow != null) {
-					arrows.add(arrow);
-				}
-			}
-		}
-		
-		// Updates the arrows & checks if the enemies are hit by the arrows
-		for (int arrow = 0; arrow < arrows.size(); arrow++) {
-			arrows.get(arrow).update();
-			for (int enemy = 0; enemy < enemies.size(); enemy++) {
-				float x = enemies.get(enemy).getCX();
-				float y = enemies.get(enemy).getCY();
-				float r = enemies.get(enemy).getRadius();
-				if (arrows.get(arrow).collidesWith(x, y, r)) {
-					if (enemies.get(enemy).health < 0) {
-						coins += enemies.get(enemy).getReward();
-						enemies.remove(enemy);
-					}
-					else {
-						enemies.get(enemy).health -= arrows.get(arrow).getDamage();
-					}
-					arrows.remove(arrow);
-					break;
-				}
-			}
-		}
-				
 		// If the gui is clicked and there is something selected: unselect item
 		if (gui.isClicked() && selected != UNSELECTED) selected = UNSELECTED;
 		
-		// If there is something pressed on the GUI, make that the new selection
+		// If there is something pressed on the GUI, make the new selection
 		if ( btn > -1) selected = btn;
 		
 		// If there is nothing selected
@@ -175,7 +180,6 @@ public class Playing {
 			case QUIT:
 				Main.state = Main.MAIN_MENU;
 				selected = UNSELECTED;
-			case PAUSE:
 				break;
 		}
 	
@@ -187,7 +191,6 @@ public class Playing {
 	
 	public static void draw() {
 		grid.draw();
-		
 		for (int i = 0; i < enemies.size(); i++)
 			enemies.get(i).draw();
 		for (int i = 0; i < arrows.size(); i++)
@@ -197,7 +200,7 @@ public class Playing {
 			if (!gui.isClosed()) gui.close();
 			
 			// If you can place the tile in that place, then 
-			if (canPlace())Main.window.setColour(0f, 1f, 0f, 0.5f); //show green
+			if (canPlace())Main.window.setColour(0f, 1f, 0f, 0.5f);//show green
 			else Main.window.setColour(1f, 0f, 0f, 0.5f); //show red
 			
 			// Outlines of where the turret will go
@@ -258,6 +261,24 @@ public class Playing {
 					    turret,
 					    level);
 			selected = UNSELECTED;
+		}
+	}
+	
+	public static void start_new_round(int round) {
+		time_end = 0;
+		spawn_num = 0;
+		wave.produceWave(round, Wave.EASY);
+		roundEnded = false;
+	}
+	
+	public static void toggle_pause() {
+		switch (state) {
+			case PAUSED:
+				state = PLAYING;
+				break;
+			case PLAYING:
+				state = PAUSED;
+				break;			
 		}
 	}
 }

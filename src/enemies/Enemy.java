@@ -126,7 +126,7 @@ public abstract class Enemy {
 	public void draw() {
 		
 		// Walking animation
-		if (System.nanoTime() > end_time) {
+		if (System.nanoTime() > end_time && Playing.state == Playing.PLAYING) {
 			if (t_num == 0) {
 				if (prev_t_num == 1){
 					t_num = 2;

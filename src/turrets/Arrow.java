@@ -27,6 +27,8 @@ public class Arrow {
         texture = new Texture( "turrets/arrow.png", x, y, scale, scale);
         
         // Gets the centre coordinates of the texture
+        x -= texture.getWidth()/2;
+        y -= texture.getHeight()/2;
         float cx = x + (texture.getWidth()/2);
         float cy = y + (texture.getHeight()/2);
         
