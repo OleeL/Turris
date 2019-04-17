@@ -7,12 +7,11 @@
 package gui;
 
 import static org.lwjgl.opengl.GL11.*;
-
 import engine.io.Image;
 
 public class Texture {
 	private int id;
-	private float x, y, w, h;;
+	private float x, y, w, h;
 	private Image texture;
 	
 	/**
@@ -23,13 +22,13 @@ public class Texture {
 	 * @param float x scale position (0.0 - 1.0)
 	 * @param float y scale position (0.0 - 1.0)
 	 */
-	public Texture(String filename, float x, float y, float w, float h) {
+	public Texture(String filename, float x, float y, float sx, float sy) {
 		id = glGenTextures();
 		texture = Image.loadImage("./assets/images/"+filename);
 		this.x = x;
 		this.y = y;
-		this.w = texture.getWidth() * w;
-		this.h = texture.getHeight() * h;
+		this.w = texture.getWidth() * sx;
+		this.h = texture.getHeight() * sy;
 		
 		// Binds the texture to the id.
 		glBindTexture(GL_TEXTURE_2D, id);

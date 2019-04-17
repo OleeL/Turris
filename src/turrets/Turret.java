@@ -21,6 +21,7 @@ public abstract class Turret extends Entity {
 	protected long rateOfFire;
 	private long time, end;
 	private boolean arrowReady;
+	private float grid_size;
 	
 	/**
 	 * @param String filename
@@ -41,6 +42,7 @@ public abstract class Turret extends Entity {
 			y);
 		this.game_x = x * grid_size;
 		this.game_y = y * grid_size;
+		this.grid_size = grid_size;
 		arrowReady = true;
 	}
 
@@ -70,7 +72,14 @@ public abstract class Turret extends Entity {
 	private Arrow fire_at(float tx, float ty) {
 		arrowReady = false;
 		end = (long) (System.currentTimeMillis( ) + rateOfFire);
-		return new Arrow(game_x+(w/2), game_y+(h/2), tx, ty, damage, arrowSpeed);
+		return new Arrow(
+				game_x+(w/2), 
+				game_y+(h/2), 
+				tx,
+				ty,
+				grid_size/100,
+				damage, 
+				arrowSpeed);
 	}
 	
 	@Override
