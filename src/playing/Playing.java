@@ -146,7 +146,6 @@ public class Playing {
 	
 	public static void draw() {
 		grid.draw();
-		gui.draw();
 		
 		for (int i = 0; i < enemies.size(); i++)
 			enemies.get(i).draw();
@@ -167,6 +166,7 @@ public class Playing {
 					grid.getTileSize(),
 					grid.getTileSize());
 		}
+		gui.draw();
 	}
 	
 	public static boolean canPlace() {
