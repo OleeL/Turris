@@ -12,10 +12,7 @@ import main.Main;
 
 public class Button {
 	private String name;
-	private int x;
-	private int y;
-	private int width;
-	private int height;
+	private float x, y, width, height;
 	private int state;
 	private float r = 0f;
 	private float g = 0f;
@@ -28,13 +25,14 @@ public class Button {
 	private float font_g = 1f;
 	private float font_b = 1f;
 	
-	public Button(String name, int x, int y, int width, int height, int state)
+	public Button(String name, float x, float y, float width, float height, int state)
 	{
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.state = state;
+		this.name = name;
 		
 		// Creates text to go on the button
 		text = new Text(name, x, y, 16);
@@ -120,11 +118,21 @@ public class Button {
 		this.name = name;
 	}
 	// returns button width
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
 	//returns button height
-	public int getHeight() {
+	public float getHeight() {
 		return height;
+	}
+	
+	// Returns the x coordinate
+	public float getX() {
+		return x;
+	}
+	
+	// Returns the y coordinate
+	public float getY() {
+		return y;
 	}
 }

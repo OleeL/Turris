@@ -26,25 +26,26 @@ public class Main_menu {
 	private static Button[] buttons = new Button[5];
 	private static Texture title, background, howtoplay;
 	private static Cloud clouds[] = new Cloud[2];
-	private static float w = 580;
-	private static float h = 580;
-	private static float boxX = (Main.window.getWidth() / 2) - (w/2);
-	private static float boxY = (Main.window.getHeight() / 2) - (h/2);
-	private static Button backToMenu = new Button("Back to Menu", 580, 535, 100, 50, MAIN);
+
+	private static float boxW = 580;
+	private static float boxH = 580; 
+	private static float boxX = (Main.window.getWidth() / 2) - (boxW/2);
+	private static float boxY = (Main.window.getHeight() / 2) - (boxH/2);
+	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
 	
 	
-	public static void create(){
+	public static void create(){		
 		background = new Texture("background_small.jpg", 0, 0, 1f, 1f);
 		title = new Texture("turris_text.png", 283, 25, 1f, 1f);
 		howtoplay = new Texture("howtoplay.png", boxX, boxY, 1f, 1f);
 		for (int i = 0; i < clouds.length; i++){
 			clouds[i] = new Cloud(i+1);
 		}
-		int b_x = 300;
-		int b_y = 150;
-		int b_w = 200;
-		int b_h = 50;
-		int b_yIncrement = 60;
+		float b_x = 300;
+		float b_y = 150;
+		float b_w = 200;
+		float b_h = 50;
+		float b_yIncrement = 60;
 		
 		String[] names  = {"New Game", "Load Game","Settings", "How To Play", "Exit"};
 		int[]    states = { NEW_GAME,   LOAD_GAME,  SETTINGS,   HELP,          EXIT};
@@ -57,7 +58,14 @@ public class Main_menu {
 					((b_x+(b_w/2))-(text_w/2)),  // x
 			        ((b_y+(b_h/2))-(text_h/2))); // y
 			b_y += b_yIncrement;
-		}		
+		}
+		
+		// Sets the correct position for 'back' button
+		b_x = backToMenu.getX()+(backToMenu.getWidth()/2);
+		b_y = backToMenu.getY()+(backToMenu.getHeight()/2);
+		b_w = backToMenu.getText().getFont().getTextWidth(backToMenu.getName());
+		b_h = backToMenu.getText().getFont().getCharHeight();
+		backToMenu.getText().setPosition((b_x-(b_w/2)), (b_y-(b_h/2)));
 	}
 	
 	public static void update(double dt)
@@ -123,19 +131,17 @@ public class Main_menu {
 				
 			case SETTINGS:
 				Main.window.setColour(0f, 0f, 0f, 0.5f);
-				Main.window.rectangle(boxX, boxY, w, h, 20);
+				Main.window.rectangle(boxX, boxY, boxW, boxH, 20);
 				backToMenu.setFontColour(1f, 1f, 1f);
-				backToMenu.getText().setPosition(580 , 550);
 				backToMenu.draw();
 				
 				break;
 				
 			case HELP:
 				Main.window.setColour(0f, 0f, 0f, 0.5f);
-				Main.window.rectangle(boxX, boxY, w, h, 20);
+				Main.window.rectangle(boxX, boxY, boxW, boxH, 20);
 				howtoplay.draw();
 				backToMenu.setFontColour(1f, 1f, 1f);
-				backToMenu.getText().setPosition(580 , 550);
 				backToMenu.draw();
 				break;
 				

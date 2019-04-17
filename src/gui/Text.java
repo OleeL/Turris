@@ -12,12 +12,11 @@ import engine.io.Font;
 public class Text {
 
 	public String text;
-	public int x;
-	public int y;
+	public float x, y;
 	public int size;
 	private Font font;
 	
-	public Text(String text, int x, int y, int size)
+	public Text(String text, float x, float y, int size)
 	{
 		this.text = text;
 		this.x = x;
@@ -59,7 +58,7 @@ public class Text {
 		font.drawText(text, x, y);
 	}
 	
-	public void setPosition(int x, int y)
+	public void setPosition(float x, float y)
 	{
 		this.x = x;
 		this.y = y;

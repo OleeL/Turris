@@ -80,12 +80,12 @@ public class Font {
     }
     
     //Functions
-    public void drawText(String text, int x, int y) {
+    public void drawText(String text, float x, float y) {
     	// Binds the texture to the id.
         glBindTexture(GL_TEXTURE_2D, this.fontTextureId);
         glBegin(GL_QUADS);
         
-        int xTmp = x;
+        float xTmp = x;
         for (char c : text.toCharArray()) {
             float width = getCharWidth(c);
             float height = getCharHeight();
