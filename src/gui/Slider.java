@@ -1,5 +1,7 @@
 package gui;
 
+import main.Main;
+
 public class Slider {
 	private int xPos;
 	private int yPos;
@@ -20,6 +22,20 @@ public class Slider {
 		this.yPos = yPos;
 		this.sliderWidth = sliderWidth;
 	}
+	public void updateSlider() {
+		if(Main.window.getMouseX() > xPos &&
+		   Main.window.getMouseX() < xPos+width &&
+		   Main.window.getMouseY() > yPos &&
+		   Main.window.getMouseY() < yPos+height) {
+				
+			if(Main.window.isMouseDown(Main.window.LEFT_MOUSE)) {
+				sliderWidth = (int) Main.window.getMouseX() - xPos;
+				if(sliderWidth > max) sliderWidth = max;
+				else if (sliderWidth < min) sliderWidth = min;
+			}
+		}
+	}
+
 	
 	public void setPosition(int xPos, int yPos) {;
 		this.xPos = xPos;
@@ -29,6 +45,5 @@ public class Slider {
 	public void setSliderWidth(int sliderWidth) {
 		this.sliderWidth = sliderWidth;
 	}
-	
 
 }
