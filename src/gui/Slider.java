@@ -26,5 +26,9 @@ public class Slider {
 		this.yPos = yPos;
 	}
 	
+	public void setSliderWidth(int sliderWidth) {
+		this.sliderWidth = sliderWidth;
+	}
+	
 
 }
