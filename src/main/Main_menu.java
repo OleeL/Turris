@@ -33,7 +33,7 @@ public class Main_menu {
 	private static float boxX = (Main.window.getWidth() / 2) - (boxW/2);
 	private static float boxY = (Main.window.getHeight() / 2) - (boxH/2);
 	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
-	private static Slider volume = new Slider("Volume", 500, 50, 150, 50, 500);
+	private static Slider volume = new Slider("Volume", 500, 50, 150, 100, 500);
 	
 	
 	public static void create(){		

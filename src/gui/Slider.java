@@ -17,6 +17,7 @@ public class Slider {
 	private int max;
 	//sliderWidth = current position of slider along width.
 	private int sliderWidth;
+	private boolean interacted = false;
 	
 	public Slider(String name, int width, int height, int xPos, int yPos, int sliderWidth) {
 		this.name = name;
@@ -30,17 +31,21 @@ public class Slider {
 	}
 	
 	public void updateSlider() {
+
+		if (Main.window.isMouseReleased(Main.window.LEFT_MOUSE)) {
+			interacted = false;
+		}
 		if(Main.window.getMouseX() > xPos &&
 		   Main.window.getMouseX() < xPos+width &&
 		   Main.window.getMouseY() > yPos &&
-		   Main.window.getMouseY() < yPos+height) {
-				
-			if(Main.window.isMouseDown(Main.window.LEFT_MOUSE)) {
+		   Main.window.getMouseY() < yPos+height || interacted) {
+			if(Main.window.isMousePressed(Main.window.LEFT_MOUSE) || interacted) {
 				double mx = Main.window.getMouseX();
+				interacted = true;
 				sliderWidth = Math.abs((int) mx - xPos);
-				if (sliderWidth > max) sliderWidth = max; else if(sliderWidth < min) sliderWidth = min;
-		
-				//sliderWidth = Math.min(sliderWidth, max); sliderWidth = Math.max(sliderWidth, min);
+				if (mx < xPos) sliderWidth = 0;
+				//if (sliderWidth > max) sliderWidth = max; else if(sliderWidth < min) sliderWidth = min;
+				sliderWidth = Math.min(sliderWidth, max); sliderWidth = Math.max(sliderWidth, min);
 			}
 		}
 	}
