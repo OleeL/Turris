@@ -6,6 +6,7 @@ import gui.Button;
 import gui.Cloud;
 import gui.Texture;
 import playing.Playing;
+import gui.Slider;
 
 /**
  * @author Team 62
@@ -32,6 +33,7 @@ public class Main_menu {
 	private static float boxX = (Main.window.getWidth() / 2) - (boxW/2);
 	private static float boxY = (Main.window.getHeight() / 2) - (boxH/2);
 	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
+	private static Slider volume = new Slider("Volume", 500, 50, 150, 50, 500);
 	
 	
 	public static void create(){		
@@ -100,9 +102,10 @@ public class Main_menu {
 				}
 				break;
 			case SETTINGS:
-				if (backToMenu.updateClick()) {
+				if (backToMenu.updateClick()) {	
 					state = MAIN;
 				}
+				volume.updateSlider();
 				break;
 		}
 		
@@ -132,6 +135,7 @@ public class Main_menu {
 			case SETTINGS:
 				Main.window.setColour(0f, 0f, 0f, 0.5f);
 				Main.window.rectangle(boxX, boxY, boxW, boxH, 20);
+				volume.draw();
 				backToMenu.setFontColour(1f, 1f, 1f);
 				backToMenu.draw();
 				
