@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL11.glVertex2f;
 import gui.Button;
 import gui.Text;
 import main.Main;
+import main.Main_menu;
 
 /**
  * @author Oliver Legg - sgolegg - 201244658
@@ -18,6 +19,7 @@ import main.Main;
  */
 public class GUI {
 	
+	// x, y, w and h of the side panel
 	private float x = Main.window.getWidth();
 	private float y = 0;
 	private float w = 100;
@@ -29,6 +31,35 @@ public class GUI {
 	private float open_button_x = Main.window.getWidth() - open_button_w;
 	private float open_button_y;
 	private float open_button_radius = 6;
+	
+	// Final screen (winning or losing)
+	private float final_w = 500;
+	private float final_h = 500;
+	private float final_x = (Main.window.getWidth()/2)-(final_w/2);
+	private float final_y = (Main.window.getHeight()/2)-(final_h/2);
+	private float final_r = 6;
+	
+	// Winning Text & Losing Text
+	private Text win_text  = new Text("Congratulations! You win!", 0, 0, 18);
+	private Text lose_text = new Text("Unlucky! You you lose!", 0, 0, 18);
+	private Text[] final_stats = {
+			new Text("Difficulty: ", 0, 0, 15),
+			new Text("You made it to round: ", 0, 0, 15),
+			new Text("Lives remaining: ", 0, 0, 15),
+			new Text("Total revenue: ", 0, 0, 15),
+			new Text("Kills: ",0,0,15),
+			new Text("Arrows Fired: ", 0, 0, 15),
+			new Text("Buildings Built: ", 0, 0, 15),
+			new Text("Buildings Upgrades: ", 0, 0, 15)};
+	
+	// Button that returns to the main menu after winning or losing
+	private Button button_quit = new Button(
+			"Quit",
+			(Main.window.getWidth()/2)-(100/2),
+			(Main.window.getHeight()/2) + (final_h/2) - 100,
+			100,
+			35,
+			Playing.QUIT);
 	
 	// Button that stops and starts the rounds
 	public Button button_round = new Button(
@@ -58,11 +89,13 @@ public class GUI {
 	
 	// Colours
 	private static final float[] LINE_COLOUR    = {1.0f, 1.0f, 1.0f, 0.7f};
+	private static final float[] FONT_COLOUR    = {1.0f, 1.0f, 1.0f, 1.0f};
 	private static final float[] DEFAULT_COLOUR = {0.0f, 0.0f, 0.0f, 0.5f};
 	private static final float[] HOVER_COLOUR   = {0.4f, 0.4f, 0.4f, 0.5f};
 	private static float[]       colour         = DEFAULT_COLOUR;
 	
 	public GUI(){
+		// Creating the buttons on the opening and closing GUI panel
 		buttons = new GUIButton[4];
 		buttons[0] = new GUIButton(
 				"Tower 1",  BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_1);
@@ -73,6 +106,7 @@ public class GUI {
 		buttons[3] = new GUIButton(
 				"Quit",     BUTTON_SIZE, BUTTON_SIZE, Playing.QUIT);
 		
+		// Repositioning the buttons on the GUI panel
 		int btn_len = (int) Math.ceil(buttons.length/2.0);
 		for (int by = 0; by < btn_len; by++) {
 			for (int bx = 0; bx <= 2; bx++){
@@ -81,6 +115,7 @@ public class GUI {
 						x-w+(bx*BUTTON_SIZE), by*BUTTON_SIZE);
 			}
 		}
+		// Setting the position of the statistics text
 		text_coins = new Text(
 				"Coins: ", 
 				(int) stats_x+text_size, (int) stats_y+text_size, text_size);
@@ -91,11 +126,47 @@ public class GUI {
 				"Lives: ", 
 				(int) stats_x+text_size, (int) stats_y+(text_size*3), text_size);
 		
+		// Repositioning the win text
+		float txt_w = win_text.getFont().getTextWidth(win_text.getText());
+		float txt_h = win_text.getFont().getCharHeight();
+		win_text.setPosition(final_x+(final_w/2)-(txt_w/2), 
+				final_y+50-(txt_h/2));
+		
+		// Respositioning the losing text
+		txt_w = lose_text.getFont().getTextWidth(lose_text.getText());
+		txt_h = lose_text.getFont().getCharHeight();
+		lose_text.setPosition(final_x+(final_w/2)-txt_w/2,
+				final_y+50-txt_h/2);
+		
+		// Respositioning the end game button
+		float bx = button_quit.getX();
+		float by = button_quit.getY();
+		float bw = button_quit.getWidth();
+		float bh = button_quit.getHeight();
+		String txt = button_quit.getText().getText();
+		txt_w =button_quit.getText().getFont().getTextWidth(txt);
+		txt_h =button_quit.getText().getFont().getCharHeight();
+		button_quit.getText().setPosition(
+				bx+(bw/2)-(txt_w/2), by+(bh/2)-(txt_h/2));
+		
+		by = final_y+120;
+		float by_incrementor = final_stats[0].getFont().getCharHeight();
+		// Repositioning the end game function
+		for (int i = 0; i < final_stats.length; i++) {
+			txt = final_stats[i].getText();
+			bx = Main.window.getWidth()/2;
+			bx -= final_stats[i].getFont().getTextWidth(txt)/2;
+			final_stats[i].setPosition(bx, by);
+			by += by_incrementor;
+		}
+		// Reset the position of text and buttons
 		button_round_resetPosition();
 	}
 	
 	public int update(){
-		int state = -1;
+		// Defining variables that are used later one
+		// If nothing is pressed in the gui, this update function returns -1
+		int state = -1; 
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		int screenWidth = Main.window.getWidth();
@@ -145,22 +216,36 @@ public class GUI {
 			colour = DEFAULT_COLOUR;
 		}
 		
-		if (button_round.updateClick()){
-			if (button_round.getName().equals("Start")) {
-				button_round.setName("Pause");
-				Playing.roundEnded = false;
-				Playing.state = Playing.PAUSE;
+		// What happens when you press the round button. (the one button that
+		// handles pausing, playing and starting new rounds).
+		if (Playing.state != Playing.WIN && Playing.state != Playing.LOSE ) {
+			if (button_round.updateClick()){
+				if (button_round.getName().equals("Start")) {
+					button_round.setName("Pause");
+					Playing.roundEnded = false;
+					Playing.state = Playing.PLAYING;
+				}
+				else if (button_round.getName().equals("Pause")){
+					button_round.setName("Play");
+					Playing.toggle_pause();
+				}
+				else {
+					button_round.setName("Pause");
+					Playing.toggle_pause();
+				}
+				button_round_resetPosition();
 			}
-			else if (button_round.getName().equals("Pause")){
-				button_round.setName("Play");
-				Playing.toggle_pause();
-			}
-			else {
-				button_round.setName("Pause");
-				Playing.toggle_pause();
-			}
-			button_round_resetPosition();
 		}
+		
+		// Updating the winning and losing state
+		if (Playing.state == Playing.WIN || Playing.state == Playing.LOSE) {
+			if (button_quit.updateClick()) {
+				Playing.state = Playing.PAUSED;
+				Main.state = Main.MAIN_MENU;
+			}
+		}
+		
+		// Respositions the statistics box
 		stats_x = (screenWidth - stats_w) - (screenWidth - x);
 		return state;
 	}
@@ -224,8 +309,52 @@ public class GUI {
 			Main.window.drawLine(x, y, x, (y+h)-stats_h);
 		}
 		
+		// Draws for the winning state
+		if (Playing.state == Playing.WIN) {
+			draw_final_screen();
+			Main.window.setColour(FONT_COLOUR);
+			win_text.draw();
+		}
+		// Draws for the losing state
+		if (Playing.state == Playing.LOSE) {
+			draw_final_screen();
+			Main.window.setColour(FONT_COLOUR);
+			lose_text.draw();
+		}
+		
 	}
 	
+	// Draws for the winning and losing state
+	public void draw_final_screen() {
+		float text_box_w = 400;
+		float text_box_h = 40;
+		float text_box_x = Main.window.getWidth()/2 - (text_box_w/2);
+		float text_box_y = win_text.y+(win_text.getFont().getCharHeight()/2)-20;
+
+		Main.window.setColour(DEFAULT_COLOUR);
+		
+		Main.window.rectangle(final_x, final_y, final_w, final_h, final_r);
+		
+		Main.window.rectangle(text_box_x, text_box_y, text_box_w, text_box_h, 
+				final_r);
+		button_quit.draw();
+		
+		// Statistics:
+		final_stats[0].text = "Difficulty: "+Playing.difficulty_visual;
+		final_stats[1].text = "You made it to round: "+Playing.round;
+		final_stats[2].text = "Lives remaining: "+Playing.lives;
+		final_stats[3].text = "Total revenue: "+Playing.coins_revenue;
+		final_stats[4].text = "Kills: "+Playing.kills;
+		final_stats[5].text = "Arrows Fired: "+Playing.arrows_fired;
+		final_stats[6].text = "Buildings built: "+Playing.buildings_built;
+		final_stats[7].text = "Buildings upgraded: "+Playing.buildings_upgraded;
+		
+		for (int i = 0; i < final_stats.length; i++) {
+			final_stats[i].draw();
+		}
+	}
+	
+	// Draws coins, level, lives during gameplay
 	public void draw_statistics(){
 		// Drawing the stats box
 		Main.window.setColour(DEFAULT_COLOUR);

@@ -50,8 +50,8 @@ public abstract class Enemy {
 		this.end_time = 0;
 		this.target = head;
 		this.grid_size = grid_size;
-		this.orb_x = head.x;
-		this.orb_y = head.y;
+		this.orb_x = (head.x * grid_size) + 25;
+		this.orb_y = (head.y * grid_size) + 25;
 		this.direction = (float) Math.toDegrees(Math.atan2(orb_y-cy, orb_x-cx));
 		this.radius = ((w - h)/2);
 	}

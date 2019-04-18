@@ -19,32 +19,44 @@ public class Playing {
 	public static final String LEVEL_3 = "assets/levels/level_3.csv";
 
 	// Playing states
-	public static final int PLAYING = 0;
-	public static final int PAUSED  = 1;
-	public static int state = PAUSED;
+	public static final int PLAYING   = 0;
+	public static final int PAUSED    = 1;
+	public static final int ROUND_END = 2;
+	public static final int WIN       = 3;
+	public static final int LOSE      = 4;
+	public static int state;
 	
 	// Graphics
 	public static Grid grid;
 	public static GUI gui;
 	
 	// Buttons
-	public static final int UNSELECTED   = -1;
-	public static final int PAUSE        = 0;
-	public static final int TOWER_1      = 1;
-	public static final int TOWER_2      = 2;
-	public static final int TOWER_3      = 3;
-	public static final int QUIT         = 99;
+	public static final int UNSELECTED = -1;
+	public static final int PAUSE      = 0;
+	public static final int TOWER_1    = 1;
+	public static final int TOWER_2    = 2;
+	public static final int TOWER_3    = 3;
+	public static final int QUIT       = 99;
 	
 	// Difficulty
 	public static final int EASY   = 1;
 	public static final int MEDIUM = 2;
 	public static final int HARD   = 3;
-	public static int selected = UNSELECTED;
+	public static String difficulty;
+	public static String difficulty_visual;
+	public static int selected;
 	
-	// Player stats
+	// Player stats (Game Dependent)
 	public static int coins;
 	public static int round;
 	public static int lives;
+	
+	// Player stats (Information)
+	public static int coins_revenue;
+	public static int kills;
+	public static int arrows_fired;
+	public static int buildings_upgraded;
+	public static int buildings_built;
 	
 	// Waves | Rounds
 	private static Wave wave;
@@ -58,22 +70,35 @@ public class Playing {
 	public static void create(int difficulty, int round, String level){
 		
 		Playing.round = round;
-
+		selected = UNSELECTED;
+		state = ROUND_END;
 		// Coins and lives depends on the difficulty
 		switch (difficulty) {
 			case HARD:
 				coins = 100;
 				lives = 1;
+				Playing.difficulty = Wave.HARD;
+				Playing.difficulty_visual = "Hard";
 				break;
 			case MEDIUM:
 				coins = 250;
 				lives = 10;
+				Playing.difficulty = Wave.MEDIUM;
+				Playing.difficulty_visual = "Medium";
 				break;
 			default:
 				coins = 300;
-				lives = 20;
+				lives = 1;
+				Playing.difficulty = Wave.EASY;
+				Playing.difficulty_visual = "Easy";
 				break;
 		}
+		// Non difficulty specific attributes
+		coins_revenue = 0;
+		kills = 0;
+		arrows_fired = 0;
+		buildings_upgraded = 0;
+		buildings_built = 0;
 		
 		// Instantiating for the GUI and grid interface
 		grid = new Grid(level);
@@ -99,11 +124,18 @@ public class Playing {
 				time_end = time+(long)(wave.spawn_delays[spawn_num++]*1000F);
 			}
 			if (enemies.isEmpty() && !roundEnded) {
-				state = PAUSED;
+				state = ROUND_END;
 				gui.button_round.setName("Start");
 				start_new_round(++round);
 				roundEnded = true;
 			}
+			
+			// If lives <= 0 you lose
+			if (lives <= 0) {
+				state = LOSE;
+				lives = 0;
+			}
+			
 			grid.update(); // Updates the grid
 	
 			// Updates the enemies
@@ -125,6 +157,7 @@ public class Playing {
 						);
 					if (arrow != null) {
 						arrows.add(arrow);
+						arrows_fired++;
 					}
 				}
 			}
@@ -139,6 +172,8 @@ public class Playing {
 					if (arrows.get(arrow).collidesWith(x, y, r)) {
 						if (enemies.get(e).health < 0) {
 							coins += enemies.get(e).getReward();
+							coins_revenue += enemies.get(e).getReward();
+							kills++;
 							enemies.remove(e);
 						}
 						else {
@@ -213,6 +248,7 @@ public class Playing {
 		gui.draw();
 	}
 	
+	// Shows wether you can place a tile in that specific place or not.
 	public static boolean canPlace() {
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
@@ -231,19 +267,19 @@ public class Playing {
 		Entity turret = null;
 		switch (tower_num) {
 			case TOWER_1:
-				 turret = new Turret_1(
+				turret = new Turret_1(
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());
 				break;
 			case TOWER_2:
-				 turret = new Turret_2(
+				turret = new Turret_2(
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());
 				break;
 			case TOWER_3:
-				 turret = new Turret_3(
+				turret = new Turret_3(
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());
@@ -260,6 +296,7 @@ public class Playing {
 					    turret.getName(),
 					    turret,
 					    level);
+			buildings_built++;
 			selected = UNSELECTED;
 		}
 	}
@@ -267,7 +304,10 @@ public class Playing {
 	public static void start_new_round(int round) {
 		time_end = 0;
 		spawn_num = 0;
-		wave.produceWave(round, Wave.EASY);
+		wave.produceWave(round, difficulty);
+		if (wave.win) {
+			state = WIN;
+		}
 		roundEnded = false;
 	}
 	
