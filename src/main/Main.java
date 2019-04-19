@@ -15,7 +15,6 @@ public class Main {
 	// Setting the states:
 	public static final int MAIN_MENU = 0;
 	public static final int PLAYING = 1;
-	public static final int SELECT_MAP = 2;
 	public static int state = MAIN_MENU;
 	
 	public static void main(String[] args) {
@@ -32,8 +31,6 @@ public class Main {
 		
 		// Creates the main menu
 		Main_menu.create();
-		
-		Map_select.create();
 		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
@@ -53,11 +50,6 @@ public class Main {
 					case PLAYING :
 						Playing.update();
 						Playing.draw();
-						break;
-						
-					case SELECT_MAP :
-						Map_select.update();
-						Map_select.draw();
 						break;
 				}
 				printMouseCoordsOnClick();

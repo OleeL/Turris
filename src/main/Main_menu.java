@@ -58,6 +58,8 @@ public class Main_menu {
 			b_y += b_yIncrement;
 		}
 		
+		Map_select.create();
+		
 	}
 	
 	public static void update(double dt)
@@ -72,6 +74,7 @@ public class Main_menu {
 				}
 				break;
 			case NEW_GAME:
+				Map_select.update();
 				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
 					state = MAIN;
 				}
@@ -121,8 +124,7 @@ public class Main_menu {
 				break;
 				
 			case NEW_GAME:
-				Main.state = Main.SELECT_MAP;
-				state = MAIN;
+				Map_select.draw();
 				break;
 				
 			case LOAD_GAME:
@@ -154,9 +156,6 @@ public class Main_menu {
 	{
 		state = button;
 		switch (button){
-			case NEW_GAME:
-				Playing.create(Playing.EASY, 1, Playing.LEVEL_2);
-				break;
 			case EXIT:
 				System.exit(-1);
 				break;	

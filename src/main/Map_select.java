@@ -37,8 +37,6 @@ public class Map_select {
 		map_images[0] = new Texture("maps/level_1.png", start_x,180,1f,1f);
 		map_images[1] = new Texture("maps/level_2.png", start_x + 270, 180, 1f,1f);
 		map_images[2] = new Texture("maps/level_3.png", start_x + 540, 180, 1f,1f);
-		
-		
 	}
 	
 	//Checks to see if a texture has been clicked/hovered over
@@ -101,7 +99,7 @@ public class Map_select {
 		//Start the game on the selected map
 		if (buttons[0].updateClick()) {
 			Main.state = Main.PLAYING;
-			
+			Main_menu.state = Main_menu.MAIN;
 			Playing.create(Playing.EASY, 1, convert_to_map_name(selected_map));
 			selected_map = -1;
 		}
@@ -110,7 +108,18 @@ public class Map_select {
 	}
 	
 	//Draws onto the window
-	public static void draw() {		
+	public static void draw() {
+		float temp_w = hint_text.getFont().getTextWidth(hint_text.text);
+		float temp_h = hint_text.getFont().getCharHeight();
+		Main.window.setColour(0.0f, 0.0f, 0.0f, 0.5f);
+		Main.window.rectangle(
+				(Main.window.getWidth()/2)-(temp_w/2) -10,
+				45,
+				temp_w + 20,
+				temp_h + 10,
+				6);
+		
+		Main.window.setColour(1.0f, 1.0f, 1.0f, 1.0f);
 		for (Texture tex : map_images) {
 			tex.draw();
 		}
@@ -128,7 +137,7 @@ public class Map_select {
 		if (rect != null) {
 			Main.window.setColour(0, 0, 0, 0.2f);
 			Main.window.rectangle(rect[0], rect[1], rect[2], rect[3]);
-			Main.window.setColour(255,255,255,1f);
+			Main.window.setColour(1f, 1f, 1f, 1f);
 		}
 		
 		hint_text.draw();
