@@ -11,7 +11,6 @@ import static org.lwjgl.opengl.GL11.glVertex2f;
 import gui.Button;
 import gui.Text;
 import main.Main;
-import main.Main_menu;
 
 /**
  * @author Oliver Legg - sgolegg - 201244658
@@ -41,7 +40,7 @@ public class GUI {
 	
 	// Winning Text & Losing Text
 	private Text win_text  = new Text("Congratulations! You win!", 0, 0, 18);
-	private Text lose_text = new Text("Unlucky! You you lose!", 0, 0, 18);
+	private Text lose_text = new Text("Unlucky! You lose!", 0, 0, 18);
 	private Text[] final_stats = {
 			new Text("Difficulty: ", 0, 0, 15),
 			new Text("You made it to round: ", 0, 0, 15),
