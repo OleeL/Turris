@@ -10,6 +10,10 @@ package gui;
 import engine.io.Font;
 
 public class Text {
+	
+	public static final int ALIGN_CENTRE = 0;
+	public static final int ALIGN_LEFT = 1;
+	public static final int ALIGN_RIGHT = 2;
 
 	public String text;
 	public float x, y;

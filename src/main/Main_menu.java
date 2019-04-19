@@ -51,21 +51,9 @@ public class Main_menu {
 		int[]    states = { NEW_GAME,   LOAD_GAME,  SETTINGS,   HELP,          EXIT};
 		for (int i = 0; i < buttons.length; i++){
 			buttons[i] = new Button(names[i], b_x, b_y, b_w, b_h, states[i]);
-			int text_w= (int) buttons[i].getText().getFont().getTextWidth(
-					buttons[i].getText().getText());
-			int text_h= (int) buttons[i].getText().getFont().getCharHeight();
-			buttons[i].getText().setPosition( 
-					((b_x+(b_w/2))-(text_w/2)),  // x
-			        ((b_y+(b_h/2))-(text_h/2))); // y
 			b_y += b_yIncrement;
 		}
 		
-		// Sets the correct position for 'back' button
-		b_x = backToMenu.getX()+(backToMenu.getWidth()/2);
-		b_y = backToMenu.getY()+(backToMenu.getHeight()/2);
-		b_w = backToMenu.getText().getFont().getTextWidth(backToMenu.getName());
-		b_h = backToMenu.getText().getFont().getCharHeight();
-		backToMenu.getText().setPosition((b_x-(b_w/2)), (b_y-(b_h/2)));
 	}
 	
 	public static void update(double dt)
@@ -122,7 +110,7 @@ public class Main_menu {
 				break;
 				
 			case NEW_GAME:
-				Main.state = Main.PLAYING;
+				Main.state = Main.SELECT_MAP;
 				state = MAIN;
 				break;
 				

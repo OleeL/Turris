@@ -36,6 +36,8 @@ public class Button {
 		
 		// Creates text to go on the button
 		text = new Text(name, x, y, 16);
+		
+		this.setPosition((int)x,(int)y);
 	}
 	
 	// Returns the number put into the button on creation
@@ -72,6 +74,20 @@ public class Button {
 	{
 		this.x = x;
 		this.y = y;
+		
+		text.setPosition(x + (width / 2) - (text.getFont().getTextWidth(name) / 2), y + (height / 2) - (text.getFont().getCharHeight() / 2));
+	}
+	
+	//Sets the position of the button with option for text alignment
+	public void setPosition(int x, int y, int align) {
+		setPosition(x,y);
+		switch(align) {
+		case 1:
+			text.setPosition(x, text.y);
+			break;
+		case 2:
+			text.setPosition(text.x + (width / 2) - (text.getFont().getTextWidth(name) / 2), text.y);
+		}
 	}
 	
 	// Checks if the button is pressed (update this every frame)
