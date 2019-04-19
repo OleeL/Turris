@@ -28,6 +28,7 @@ public class Main {
 		
 		// Creates the game window
 		window = new Window(width, height, fps, vsync, windowName);
+		window.setIcon("TurrisIcon.png");
 		window.create();
 		
 		// Creates the main menu
@@ -41,18 +42,20 @@ public class Main {
 			//System.out.println(window.getDelta());
 			double dt = window.getDelta();
 			// Organises the updating within the states
-			switch (state){
-			
-				case MAIN_MENU : 
-					Main_menu.update(dt);
-					Main_menu.draw();
-					break;
-					
-				case PLAYING :
-					Playing.update();
-					Playing.draw();
-					break;
-					
+			if (window.processingLimitReady()) {
+				switch (state){
+				
+					case MAIN_MENU : 
+						Main_menu.update(dt);
+						Main_menu.draw();
+						break;
+						
+					case PLAYING :
+						Playing.update();
+						Playing.draw();
+						break;
+						
+				}
 			}
 			
 			// Finish update

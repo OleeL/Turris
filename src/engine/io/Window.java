@@ -6,6 +6,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.glfw.*;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -18,13 +19,14 @@ public class Window {
 	private int width, height;
 	private String title;
 	private long window;
-	private double fps_cap;
+	private double fps_cap, time, processedTime;
 	private double lastFrame;
 	private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 	private boolean[] mouseButtons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
 	private boolean vsync, closed = false;
 	public final int LEFT_MOUSE = 0;
 	public final int RIGHT_MOUSE = 1;
+	private static GLFWImage.Buffer iconBuffer;
 	
 	public Window(int width, int height, int fps, boolean vsync, String title)
 	{
@@ -67,7 +69,10 @@ public class Window {
 		videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 		GLFW.glfwSetWindowPos(window, (videoMode.width() - width)/2, 
 		                              (videoMode.height() - height)/2);
-	
+		
+		if(iconBuffer != null) {
+            GLFW.glfwSetWindowIcon(window, iconBuffer);
+        }
 		// Shows the window when done
 		GLFW.glfwShowWindow(window);
 
@@ -85,6 +90,9 @@ public class Window {
 			GLFW.glfwSwapInterval(1);
 		else
 			GLFW.glfwSwapInterval(0);
+		
+		time = getTime();
+		processedTime = 0;
 	}
 	
 	// Returns whether the window should be closed
@@ -92,6 +100,13 @@ public class Window {
 	{
 		return GLFW.glfwWindowShouldClose(window);
 	}
+	public void setIcon(String path) {
+        Image icon = Image.loadImage("assets/images/" + path);
+        GLFWImage iconImage = GLFWImage.malloc(); 
+        iconBuffer = GLFWImage.malloc(1);
+        iconImage.set(icon.getWidth(), icon.getHeight(), icon.getImage());
+        iconBuffer.put(0, iconImage);
+    }
 	
 	// The update loop where all the game processing will be handled
 	public void update()
@@ -104,6 +119,21 @@ public class Window {
 		
 		// Removes images from the previous frame
 		GLFW.glfwPollEvents(); 
+	}
+	
+	public boolean processingLimitReady() {
+		if (!closed) {
+			double nextTime = getTime();
+			double passedTime = nextTime - time;
+			processedTime += passedTime;
+			time = nextTime;
+
+			while (processedTime > 1.0/fps_cap) {
+				processedTime -= 1.0/fps_cap;
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	// stops the function
