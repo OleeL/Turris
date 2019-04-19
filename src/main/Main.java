@@ -28,6 +28,7 @@ public class Main {
 		
 		// Creates the game window
 		window = new Window(width, height, fps, vsync, windowName);
+		window.setIcon("TurrisIcon.png");
 		window.create();
 		
 		// Creates the main menu
