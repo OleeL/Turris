@@ -16,10 +16,32 @@ import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
 
+/* Todo
+ * Work out how to control audio volume?
+ * Make audio not sound like the beat of a song??
+ * Speed up audio when game speed is sped up???
+ * Add limit to audio sources - Too many turrets shooting on high game speeds
+ */
+
 public class Audio{
 	
+	public static final String SND_TURRET_PLACE = "effects/turret_place.wav";
+	public static final String SND_TURRET_UPGRADE = "effects/turret_upgrade.wav";
+	public static final String SND_TURRET_SHOOT = "effects/turret_shoot.wav";
+	public static final String SND_ENEMY_STEP = "effects/enemy_step.wav";
+	public static final String SND_ENEMY_DEATH = "effects/enemy_death.wav";
+	public static final String SND_DAMAGE_TAKEN = "effects/damage_taken.wav";
+	public static final String SND_ROUND_COMPLETE = "effects/round_complete.wav";
+	public static final String SND_VICTORY = "effects/victory.wav";
+	public static final String SND_DEFEAT = "effects/defeat.wav";
+	public static final String SND_MENU_CLICK = "effects/menu_click.wav";
+	
+	public static final String MSC_MENU = "music/menu.wav";
+	public static final String MSC_GAME = "music/game.wav";
+	
+	
 	//Plays an audio file
-	public void playAudio(String filename) {
+	public  void playAudio(String filename) {
 		Sound test = new Sound(filename);
 		test.start();
 	}
