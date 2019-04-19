@@ -1,5 +1,6 @@
 package main;
 
+import engine.io.Audio;
 import engine.io.Window;
 import playing.Playing;
 
@@ -17,6 +18,8 @@ public class Main {
 	public static final int PLAYING = 1;
 	public static int state = MAIN_MENU;
 	
+	public static Audio audio_manager;
+	
 	public static void main(String[] args) {
 		
 		// Setting up window settings
@@ -33,6 +36,8 @@ public class Main {
 		
 		// Creates the main menu
 		Main_menu.create();
+		
+		audio_manager = new Audio();
 		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
