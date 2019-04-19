@@ -391,6 +391,7 @@ public class GUI {
 		closed = !closed;
 	}
 	
+	// Returns whether the side panel GUI is open or not
 	public boolean isClosed() {
 		return closed;
 	}
