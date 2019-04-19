@@ -32,8 +32,9 @@ public class Main_menu {
 	private static float boxX = (Main.window.getWidth() / 2) - (boxW/2);
 	private static float boxY = (Main.window.getHeight() / 2) - (boxH/2);
 	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
-	private static Slider volume_sfx = new Slider("Sound Effects:", 500, 50, 150, 100, 31);
-	private static Slider volume_music = new Slider("Music: ",500, 50, 150, 200, 62);
+	private static Slider volume_sfx = new Slider("Sound Effects:", 500, 50, 150, 100, 50);
+	private static Slider volume_music = new Slider("Music: ",500, 50, 150, 200, 50);
+	private static Slider max_fps = new Slider("FPS:", 500, 50, 150, 300, 130);
 	
 	
 	public static void create(){		
@@ -104,6 +105,10 @@ public class Main_menu {
 				sw = volume_music.getSliderWidth();
 				sm = volume_music.getMaxWidth();
 				volume_music.update("Music: "+(int)((sw/sm)*100));
+				sw = max_fps.getSliderWidth();
+				sm = 250;
+				int range = 220;
+				max_fps.update("FPS: "+(int)(range*(sw/(2*sm)) + 30));
 				break;
 		}
 		
@@ -134,6 +139,7 @@ public class Main_menu {
 				Main.window.rectangle(boxX, boxY, boxW, boxH, 20);
 				volume_sfx.draw();
 				volume_music.draw();
+				max_fps.draw();
 				backToMenu.setFontColour(1f, 1f, 1f);
 				backToMenu.draw();
 				
