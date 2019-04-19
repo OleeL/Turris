@@ -68,10 +68,13 @@ public class Playing {
 	private static int spawn_num;
 	public static boolean roundEnded;
 	
+	// Enemies and arrows
 	private static ArrayList<Enemy> enemies;
 	private static ArrayList<Arrow> arrows;
 	
+	// Gameplay
 	private static float selected_range;
+	public static float speed_modifier = 1;
 		
 	public static void create(int difficulty, int round, String level){
 		
@@ -121,7 +124,7 @@ public class Playing {
 		start_new_round(round);
 	}
 	
-	public static void update(){
+	public static void update(double dt){
 		if (state == PLAYING) {
 			//Spawning
 			long time = System.currentTimeMillis();
@@ -146,7 +149,7 @@ public class Playing {
 	
 			// Updates the enemies
 			for (int i = 0; i < enemies.size(); i++) {
-				enemies.get(i).update();
+				enemies.get(i).update(dt);
 				if (enemies.get(i).reached) {
 					lives--;
 					enemies.remove(i);
@@ -170,7 +173,7 @@ public class Playing {
 			
 			// Updates the arrows & checks if the enemies are hit by the arrows
 			for (int arrow = 0; arrow < arrows.size(); arrow++) {
-				arrows.get(arrow).update();
+				arrows.get(arrow).update(dt);
 				for (int e = 0; e < enemies.size(); e++) {
 					float x = enemies.get(e).getCX();
 					float y = enemies.get(e).getCY();

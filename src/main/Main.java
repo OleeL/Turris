@@ -37,10 +37,9 @@ public class Main {
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
 			
-			//System.out.println(window.getDelta());
-			double dt = window.getDelta();
 			// Organises the updating within the states
 			if (window.processingLimitReady()) {
+				double dt = window.getDelta();
 				window.clear();  // Clears the previous frame
 				window.update(); // Start update
 				switch (state){
@@ -49,12 +48,11 @@ public class Main {
 						Main_menu.update(dt);
 						Main_menu.draw();
 						break;
-						
+				
 					case PLAYING :
-						Playing.update();
+						Playing.update(dt);
 						Playing.draw();
 						break;
-			
 				}
 
 				// Finish update

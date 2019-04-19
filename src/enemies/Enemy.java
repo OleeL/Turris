@@ -39,7 +39,7 @@ public abstract class Enemy {
 	public Enemy(String path, float x, float y, float grid_size) {
 		this.x = x;
 		this.y = y;
-		this.speed = 1;
+		this.speed = 100;
 		this.xvel = 0;
 		this.yvel = 0;
 		this.scale = grid_size / 100;
@@ -56,7 +56,7 @@ public abstract class Enemy {
 		this.radius = ((w - h)/2);
 	}
 	
-	public void update(){
+	public void update(double dt){
         if (target == null) {
     		// Defining the destination positions
     		dest_x = (float) Playing.grid.finish_x + (grid_size / 2);
@@ -68,7 +68,7 @@ public abstract class Enemy {
     		dest_y = (float) (target.y * grid_size)+(grid_size / 2);
         }
         
-		physics();
+		physics(dt);
 		
         // Checks the distance from the enemy and the target destination
         double dist = Math.sqrt(Math.pow(dest_x-orb_x,2) + Math.pow(dest_y-orb_y,2));
@@ -85,7 +85,7 @@ public abstract class Enemy {
 	}
 	
 	// Processes the movement of the object
-	public void physics() {
+	public void physics(double dt) {
 		// ORB CODE
 		// Orb follows path
     	float orb_dir = (float) Math.toDegrees(Math.atan2(dest_y-orb_y, dest_x-orb_x));
@@ -96,9 +96,9 @@ public abstract class Enemy {
         
         double dist = Math.sqrt(Math.pow(cx-orb_x,2) + Math.pow(cy-orb_y,2));
         if (dist < 30)
-        	orb_speed += 0.001;
+        	orb_speed += (0.001*Playing.speed_modifier) * dt;
         else
-        	orb_speed = speed;
+        	orb_speed = (float) ((speed*Playing.speed_modifier) * dt);
         
         // Moves the invisible orb the enemy is following
         orb_xvel = (orb_speed * orb_dx);
@@ -117,8 +117,8 @@ public abstract class Enemy {
         float direction_y = (float) Math.sin(direction * Math.PI / 180);
         
         // Moves the enemy
-        xvel = (speed * direction_x);
-        yvel = (speed * direction_y);
+        xvel = (float) (direction_x * (speed*Playing.speed_modifier) * dt);
+        yvel = (float) (direction_y * (speed*Playing.speed_modifier) * dt);
         x += xvel;
         y += yvel;
 	}

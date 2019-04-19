@@ -22,7 +22,6 @@ public class Arrow {
 			float scale, 
 			float damage, 
 			float speed) {
-        
 
         texture = new Texture( "turrets/arrow.png", x, y, scale, scale);
         
@@ -49,23 +48,23 @@ public class Arrow {
         float direction_y = (float) Math.sin(direction * Math.PI / 180);
         
         // Moves the enemy
-        xvel = (speed * direction_x);
-        yvel = (speed * direction_y);
+        xvel = (direction_x * speed);
+        yvel = (direction_y * speed);
         
         // Sets the rotation of the arrow so it's facing the right way
         texture_rotation = (float) Math.atan2( tx-cx, ty-cy);
 
 	}
 	
-	public void update() {
+	public void update( double dt ) {
 		// if the arrow goes off the screen, it is then removed
 		if (x < 0 || y < 0 || x > Main.window.getWidth() || y > Main.window.getHeight()) {
 			destroy = true;
 		}
         
 		// Moves the arrow based on it's current velocity
-		x += xvel;
-        y += yvel;
+		x += xvel * dt;
+        y += yvel * dt;
         
 
         // Moves the texture of the arrow
@@ -75,7 +74,6 @@ public class Arrow {
 	}
 	
 	public void draw() {
-		
 		// Draw the enemy (at a rotation too)
 		texture.draw(-((float) Math.toDegrees(texture_rotation)));
 	}
