@@ -209,16 +209,31 @@ public class Playing {
 				grid.turnOffLines();
 				break;
 			case TOWER_1:
-				place(TOWER_1, 1);
-				grid.turnOnLines();
+				if (Turret_1.TURRET_COST <= coins) {
+					place(TOWER_1, 1);
+					grid.turnOnLines();
+				} else {
+					selected = UNSELECTED;
+				}
+
 				break;
 			case TOWER_2:
-				place(TOWER_2, 1);
-				grid.turnOnLines();
+				if (Turret_2.TURRET_COST <= coins) {
+					place(TOWER_2, 1);
+					grid.turnOnLines();
+				} else {
+					selected = UNSELECTED;
+				}
+
 				break;
 			case TOWER_3:
-				place(TOWER_3, 1);
-				grid.turnOnLines();
+				if (Turret_3.TURRET_COST <= coins) {
+					place(TOWER_3, 1);
+					grid.turnOnLines();
+				} else {
+					selected = UNSELECTED;
+				}
+
 				break;
 			case QUIT:
 				Main.state = Main.MAIN_MENU;

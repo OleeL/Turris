@@ -8,7 +8,13 @@ package turrets;
  */
 public class Turret_2 extends Turret {
 
-	
+	public static float TURRET_RANGE = 100;
+	public static float TURRET_DAMAGE = 40;
+	public static long TURRET_RATE_OF_FIRE = 500;
+	public static int TURRET_COST = 100;	
+	public static float TURRET_ARROW_SPEED = 12f;	
+	public static int TURRET_UPGRADE_COST = 60;
+
 	/**
 	 * @param float x position 
 	 * @param float y position 
@@ -16,12 +22,12 @@ public class Turret_2 extends Turret {
 	 */
 	public Turret_2(float x, float y, float grid_size) {
 		super("turrets/turret_2", x, y, grid_size);
-		range = 100;
-		damage = 40;
-		rateOfFire = 500;
-		cost = 100;
-		arrowSpeed = 12f;
-		upgrade_cost = 60;
+		range = TURRET_RANGE;
+		damage = TURRET_DAMAGE;
+		rateOfFire = TURRET_RATE_OF_FIRE;
+		cost = TURRET_COST;
+		arrowSpeed = TURRET_ARROW_SPEED;
+		upgrade_cost = TURRET_UPGRADE_COST;
 	}
 
 	public int upgrade() {

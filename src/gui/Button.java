@@ -25,6 +25,8 @@ public class Button {
 	private float font_g = 1f;
 	private float font_b = 1f;
 	
+	private boolean hover;
+	
 	public Button(String name, float x, float y, float width, float height, int state)
 	{
 		this.x = x;
@@ -33,6 +35,8 @@ public class Button {
 		this.height = height;
 		this.state = state;
 		this.name = name;
+		
+		hover = false;
 		
 		// Creates text to go on the button
 		text = new Text(name, x, y, 16);
@@ -102,6 +106,8 @@ public class Button {
 			g = 0.4f;
 			b = 0.4f;
 			
+			hover = true;
+			
 			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
 				return true;
 
@@ -112,7 +118,10 @@ public class Button {
 			r = 0f;
 			g = 0f;
 			b = 0f;
+			
+			hover = false;
 		}
+
 		return false;
 	}
 	
@@ -152,6 +161,10 @@ public class Button {
 	// Returns the y coordinate
 	public float getY() {
 		return y;
+	}
+	
+	public boolean getHover() {
+		return hover;
 	}
 	
 }

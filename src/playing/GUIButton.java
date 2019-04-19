@@ -18,10 +18,13 @@ public class GUIButton {
 	private final float[] BUTTON_HOVER_COLOUR   = { 0.3f, 0.3f, 0.3f, 0.5f };
 	private float[]       button_colour         = DEFAULT_BUTTON_COLOUR;
 	
+	private boolean hover;
+	
 	public GUIButton(String t, float w, float h, int code) {
 		this.w = w;
 		this.h = h;
 		this.code = code;
+		hover = false;
 		text = new Text(t, (int)x, (int)y, 11);
 	}
 	
@@ -32,6 +35,8 @@ public class GUIButton {
 		// If mouse hovers over the button
 		if (mx > x && mx < x+w && my > y && my < y+h){
 			button_colour = BUTTON_HOVER_COLOUR;
+			
+			hover = true;
 			// If mouse is clicked
 			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
 				return code;
@@ -40,6 +45,7 @@ public class GUIButton {
 		else
 		{
 			button_colour = DEFAULT_BUTTON_COLOUR;
+			hover = false;
 		}
 		return -1;
 	}
@@ -59,6 +65,14 @@ public class GUIButton {
 		text.setPosition(
 				(int) ((x+(w/2)) - (text_w/2)), 
 				(int) (((y+(h/2)) - (text_h/2))));
+	}
+	
+	public boolean getHover() {
+		return hover;
+	}
+	
+	public Text getText() {
+		return text;
 	}
 
 }

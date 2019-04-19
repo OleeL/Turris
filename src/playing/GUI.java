@@ -12,6 +12,9 @@ import gui.Button;
 import gui.Text;
 import main.Main;
 import main.Main_menu;
+import turrets.Turret_1;
+import turrets.Turret_2;
+import turrets.Turret_3;
 
 /**
  * @author Oliver Legg - sgolegg - 201244658
@@ -38,6 +41,8 @@ public class GUI {
 	private float final_x = (Main.window.getWidth()/2)-(final_w/2);
 	private float final_y = (Main.window.getHeight()/2)-(final_h/2);
 	private float final_r = 6;
+	
+	private Text turret_info = new Text("Price:", 650,520,18);
 	
 	// Winning Text & Losing Text
 	private Text win_text  = new Text("Congratulations! You win!", 0, 0, 18);
@@ -173,12 +178,39 @@ public class GUI {
 		
 		// Updates tower buttons, pause buttons
 		if (!closed) {
+			String temp_info = "";
 			for (GUIButton button : buttons){
 				int temp_state = button.update();
 				if (temp_state > -1) {
 					guiClicked = true;
 					state = temp_state;
 				}
+				if (button.getHover() && button.getText().text != "Quit") {
+					switch (button.getText().text) {
+					case "Tower 1":
+						temp_info = String.valueOf(Turret_1.TURRET_COST);
+						break;
+					case "Tower 2":
+						temp_info = String.valueOf(Turret_2.TURRET_COST);
+						break;
+					case "Tower 3":
+						temp_info = String.valueOf(Turret_3.TURRET_COST);
+						break;
+					}
+					
+				}
+				if (temp_info != "") {
+					if (Playing.coins < Integer.parseInt(temp_info)) {
+						turret_info.text = "xCost: " + temp_info + "c";
+					} else {
+						turret_info.text = "Cost: " + temp_info + "c";
+					}
+					
+				} else {
+					turret_info.text = "";
+				}
+				
+				
 			}
 		}
 		
@@ -198,7 +230,7 @@ public class GUI {
 		{
 			colour = DEFAULT_COLOUR;
 		}
-		
+				
 		// The button that starts and stops the rounds
 		if (mx > open_button_x &&
 				mx < open_button_x+open_button_w &&
@@ -304,6 +336,19 @@ public class GUI {
 			for (GUIButton button : buttons) {
 				button.draw();
 			}
+			
+			if (turret_info.getText().length() != 0) {
+				if (turret_info.getText().contains("x")) {
+
+					Main.window.setColour(1f,0,0,1f);
+					turret_info.text = turret_info.getText().substring(1);
+				} else {				
+					Main.window.setColour(0,1f,0,1f);
+				}
+				
+				turret_info.draw();
+			}
+
 			
 			// Creating a border for the GUI.
 			Main.window.setColour(LINE_COLOUR);
