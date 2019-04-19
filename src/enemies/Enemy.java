@@ -1,7 +1,6 @@
 package enemies;
 
 import gui.Texture;
-import main.Main;
 import playing.Grid;
 import playing.Playing;
 import engine.io.Node;

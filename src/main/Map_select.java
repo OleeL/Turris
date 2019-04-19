@@ -155,7 +155,4 @@ public class Map_select {
 		}
 	}
 	
-	
-	
-	
 }
