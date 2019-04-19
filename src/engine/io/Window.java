@@ -19,7 +19,7 @@ public class Window {
 	private int width, height;
 	private String title;
 	private long window;
-	private double fps_cap, time, processedTime;
+	private double fps_cap, time, processedTime = 0;
 	private double lastFrame;
 	private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 	private boolean[] mouseButtons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
@@ -92,7 +92,6 @@ public class Window {
 			GLFW.glfwSwapInterval(0);
 		
 		time = getTime();
-		processedTime = 0;
 	}
 	
 	// Returns whether the window should be closed
@@ -127,7 +126,7 @@ public class Window {
 			double passedTime = nextTime - time;
 			processedTime += passedTime;
 			time = nextTime;
-
+			
 			while (processedTime > 1.0/fps_cap) {
 				processedTime -= 1.0/fps_cap;
 				return true;
@@ -188,12 +187,6 @@ public class Window {
 		return fps_cap;
 	}
 	
-//	// Gets the frame rate
-//	public double getFPS()
-//	{
-//		return processedTime;
-//	}
-	
 	// Set max fps
 	public void setFPS(double fps) {
 		fps_cap = fps;
@@ -220,8 +213,6 @@ public class Window {
 	 * 
 	 * @param float r, float g, float b, float alpha
 	 * </pre>
-	 *    
-	 *  
 	 */
 	public void setColour(float r, float g, float b, float a)
 	{

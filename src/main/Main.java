@@ -34,15 +34,15 @@ public class Main {
 		// Creates the main menu
 		Main_menu.create();
 		
-		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
-			window.clear();  // Clears the previous frame
-			window.update(); // Start update
+			
 			//System.out.println(window.getDelta());
 			double dt = window.getDelta();
 			// Organises the updating within the states
 			if (window.processingLimitReady()) {
+				window.clear();  // Clears the previous frame
+				window.update(); // Start update
 				switch (state){
 				
 					case MAIN_MENU : 
@@ -54,12 +54,12 @@ public class Main {
 						Playing.update();
 						Playing.draw();
 						break;
-						
-				}
-			}
 			
-			// Finish update
-			window.swapBuffers();
+				}
+
+				// Finish update
+				window.swapBuffers();
+			}
 		}
 	}
 	
