@@ -1,6 +1,7 @@
 package enemies;
 
 import gui.Texture;
+import main.Main;
 import playing.Grid;
 import playing.Playing;
 import engine.io.Node;
@@ -96,7 +97,7 @@ public abstract class Enemy {
         
         double dist = Math.sqrt(Math.pow(cx-orb_x,2) + Math.pow(cy-orb_y,2));
         if (dist < 30)
-        	orb_speed += (0.001*Playing.speed_modifier) * dt;
+        	orb_speed += (float) ((1*Playing.speed_modifier) * dt);
         else
         	orb_speed = (float) ((speed*Playing.speed_modifier) * dt);
         
@@ -245,4 +246,8 @@ public abstract class Enemy {
 	public int getReward() {
 		return value;
 	}
+	
+//	private static difference(float x1, float y1) {
+//		if (x1)
+//	}
 }

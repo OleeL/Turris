@@ -34,7 +34,7 @@ public class Main_menu {
 	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
 	private static Slider volume_sfx = new Slider("Sound Effects:", 500, 50, 150, 100, 50);
 	private static Slider volume_music = new Slider("Music: ",500, 50, 150, 200, 50);
-	private static Slider max_fps = new Slider("FPS:", 500, 50, 150, 300, 130);
+	private static Slider max_fps = new Slider("FPS:", 500, 50, 150, 300, 500);
 	
 	
 	public static void create(){		

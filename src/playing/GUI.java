@@ -75,6 +75,15 @@ public class GUI {
 			25f, 
 			1);
 	
+	// Button to change speed of game
+	private Button button_speed = new Button(
+			"1x",
+			0f,
+			0f,
+			35f,
+			45f,
+			2);
+	
 	// Statistics GUI panel variables
 	private float stats_w = 200f;
 	private float stats_h = 100f;
@@ -164,6 +173,17 @@ public class GUI {
 			final_stats[i].setPosition(bx, by);
 			by += by_incrementor;
 		}
+		
+		// Respositioning the speed modifier button
+		bx = button_speed.getX();
+		by = button_speed.getY();
+		bw = button_speed.getWidth();
+		bh = button_speed.getHeight();
+		txt = button_speed.getText().getText();
+		txt_w =button_speed.getText().getFont().getTextWidth(txt);
+		txt_h =button_speed.getText().getFont().getCharHeight();
+		button_speed.getText().setPosition(
+				bx+(bw/2)-(txt_w/2), by+(bh/2)-(txt_h/2));
 		// Reset the position of text and buttons
 		button_round_resetPosition();
 	}
@@ -269,6 +289,22 @@ public class GUI {
 			}
 		}
 		
+		if (button_speed.updateClick()) {
+			if (Playing.speed_modifier == 1) {
+				Playing.speed_modifier = 2;
+			}
+			else if (Playing.speed_modifier == 2) {
+				Playing.speed_modifier = 4;
+			}
+			else if (Playing.speed_modifier == 4) {
+				Playing.speed_modifier = 8;
+			}
+			else {
+				Playing.speed_modifier = 1;
+			}
+			button_speed.setName((int) Playing.speed_modifier+"x");
+		}
+		
 		// Updating the winning and losing state
 		if (Playing.state == Playing.WIN || Playing.state == Playing.LOSE) {
 			if (button_quit.updateClick()) {
@@ -284,89 +320,95 @@ public class GUI {
 	}
 	
 	public void draw(){
-		button_round.draw();
-		guiClicked = false;
 		
-		draw_statistics();
-		
-		// Setting the colours for the open GUI button
-		Main.window.setColour(colour);
-		
-		// Open button
-		glBegin(GL_POLYGON);
-		
-			// top-left corner
-			Main.window.DrawGLRoundedCorner(
-					open_button_x, 
-					open_button_y + open_button_radius, 
-					3 * Math.PI / 2, 
-					Math.PI / 2, 
-					open_button_radius
-					);
-	
-			// top-right corner
-			glVertex2f(
-					open_button_x+open_button_w, 
-					open_button_y);
-	
-			// bottom-right corner 
-			glVertex2f(
-					open_button_x+open_button_w, 
-					open_button_y+open_button_h);
-			
-			// bottom-left
-			Main.window.DrawGLRoundedCorner(
-					open_button_x + open_button_radius, 
-					open_button_y + open_button_h, 
-					Math.PI,
-					Math.PI / 2,
-					open_button_radius);
-		glEnd();
-		
-		// If the GUI is open, show all of the GUI
-		if (!closed)
-		{
-			// Setting the colours for the GUI
-			Main.window.setColour(DEFAULT_COLOUR);
-			
-			// GUI side
-			Main.window.rectangle(x, y, w, h);			
-			
-			// Drawing all of the buttons on towers and button on the GUI
-			for (GUIButton button : buttons) {
-				button.draw();
-			}
-			
-			if (turret_info.getText().length() != 0) {
-				if (turret_info.getText().contains("x")) {
-
-					Main.window.setColour(1f,0,0,1f);
-					turret_info.text = turret_info.getText().substring(1);
-				} else {				
-					Main.window.setColour(0,1f,0,1f);
-				}
+		switch (Playing.state) {
+			// Draws for the winning state
+			case Playing.PAUSED:
+			case Playing.ROUND_END:
+			case Playing.PLAYING:
+				button_round.draw();
+				guiClicked = false;
 				
-				turret_info.draw();
-			}
-
+				draw_statistics();
+				
+				// Setting the colours for the open GUI button
+				Main.window.setColour(colour);
+				
+				// Open button
+				glBegin(GL_POLYGON);
+				
+					// top-left corner
+					Main.window.DrawGLRoundedCorner(
+							open_button_x, 
+							open_button_y + open_button_radius, 
+							3 * Math.PI / 2, 
+							Math.PI / 2, 
+							open_button_radius
+							);
 			
-			// Creating a border for the GUI.
-			Main.window.setColour(LINE_COLOUR);
-			Main.window.drawLine(x, y, x, (y+h)-stats_h);
+					// top-right corner
+					glVertex2f(
+							open_button_x+open_button_w, 
+							open_button_y);
+			
+					// bottom-right corner 
+					glVertex2f(
+							open_button_x+open_button_w, 
+							open_button_y+open_button_h);
+					
+					// bottom-left
+					Main.window.DrawGLRoundedCorner(
+							open_button_x + open_button_radius, 
+							open_button_y + open_button_h, 
+							Math.PI,
+							Math.PI / 2,
+							open_button_radius);
+				glEnd();
+				
+				// If the GUI is open, show all of the GUI
+				if (!closed)
+				{
+					// Setting the colours for the GUI
+					Main.window.setColour(DEFAULT_COLOUR);
+					
+					// GUI side
+					Main.window.rectangle(x, y, w, h);			
+					
+					// Drawing all of the buttons on towers and button on the GUI
+					for (GUIButton button : buttons) {
+						button.draw();
+					}
+					
+					if (turret_info.getText().length() != 0) {
+						if (turret_info.getText().contains("x")) {
+
+							Main.window.setColour(1f,0,0,1f);
+							turret_info.text = turret_info.getText().substring(1);
+						} else {				
+							Main.window.setColour(0,1f,0,1f);
+						}
+						
+						turret_info.draw();
+					}
+					// Creating a border for the GUI.
+					Main.window.setColour(LINE_COLOUR);
+					Main.window.drawLine(x, y, x, (y+h)-stats_h);
+				}
+				button_speed.draw();
+				break;
+			case Playing.WIN:
+				draw_final_screen();
+				Main.window.setColour(FONT_COLOUR);
+				win_text.draw();
+				break;
+			// Draws for the losing state
+			case Playing.LOSE:
+				draw_final_screen();
+				Main.window.setColour(FONT_COLOUR);
+				lose_text.draw();
+				break;
 		}
 		
-		// Draws for the winning state
-		if (Playing.state == Playing.WIN) {
-			draw_final_screen();
-			Main.window.setColour(FONT_COLOUR);
-			win_text.draw();
-		}
-		// Draws for the losing state
-		if (Playing.state == Playing.LOSE) {
-			draw_final_screen();
-			Main.window.setColour(FONT_COLOUR);
-			lose_text.draw();
-		}
 		
 	}
 	
