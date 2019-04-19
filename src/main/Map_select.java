@@ -4,9 +4,7 @@ import gui.Button;
 import gui.Text;
 import gui.Texture;
 import playing.Playing;
-/*TODO
- * Check that main menu states are changed correctly when going to and from map select
- */
+
 
 public class Map_select {
 	
@@ -90,6 +88,7 @@ public class Map_select {
 		
 		//Start the game on the selected map when button clicked
 		if (buttons[0].updateClick()) {
+
 			Main.state = Main.PLAYING;
 			
 			Playing.create(Playing.EASY, 1, convert_to_map_name(selected_map));
@@ -97,6 +96,7 @@ public class Map_select {
 		buttons[1].updateClick();
 		
 		if (btn_back.updateClick()) {
+
 			Main.state = Main.MAIN_MENU;
 			Main_menu.state = Main_menu.MAIN;
 		}
