@@ -33,7 +33,8 @@ public class Main_menu {
 	private static float boxX = (Main.window.getWidth() / 2) - (boxW/2);
 	private static float boxY = (Main.window.getHeight() / 2) - (boxH/2);
 	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
-	private static Slider volume = new Slider("Volume", 500, 50, 150, 100, 500);
+	private static Slider volume_sfx = new Slider("Sound Effects:", 500, 50, 150, 100, 31);
+	private static Slider volume_music = new Slider("Music: ",500, 50, 150, 200, 62);
 	
 	
 	public static void create(){		
@@ -49,8 +50,9 @@ public class Main_menu {
 		float b_h = 50;
 		float b_yIncrement = 60;
 		
-		String[] names  = {"New Game", "Load Game","Settings", "How To Play", "Exit"};
-		int[]    states = { NEW_GAME,   LOAD_GAME,  SETTINGS,   HELP,          EXIT};
+		String[]names ={"New Game","Load Game","Settings","How To Play","Exit"};
+		int[]   states={ NEW_GAME,  LOAD_GAME,  SETTINGS,  HELP,         EXIT };
+		
 		for (int i = 0; i < buttons.length; i++){
 			buttons[i] = new Button(names[i], b_x, b_y, b_w, b_h, states[i]);
 			b_y += b_yIncrement;
@@ -93,7 +95,13 @@ public class Main_menu {
 				if (backToMenu.updateClick()) {	
 					state = MAIN;
 				}
-				volume.updateSlider();
+				// Updating the text in the slider (and the interaction)
+				float sw = volume_sfx.getSliderWidth();
+				float sm = volume_sfx.getMaxWidth();
+				volume_sfx.update("Sound Effects: "+(int)((sw/sm)*100));
+				sw = volume_music.getSliderWidth();
+				sm = volume_music.getMaxWidth();
+				volume_music.update("Music: "+(int)((sw/sm)*100));
 				break;
 		}
 		
@@ -123,7 +131,8 @@ public class Main_menu {
 			case SETTINGS:
 				Main.window.setColour(0f, 0f, 0f, 0.5f);
 				Main.window.rectangle(boxX, boxY, boxW, boxH, 20);
-				volume.draw();
+				volume_sfx.draw();
+				volume_music.draw();
 				backToMenu.setFontColour(1f, 1f, 1f);
 				backToMenu.draw();
 				
