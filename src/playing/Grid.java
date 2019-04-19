@@ -8,6 +8,7 @@
 package playing;
 
 import gui.Texture;
+import main.Map_select;
 import turrets.*;
 
 import static main.Main.window;
@@ -121,7 +122,7 @@ public class Grid {
 		grid[y][x] = new Entity(
 				tile, 
 				new Texture(
-						PATH+tile+PNG, 
+						PATH+"/" + (Map_select.getSelectedMap() + 1) + "/" +tile+PNG, 
 						(int) (x*grid_size), 
 						(int) (y*grid_size),
 						grid_size / 100,  // The tiles are 100 x 100
