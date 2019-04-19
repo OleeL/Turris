@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL11.glVertex2f;
 import gui.Button;
 import gui.Text;
 import main.Main;
+import main.Main_menu;
 
 /**
  * @author Oliver Legg - sgolegg - 201244658
@@ -241,6 +242,7 @@ public class GUI {
 			if (button_quit.updateClick()) {
 				Playing.state = Playing.PAUSED;
 				Main.state = Main.MAIN_MENU;
+				Main_menu.state = Main_menu.MAIN;
 			}
 		}
 		

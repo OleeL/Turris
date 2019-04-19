@@ -32,6 +32,7 @@ public class Main {
 		// Creates the main menu
 		Main_menu.create();
 		
+		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
 			if (window.isUpdating()) {
@@ -51,6 +52,7 @@ public class Main {
 						Playing.update();
 						Playing.draw();
 						break;
+						
 				}
 				//printMouseCoordsOnClick();
 				

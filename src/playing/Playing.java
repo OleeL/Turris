@@ -12,6 +12,7 @@ import org.lwjgl.glfw.GLFW;
 
 import enemies.Enemy;
 import main.Main;
+import main.Main_menu;
 import turrets.*;
 
 public class Playing {
@@ -221,6 +222,7 @@ public class Playing {
 				break;
 			case QUIT:
 				Main.state = Main.MAIN_MENU;
+				Main_menu.state = Main_menu.MAIN;
 				selected = UNSELECTED;
 				break;
 		}

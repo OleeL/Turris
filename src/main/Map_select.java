@@ -98,6 +98,7 @@ public class Map_select {
 		
 		if (btn_back.updateClick()) {
 			Main.state = Main.MAIN_MENU;
+			Main_menu.state = Main_menu.MAIN;
 		}
 	}
 		
