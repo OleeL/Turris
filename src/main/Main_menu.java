@@ -5,7 +5,6 @@ import org.lwjgl.glfw.GLFW;
 import gui.Button;
 import gui.Cloud;
 import gui.Texture;
-import playing.Playing;
 import gui.Slider;
 
 /**
