@@ -5,7 +5,7 @@ import engine.io.Random;
 public class Cloud {
 
 	private Texture texture;
-	private double speed = Random.decimal(0.2, 1);
+	private double speed = Random.integer(1000, 10000);
 	public Cloud(int cloud) {
 		int random_x = Random.integer(0, 900);
 		int random_y = Random.integer(0, 200);
@@ -15,7 +15,7 @@ public class Cloud {
 	
 	public void update(double dt)
 	{
-		texture.setX((float) (texture.getX() - speed));
+		texture.setX((float) (texture.getX() - (speed * dt)));
 	}
 	
 	public void draw()
@@ -23,7 +23,7 @@ public class Cloud {
 		if (texture.getX()+texture.getWidth() < 0) {
 			texture.setX(800);
 			texture.setY(Random.integer(0, 200));
-			speed = Random.decimal(0.2, 1);
+			speed = Random.integer(30, 100);
 		}
 		texture.draw();
 	}

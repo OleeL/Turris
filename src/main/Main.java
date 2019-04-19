@@ -20,13 +20,14 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// Setting up window settings
-		int WIDTH = 800;              // Screen Width
-		int HEIGHT = 600;             // Screen Height
-		int FPS = 60;                 // Max Frame Rate
+		int width = 800;              // Screen Width
+		int height = 600;             // Screen Height
+		int fps = 60;                 // Max Frame Rate
+		boolean vsync = false;        // Vsync settings
 		String windowName = "Turris"; // Name of the window
 		
 		// Creates the game window
-		window = new Window(WIDTH, HEIGHT, FPS, windowName);
+		window = new Window(width, height, fps, vsync, windowName);
 		window.create();
 		
 		// Creates the main menu
@@ -35,30 +36,27 @@ public class Main {
 		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
-			if (window.isUpdating()) {
-				window.clear();  // Clears the previous frame
-				window.update(); // Start update
-				
-				// Organises the updating within the states
-				switch (state){
-				
-					case MAIN_MENU : 
-						Main_menu.update(window.getTime());
-						Main_menu.draw();
-
-						break;
-						
-					case PLAYING :
-						Playing.update();
-						Playing.draw();
-						break;
-						
-				}
-				//printMouseCoordsOnClick();
-				
-				// Finish update
-				window.swapBuffers();
+			window.clear();  // Clears the previous frame
+			window.update(); // Start update
+			//System.out.println(window.getDelta());
+			double dt = window.getDelta();
+			// Organises the updating within the states
+			switch (state){
+			
+				case MAIN_MENU : 
+					Main_menu.update(dt);
+					Main_menu.draw();
+					break;
+					
+				case PLAYING :
+					Playing.update();
+					Playing.draw();
+					break;
+					
 			}
+			
+			// Finish update
+			window.swapBuffers();
 		}
 	}
 	

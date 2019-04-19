@@ -108,7 +108,9 @@ public class Main_menu {
 				sw = max_fps.getSliderWidth();
 				sm = 250;
 				int range = 220;
-				max_fps.update("FPS: "+(int)(range*(sw/(2*sm)) + 30));
+				int fps = (int)(range*(sw/(2*sm)) + 30);
+				max_fps.update("FPS: "+fps);
+				Main.window.setFPS(fps);
 				break;
 		}
 		

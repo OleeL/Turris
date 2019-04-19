@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.*;
+
 /**
  * @author Team 62
  * 
@@ -17,19 +18,21 @@ public class Window {
 	private int width, height;
 	private String title;
 	private long window;
-	private boolean closed = false;
-	private double fps_cap, time, processedTime = 0;
+	private double fps_cap;
+	private double lastFrame;
 	private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 	private boolean[] mouseButtons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
+	private boolean vsync, closed = false;
 	public final int LEFT_MOUSE = 0;
 	public final int RIGHT_MOUSE = 1;
 	
-	public Window(int width, int height, int fps, String title)
+	public Window(int width, int height, int fps, boolean vsync, String title)
 	{
 		this.width = width;
 		this.height = height;
 		this.title = title;
-		fps_cap = fps;
+		this.vsync = vsync;
+		this.fps_cap = fps;
 	}
 	
 	public void create()
@@ -67,9 +70,6 @@ public class Window {
 	
 		// Shows the window when done
 		GLFW.glfwShowWindow(window);
-		
-		// Sets the time
-		time = getTime();
 
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
@@ -80,6 +80,11 @@ public class Window {
 		glMatrixMode(GL_MODELVIEW);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
+		if (vsync) 
+			GLFW.glfwSwapInterval(1);
+		else
+			GLFW.glfwSwapInterval(0);
 	}
 	
 	// Returns whether the window should be closed
@@ -120,20 +125,12 @@ public class Window {
 	}
 	
 	// Returns whether
-	public boolean isUpdating()
+	public double getDelta()
 	{
-		if (!closed) {
-			double nextTime = getTime();
-			double passedTime = nextTime - time;
-			processedTime += passedTime;
-			time = nextTime;
-			
-			while (processedTime > 1.0/fps_cap) {
-				processedTime -= 1.0/fps_cap;
-				return true;
-			}
-		}
-		return false;
+		double time = getTime();
+		double delta = (double) (time - lastFrame);
+        lastFrame = time;
+        return delta;
 	}
 	
 	// Gets the width of the screen
@@ -161,10 +158,15 @@ public class Window {
 		return fps_cap;
 	}
 	
-	// Gets the frame rate
-	public double getFPS()
-	{
-		return processedTime;
+//	// Gets the frame rate
+//	public double getFPS()
+//	{
+//		return processedTime;
+//	}
+	
+	// Set max fps
+	public void setFPS(double fps) {
+		fps_cap = fps;
 	}
 
 	// Returns true if a certain key is down
@@ -252,6 +254,16 @@ public class Window {
 	// Draws a rectangle
 	public void rectangle(float x, float y, float w, float h) {
         glRectf(x, y, x+w, y+h);
+	}
+	
+	// Toggles vsync
+	public void toggleVsync() {
+		vsync = !vsync;
+	}
+	
+	// Get vsync
+	public boolean getVsync() {
+		return vsync;
 	}
 
 	// Draws a rectangle with rounded edges
