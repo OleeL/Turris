@@ -116,4 +116,9 @@ public abstract class Turret extends Entity {
 		return cost;
 	}
 	
+	public float getRange() {
+		return range;
+	}
+	
+	
 }

@@ -104,6 +104,7 @@ public class Button {
 			
 			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
 				return true;
+
 			}
 		}
 		else
@@ -152,4 +153,5 @@ public class Button {
 	public float getY() {
 		return y;
 	}
+	
 }

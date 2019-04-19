@@ -7,6 +7,9 @@
 package playing;
 
 import java.util.ArrayList;
+
+import org.lwjgl.glfw.GLFW;
+
 import enemies.Enemy;
 import main.Main;
 import turrets.*;
@@ -66,6 +69,8 @@ public class Playing {
 	
 	private static ArrayList<Enemy> enemies;
 	private static ArrayList<Arrow> arrows;
+	
+	private static float selected_range;
 		
 	public static void create(int difficulty, int round, String level){
 		
@@ -188,6 +193,8 @@ public class Playing {
 		// Updates the gui and gets the button if it is pushed
 		int btn = gui.update();
 		
+		if (Main.window.isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) selected = UNSELECTED;
+		
 		// If the gui is clicked and there is something selected: unselect item
 		if (gui.isClicked() && selected != UNSELECTED) selected = UNSELECTED;
 		
@@ -235,15 +242,17 @@ public class Playing {
 			if (!gui.isClosed()) gui.close();
 			
 			// If you can place the tile in that place, then 
-			if (canPlace())Main.window.setColour(0f, 1f, 0f, 0.5f);//show green
+			if (canPlace())Main.window.setColour(0f, 1f, 0f, 0.3f);//show green
 			else Main.window.setColour(1f, 0f, 0f, 0.5f); //show red
 			
+			Main.window.circle(true, grid.getCoordX(Main.window.getMouseX()) + (grid.getTileSize() / 2), grid.getCoordY(Main.window.getMouseY()) + (grid.getTileSize() / 2), selected_range, 64);
 			// Outlines of where the turret will go
 			Main.window.rectangle(
 					grid.getCoordX(Main.window.getMouseX()),
 					grid.getCoordY(Main.window.getMouseY()),
 					grid.getTileSize(),
 					grid.getTileSize());
+			
 		}
 		gui.draw();
 	}
@@ -271,18 +280,21 @@ public class Playing {
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());
+				selected_range = ((Turret) turret).getRange();
 				break;
 			case TOWER_2:
 				turret = new Turret_2(
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());
+				selected_range = ((Turret) turret).getRange();
 				break;
 			case TOWER_3:
 				turret = new Turret_3(
 							(float)(temp_tile_x / grid.getTileSize()),
 							(float)(temp_tile_y / grid.getTileSize()),
 							grid.getTileSize());
+				selected_range = ((Turret) turret).getRange();
 				break;
 		}
 			

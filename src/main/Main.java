@@ -60,7 +60,7 @@ public class Main {
 						Map_select.draw();
 						break;
 				}
-				printMouseCoordsOnClick();
+				//printMouseCoordsOnClick();
 				
 				// Finish update
 				window.swapBuffers();
