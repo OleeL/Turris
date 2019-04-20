@@ -28,7 +28,7 @@ public class Text {
 		
 		// Creating the font        
         try {
-			font = new Font("./assets/fonts/DroidSans.ttf", size);
+			font = new Font("./assets/fonts/monof55.ttf", size);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
