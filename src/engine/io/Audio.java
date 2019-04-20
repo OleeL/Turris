@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -16,14 +18,17 @@ import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
 
-/* Todo
- * Work out how to control audio volume?
+/* TODO
+ * Finish creating audio files
  * Make audio not sound like the beat of a song??
- * Speed up audio when game speed is sped up???
+ * Speed up audio when game speed is sped up??? - Don't know if possible or even needed?
  * Add limit to audio sources - Too many turrets shooting on high game speeds
+ * Audio looping?
  */
 
 public class Audio{
+	
+	//Audio file references
 	
 	public static final String SND_TURRET_PLACE = "effects/turret_place.wav";
 	public static final String SND_TURRET_UPGRADE = "effects/turret_upgrade.wav";
@@ -39,19 +44,64 @@ public class Audio{
 	public static final String MSC_MENU = "music/menu.wav";
 	public static final String MSC_GAME = "music/game.wav";
 	
+	private static final String PATH = "assets/sounds/";
+	
+	//private static HashMap<String, Sound> loopingSounds = new HashMap<String, Sound>();
+	
+	private static Sound looped = null;
 	
 	//Plays an audio file
-	public  void playAudio(String filename) {
-		Sound test = new Sound(filename);
-		test.start();
+	public  static void play(String filename) {
+		Sound snd = new Sound(filename, 0f,0f, 1f);
+		snd.start();
+	}
+	
+	//Play an audio file with a given volume
+	public static void play(String filename, float volume) {
+		Sound snd = new Sound(filename, 0f,0f, 1f);
+		snd.start();
+	}
+	
+	//Play audio file in a given position
+	public static void play(String filename, float x, float y) {
+		Sound snd = new Sound(filename,x, y, 1f);
+		snd.start();
+	}
+	
+	//Play audio file in a given position and volume
+	public static void play(String filename, float x, float y, float volume) {
+		Sound snd = new Sound(filename, x, y, volume);
+		snd.start();
+	}
+	
+	public static void playLoop(String filename) {
+		if (looped == null) {
+			looped = new Sound(filename,0f,0f,1f);
+			looped.start();
+		}
+
+	}
+	
+	public static void stop() {
+		if (looped != null) {
+			looped.terminate = true;
+		}
+
 	}
 
 //Creates a sound object on a new thread
-class Sound extends Thread {
+static class Sound extends Thread {
 	private String name;
+	private float x;
+	private float y;
+	private float volume;
+	boolean terminate = false;
 	
-	public Sound(String name) {
+	public Sound(String name, float x, float y, float volume) {
 		this.name = name;
+		this.x = Math.min(Math.max(-1, x), 1);
+		this.y = Math.min(Math.max(-1, y), 1);;
+		this.volume = Math.min(Math.max(0, volume), 1);
 	}
 	
 	//Runs the thread
@@ -59,14 +109,14 @@ class Sound extends Thread {
 		try {
 			play();
 			
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 	
 	//Reads and plays the audio file
-	public void play() throws UnsupportedAudioFileException{
+	public void play() throws Exception{
+		//Create a new audio device
 		long device = ALC10.alcOpenDevice((CharSequence)null);
 		
 		ALCCapabilities deviceCaps = ALC.createCapabilities(device);
@@ -88,41 +138,53 @@ class Sound extends Thread {
 		long newContext = ALC10.alcCreateContext(device, contextAttribList);
 		
 		if (!ALC10.alcMakeContextCurrent(newContext)) {
-			try {
-				throw new Exception("Failed to make context current");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			throw new Exception("Failed to make context current");
 		}
 		
 		AL.createCapabilities(deviceCaps);
 		
-		AL10.alListener3f(AL10.AL_VELOCITY, 0f, 0f, 0f);
-		AL10.alListener3f(AL10.AL_ORIENTATION, 0f, 0f, -1f);
-		
-		
+		//Creates a buffer to store the sound data
 		IntBuffer buffer = BufferUtils.createIntBuffer(1);
 		AL10.alGenBuffers(buffer);
 		
+		//Gets the length of the audio file
 		long time = createBufferData(buffer.get(0));
-			
-		int source = AL10.alGenSources();
 		
+		//Generate a source to play the audio through
+		int source = AL10.alGenSources();	
 		
-		AL10.alSourcei(source, AL10.AL_BUFFER, buffer.get(0));
-		AL10.alSource3f(source, AL10.AL_POSITION, 0f, 0f, 0f);
-		AL10.alSource3f(source,AL10.AL_VELOCITY,0f,0f,0f);
+		//Setup the source
+		AL10.alSourcei(source, AL10.AL_BUFFER, buffer.get(0));	
 		
-		AL10.alSourcef(source, AL10.AL_PITCH,1);
-		AL10.alSourcef(source, AL10.AL_GAIN, 1f);
-		AL10.alSourcei(source, AL10.AL_LOOPING, AL10.AL_FALSE);
+		//Audio looping - Not implemented yet
+		AL10.alSourcei(source, AL10.AL_LOOPING, AL10.AL_TRUE);
 		
+		//Pitch
+		AL10.alSourcef(source, AL10.AL_PITCH,1f);
+		
+		//Position of audio source in 3d space
+		AL10.alSource3f(source, AL10.AL_POSITION, x, y, 0f);
+		
+		//Gain/Volume
+		AL10.alSourcef(source, AL10.AL_GAIN, volume);	
+		
+		//Play the audio
 		AL10.alSourcePlay(source);
 		
-		  try {
-	            Thread.sleep(time); //Wait for the sound to finish
-	        } catch(InterruptedException ex) {}
+		//Make thread sleep until the audio is complete
+		try {
+			while (!terminate) {
+				//Thread.sleep(time);
+				Thread.sleep(10);
+				Thread.yield();
+			}
+		} catch(InterruptedException ex) {
+			throw new InterruptedException("Thread interrupted");
+	    }
+		
+		//Stop the audio
+		//Delete the source
+		//Close the device
 		
 		AL10.alSourceStop(source);
 		
@@ -131,10 +193,11 @@ class Sound extends Thread {
 		ALC10.alcCloseDevice(device);	
 	}
 	
+	//Loads the audio file into buffers
 	private long createBufferData(int p) throws UnsupportedAudioFileException {
 		final int MONO = 1, STEREO = 2;
 		
-		File audio = new File("assets/sounds/" + name);
+		File audio = new File(PATH + name);
 		
 		AudioInputStream stream = null;
 		try {
@@ -145,7 +208,7 @@ class Sound extends Thread {
 		}
 		
 		AudioFormat format = stream.getFormat();
-		if (format.isBigEndian()) throw new UnsupportedAudioFileException("Big endian");
+		if (format.isBigEndian()) throw new UnsupportedAudioFileException("Big Endian files are not supported");
 		
 		int openALFormat = -1;
 		switch(format.getChannels()) {

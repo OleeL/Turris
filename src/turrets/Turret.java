@@ -77,7 +77,7 @@ public abstract class Turret extends Entity {
 	private Arrow fire_at(float tx, float ty) {
 		// Arrows are no longer made ready and the reload timer has started
 		arrowReady = false;
-		Main.audio_manager.playAudio(Audio.SND_TURRET_SHOOT);
+		Audio.play(Audio.SND_TURRET_SHOOT);
 		end = (long) (System.currentTimeMillis( ) + rateOfFire);
 		return new Arrow(
 				game_x+(w/2), 

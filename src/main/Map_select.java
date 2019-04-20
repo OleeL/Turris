@@ -1,5 +1,6 @@
 package main;
 
+import engine.io.Audio;
 import gui.Button;
 import gui.Text;
 import gui.Texture;
@@ -91,7 +92,11 @@ public class Map_select {
 
 			Main.state = Main.PLAYING;
 			
+			Audio.stop();
+			
+			
 			Playing.create(Playing.EASY, 1, convert_to_map_name(selected_map));
+			
 		}
 		buttons[1].updateClick();
 		
