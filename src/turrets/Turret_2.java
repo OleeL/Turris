@@ -8,11 +8,11 @@ package turrets;
  */
 public class Turret_2 extends Turret {
 
-	public static float TURRET_RANGE = 100;
+	public static float TURRET_RANGE = 135;
 	public static float TURRET_DAMAGE = 40;
 	public static long TURRET_RATE_OF_FIRE = 500;
 	public static int TURRET_COST = 100;	
-	public static float TURRET_ARROW_SPEED = 1200f;	
+	public static float TURRET_ARROW_SPEED = 1500f;	
 	public static int TURRET_UPGRADE_COST = 60;
 
 	/**
