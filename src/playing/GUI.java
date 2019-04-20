@@ -229,8 +229,6 @@ public class GUI {
 				} else {
 					turret_info.text = "";
 				}
-				
-				
 			}
 		}
 		

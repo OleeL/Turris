@@ -1,7 +1,6 @@
 package enemies;
 
 import gui.Texture;
-import main.Main;
 import playing.Grid;
 import playing.Playing;
 import engine.io.Node;
@@ -70,12 +69,9 @@ public abstract class Enemy {
         }
         
 		physics(dt);
-		
-        // Checks the distance from the enemy and the target destination
-        double dist = Math.sqrt(Math.pow(dest_x-orb_x,2) + Math.pow(dest_y-orb_y,2));
         
         // If the enemy is there, move to the next destination
-        if ( dist < 5 && dist > -5) {
+        if ( arrivedDestination()) {
         	if (target == null) {
         		reached = true;
         	}
@@ -83,6 +79,7 @@ public abstract class Enemy {
             	target = target.next;
         	}
         }
+        
 	}
 	
 	// Processes the movement of the object
@@ -102,8 +99,8 @@ public abstract class Enemy {
         	orb_speed = (float) ((speed*Playing.speed_modifier) * dt);
         
         // Moves the invisible orb the enemy is following
-        orb_xvel = (orb_speed * orb_dx);
-        orb_yvel = (orb_speed * orb_dy);
+        orb_xvel = orb_dx * orb_speed;
+        orb_yvel = orb_dy * orb_speed;
         orb_x += orb_xvel;
         orb_y += orb_yvel;
         
@@ -247,7 +244,28 @@ public abstract class Enemy {
 		return value;
 	}
 	
-//	private static difference(float x1, float y1) {
-//		if (x1)
-//	}
+	private boolean arrivedDestination() {
+		double dist;
+        // Checks the distance from the enemy and the target destination
+        dist = Math.sqrt(Math.pow(dest_x-orb_x,2) + Math.pow(dest_y-orb_y,2));
+		if ( dist < 10 ) {
+			return true;
+		}
+		
+		for (float i = 0; i < 2; i+= 0.5f) {
+			double new_x = difference(orb_x, orb_x+(orb_xvel*i));
+			double new_y = difference(orb_y, orb_y+(orb_yvel*i));
+			dist = Math.sqrt(Math.pow(dest_x-new_x,2) + Math.pow(dest_y-new_y,2));
+			if ( dist < 10 ) {
+				return true;
+			}
+			
+		}
+		return false;
+	}
+	
+	private static int difference(float n1, float n2) {
+		return (int) (n1 + n2)/2;
+	}
+	
 }

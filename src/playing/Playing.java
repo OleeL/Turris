@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.lwjgl.glfw.GLFW;
 
 import enemies.Enemy;
+import engine.io.Audio;
 import main.Main;
 import main.Main_menu;
 import turrets.*;
@@ -74,7 +75,9 @@ public class Playing {
 	
 	// Gameplay
 	private static float selected_range;
-	public static float speed_modifier = 1;
+	public static float speed_modifier;
+	private static long paused_time;
+	private static long previous_time;
 		
 	public static void create(int difficulty, int round, String level){
 		
@@ -102,12 +105,16 @@ public class Playing {
 				Playing.difficulty_visual = "Easy";
 				break;
 		}
-		// Non difficulty specific attributes
+		// Statistics reset
 		coins_revenue = 0;
 		kills = 0;
 		arrows_fired = 0;
 		buildings_upgraded = 0;
 		buildings_built = 0;
+		
+		// Gameplay variables reset
+		paused_time = 0;
+		speed_modifier = 1;
 		
 		// Instantiating for the GUI and grid interface
 		grid = new Grid(level);
@@ -128,19 +135,24 @@ public class Playing {
 		if (state == PLAYING) {
 			//Spawning
 			long time = System.currentTimeMillis();
+			time += paused_time;
 			if ( time > time_end && spawn_num < wave.enemies.length) {
 				enemies.add(wave.enemies[spawn_num]);
-				time_end = time+(long)(wave.spawn_delays[spawn_num++]*1000F);
+				long delay = (long)(wave.spawn_delays[spawn_num++]*1000F);
+				delay /= speed_modifier;
+				time_end = time+delay;
 			}
 			if (enemies.isEmpty() && !roundEnded) {
 				state = ROUND_END;
 				gui.button_round.setName("Start");
 				start_new_round(++round);
 				roundEnded = true;
+				Main.audio_manager.playAudio(Audio.SND_ROUND_COMPLETE);
 			}
 			
 			// If lives <= 0 you lose
 			if (lives <= 0) {
+				Main.audio_manager.playAudio(Audio.SND_DEFEAT);
 				state = LOSE;
 				lives = 0;
 			}
@@ -170,7 +182,9 @@ public class Playing {
 					}
 				}
 			}
-			
+			paused_time = 0;
+		}
+		if (state == PLAYING || state == ROUND_END) {
 			// Updates the arrows & checks if the enemies are hit by the arrows
 			for (int arrow = 0; arrow < arrows.size(); arrow++) {
 				arrows.get(arrow).update(dt);
@@ -193,6 +207,11 @@ public class Playing {
 					}
 				}
 			}
+		}
+		
+		if (state == PAUSED) {
+			paused_time += System.currentTimeMillis() - previous_time;
+			previous_time = System.currentTimeMillis();
 		}
 		// Updates the gui and gets the button if it is pushed
 		int btn = gui.update();
@@ -262,8 +281,10 @@ public class Playing {
 			if (!gui.isClosed()) gui.close();
 			
 			// If you can place the tile in that place, then 
-			if (canPlace())Main.window.setColour(0f, 1f, 0f, 0.3f);//show green
-			else Main.window.setColour(1f, 0f, 0f, 0.5f); //show red
+			if (canPlace())
+				Main.window.setColour(0f, 1f, 0f, 0.3f);//show green
+			else 
+				Main.window.setColour(1f, 0f, 0f, 0.5f);//show red
 			
 			Main.window.circle(true, grid.getCoordX(Main.window.getMouseX()) + (grid.getTileSize() / 2), grid.getCoordY(Main.window.getMouseY()) + (grid.getTileSize() / 2), selected_range, 64);
 			// Outlines of where the turret will go
@@ -349,6 +370,7 @@ public class Playing {
 				state = PLAYING;
 				break;
 			case PLAYING:
+				previous_time = System.currentTimeMillis();
 				state = PAUSED;
 				break;			
 		}
