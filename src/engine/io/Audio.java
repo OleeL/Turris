@@ -49,7 +49,7 @@ public class Audio{
 	public static final String SND_DEFEAT = "effects/defeat.wav";
 	public static final String SND_MENU_CLICK = "effects/menu_click.wav";
 	
-	public static final String MSC_MENU = "music/menu.wav";
+	public static final String MSC_MENU = "music/menu1.wav";
 	public static final String MSC_GAME = "music/game.wav";
 	
 	private static final String PATH = "assets/sounds/";

@@ -81,7 +81,7 @@ public class Main_menu {
 				}
 				break;
 			case LOAD_GAME:
-				if (Main.window.isKeyReleased(GLFW.GLFW_KEY_ESCAPE)) {
+				if (backToMenu.updateClick()) {
 					state = MAIN;
 				}
 				break;
@@ -137,6 +137,10 @@ public class Main_menu {
 				break;
 				
 			case LOAD_GAME:
+				Main.window.setColour(0f, 0f, 0f, 0.5f);
+				Main.window.rectangle(boxX, boxY, boxW, boxH, 20);
+				backToMenu.setFontColour(1f, 1f, 1f);
+				backToMenu.draw();
 				break;
 				
 			case SETTINGS:
