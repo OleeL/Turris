@@ -147,12 +147,12 @@ public class Playing {
 				gui.button_round.setName("Start");
 				start_new_round(++round);
 				roundEnded = true;
-				Main.audio_manager.playAudio(Audio.SND_ROUND_COMPLETE);
+				Audio.play(Audio.SND_ROUND_COMPLETE);
 			}
 			
 			// If lives <= 0 you lose
 			if (lives <= 0) {
-				Main.audio_manager.playAudio(Audio.SND_DEFEAT);
+				Audio.play(Audio.SND_DEFEAT);
 				state = LOSE;
 				lives = 0;
 			}
@@ -351,7 +351,7 @@ public class Playing {
 					    level);
 			buildings_built++;
 			selected = UNSELECTED;
-			Main.audio_manager.playAudio(Audio.SND_TURRET_PLACE);
+			Audio.play(Audio.SND_TURRET_PLACE);
 		}
 	}
 	

@@ -1,5 +1,7 @@
 package main;
 
+import org.lwjgl.glfw.GLFW;
+
 import engine.io.Audio;
 import engine.io.Window;
 import playing.Playing;
@@ -18,8 +20,6 @@ public class Main {
 	public static final int PLAYING = 1;
 	public static int state = MAIN_MENU;
 	
-	public static Audio audio_manager;
-	
 	public static void main(String[] args) {
 		
 		// Setting up window settings
@@ -37,7 +37,7 @@ public class Main {
 		// Creates the main menu
 		Main_menu.create();
 		
-		audio_manager = new Audio();
+		
 		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
@@ -50,6 +50,7 @@ public class Main {
 				switch (state){
 				
 					case MAIN_MENU : 
+						Audio.playLoop(Audio.MSC_MENU);
 						Main_menu.update(dt);
 						Main_menu.draw();
 						break;
@@ -63,6 +64,7 @@ public class Main {
 				// Finish update
 				window.swapBuffers();
 			}
+			
 		}
 	}
 	
