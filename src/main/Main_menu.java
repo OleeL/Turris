@@ -96,12 +96,14 @@ public class Main_menu {
 				}
 				break;
 			case SETTINGS:
-				if (backToMenu.updateClick()) {	
+				if (backToMenu.updateClick()) {
+					Audio.stop(true);
 					state = MAIN;
 				}
 				// Updating the text in the slider (and the interaction)
 				float sw = volume_sfx.getSliderWidth();
 				float sm = volume_sfx.getMaxWidth();
+				
 				volume_sfx.update("Sound Effects: "+(int)((sw/sm)*100));
 				sw = volume_music.getSliderWidth();
 				sm = volume_music.getMaxWidth();
@@ -165,7 +167,7 @@ public class Main_menu {
 		state = button;
 		switch (button){
 			case EXIT:
-				Audio.stop();
+				Audio.stop(false);
 				System.exit(-1);
 				break;	
 		}

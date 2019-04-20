@@ -264,7 +264,7 @@ public class Playing {
 				Main.state = Main.MAIN_MENU;
 				Main_menu.state = Main_menu.MAIN;
 				selected = UNSELECTED;
-				Audio.stop();
+				Audio.stop(false);
 				break;
 		}
 	

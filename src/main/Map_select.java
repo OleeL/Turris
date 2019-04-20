@@ -92,7 +92,7 @@ public class Map_select {
 
 			Main.state = Main.PLAYING;
 			
-			Audio.stop();
+			Audio.stop(false);
 			
 			Audio.playLoop(Audio.MSC_GAME);
 			Playing.create(Playing.EASY, 1, convert_to_map_name(selected_map));

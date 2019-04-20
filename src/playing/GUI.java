@@ -308,7 +308,7 @@ public class GUI {
 		
 		// Updating the winning and losing state
 		if (Playing.state == Playing.WIN || Playing.state == Playing.LOSE) {
-			Audio.stop();
+			Audio.stop(false);
 			if (button_quit.updateClick()) {
 				Playing.state = Playing.PAUSED;
 				Main.state = Main.MAIN_MENU;

@@ -8,6 +8,7 @@
 
 package gui;
 
+import engine.io.Audio;
 import main.Main;
 
 public class Button {
@@ -108,7 +109,9 @@ public class Button {
 			
 			hover = true;
 			
+			
 			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
+				Audio.play(Audio.SND_MENU_CLICK);
 				return true;
 
 			}

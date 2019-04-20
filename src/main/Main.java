@@ -36,9 +36,6 @@ public class Main {
 		
 		// Creates the main menu
 		Main_menu.create();
-		
-		
-		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
 			
@@ -66,7 +63,7 @@ public class Main {
 			}
 			
 		}
-		Audio.stop();
+		Audio.stop(false);
 	}
 	
 	public static void printMouseCoordsOnClick() {

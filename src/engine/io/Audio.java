@@ -16,6 +16,8 @@ import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
 
+import main.Main_menu;
+
 /* TODO
  * Finish creating audio files
  * Make audio not sound like the beat of a song??
@@ -24,6 +26,14 @@ import org.lwjgl.openal.ALCCapabilities;
  * Audio looping?
  */
 
+/**
+ * @author Kieran
+ *
+ */
+/**
+ * @author Kieran
+ *
+ */
 public class Audio{
 	
 	//Audio file references
@@ -44,14 +54,26 @@ public class Audio{
 	
 	private static final String PATH = "assets/sounds/";
 	
-	//private static HashMap<String, Sound> loopingSounds = new HashMap<String, Sound>();
-	
 	private static Sound looped = null;
-	
-	//Plays an audio file
+
+	/**Plays a given audio file
+	 * @param filename : Name of the audio file to play. Use the class-defined constants
+	 * @param x(optional) : x coordinate of the audio in 2d space (-1 to 1)
+	 * @param y(optional) : y coordinate of the audio in 2d space (-1 to 1)
+	 * @param volume(optional) : Volume to play the audio at (0 to 1)
+	 */
 	public  static void play(String filename) {
-		Sound snd = new Sound(filename, 0f,0f, 1f);
-		snd.start();
+			float volume;
+			switch (filename.substring(0, 2)) {
+			case "m":
+				volume = Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth();
+				break;
+			default:
+				volume = Main_menu.volume_sfx.getSliderWidth() / Main_menu.volume_sfx.getMaxWidth();
+			}
+			Sound snd = new Sound(filename, 0f,0f, volume);
+			snd.start();
+
 	}
 	
 	//Play an audio file with a given volume
@@ -74,17 +96,27 @@ public class Audio{
 	
 	public static void playLoop(String filename) {
 		if (looped == null) {
-			looped = new Sound(filename,0f,0f,0.1f);
+			looped = new Sound(filename,0f,0f,Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
 			looped.loop = true;
 			looped.start();
+			//concurrentSounds += 1;
 		}
 
 	}
 	
-	public static void stop() {
+	
+	/**
+	 * Stops current audio loop
+	 * @param restart : Determines if the audio should restart afterwards
+	 */
+	public static void stop(boolean restart) {
 		if (looped != null) {
+			String name = looped.name;
 			looped.terminate = true;
 			looped = null;
+			if (restart) {
+				playLoop(name);
+			}
 		}
 
 	}
