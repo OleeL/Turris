@@ -42,6 +42,7 @@ public class Playing {
 	public static final int TOWER_2    = 2;
 	public static final int TOWER_3    = 3;
 	public static final int QUIT       = 99;
+	public static final int SETTINGS   = 98;
 	
 	// Difficulty
 	public static final int EASY   = 1;
@@ -256,6 +257,8 @@ public class Playing {
 					selected = UNSELECTED;
 				}
 
+				break;
+			case SETTINGS:	
 				break;
 			case QUIT:
 				Main.state = Main.MAIN_MENU;
