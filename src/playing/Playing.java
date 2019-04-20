@@ -351,6 +351,7 @@ public class Playing {
 					    level);
 			buildings_built++;
 			selected = UNSELECTED;
+			Main.audio_manager.playAudio(Audio.SND_TURRET_PLACE);
 		}
 	}
 	
