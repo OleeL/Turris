@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -76,7 +74,8 @@ public class Audio{
 	
 	public static void playLoop(String filename) {
 		if (looped == null) {
-			looped = new Sound(filename,0f,0f,1f);
+			looped = new Sound(filename,0f,0f,0.1f);
+			looped.loop = true;
 			looped.start();
 		}
 
@@ -85,6 +84,7 @@ public class Audio{
 	public static void stop() {
 		if (looped != null) {
 			looped.terminate = true;
+			looped = null;
 		}
 
 	}
@@ -96,6 +96,7 @@ static class Sound extends Thread {
 	private float y;
 	private float volume;
 	boolean terminate = false;
+	boolean loop = false;
 	
 	public Sound(String name, float x, float y, float volume) {
 		this.name = name;
@@ -173,11 +174,16 @@ static class Sound extends Thread {
 		
 		//Make thread sleep until the audio is complete
 		try {
-			while (!terminate) {
-				//Thread.sleep(time);
-				Thread.sleep(10);
-				Thread.yield();
+			if (loop) {
+				while (!terminate) {
+					//Thread.sleep(time);
+					Thread.sleep(10);
+					Thread.yield();
+				}
+			} else {
+				Thread.sleep(time);
 			}
+
 		} catch(InterruptedException ex) {
 			throw new InterruptedException("Thread interrupted");
 	    }

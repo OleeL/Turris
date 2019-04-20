@@ -261,6 +261,7 @@ public class Playing {
 				Main.state = Main.MAIN_MENU;
 				Main_menu.state = Main_menu.MAIN;
 				selected = UNSELECTED;
+				Audio.stop();
 				break;
 		}
 	
@@ -298,7 +299,7 @@ public class Playing {
 		gui.draw();
 	}
 	
-	// Shows wether you can place a tile in that specific place or not.
+	// Shows whether you can place a tile in that specific place or not.
 	public static boolean canPlace() {
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();

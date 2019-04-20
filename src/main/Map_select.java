@@ -94,7 +94,7 @@ public class Map_select {
 			
 			Audio.stop();
 			
-			
+			Audio.playLoop(Audio.MSC_GAME);
 			Playing.create(Playing.EASY, 1, convert_to_map_name(selected_map));
 			
 		}

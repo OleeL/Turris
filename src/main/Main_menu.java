@@ -2,6 +2,7 @@ package main;
 
 import org.lwjgl.glfw.GLFW;
 
+import engine.io.Audio;
 import gui.Button;
 import gui.Cloud;
 import gui.Texture;
@@ -164,6 +165,7 @@ public class Main_menu {
 		state = button;
 		switch (button){
 			case EXIT:
+				Audio.stop();
 				System.exit(-1);
 				break;	
 		}

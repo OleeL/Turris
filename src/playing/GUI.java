@@ -8,6 +8,7 @@ import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 
+import engine.io.Audio;
 import gui.Button;
 import gui.Text;
 import main.Main;
@@ -305,10 +306,12 @@ public class GUI {
 		
 		// Updating the winning and losing state
 		if (Playing.state == Playing.WIN || Playing.state == Playing.LOSE) {
+			Audio.stop();
 			if (button_quit.updateClick()) {
 				Playing.state = Playing.PAUSED;
 				Main.state = Main.MAIN_MENU;
 				Main_menu.state = Main_menu.MAIN;
+
 			}
 		}
 		

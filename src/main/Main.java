@@ -66,6 +66,7 @@ public class Main {
 			}
 			
 		}
+		Audio.stop();
 	}
 	
 	public static void printMouseCoordsOnClick() {
