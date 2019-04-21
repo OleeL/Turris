@@ -127,5 +127,9 @@ public abstract class Turret extends Entity {
 		return MAX_LEVEL;
 	}
 	
+	public int getUpgradeCost() {
+		return upgrade_cost;
+	}
+	
 	
 }

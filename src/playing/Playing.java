@@ -89,7 +89,7 @@ public class Playing {
 		// Coins and lives depends on the difficulty
 		switch (difficulty) {
 			case HARD:
-				coins = 100;
+				coins = 1000;
 				lives = 1;
 				Playing.difficulty = Wave.HARD;
 				Playing.difficulty_visual = "Hard";
@@ -101,7 +101,7 @@ public class Playing {
 				Playing.difficulty_visual = "Medium";
 				break;
 			default:
-				coins = 300;
+				coins = 1000;
 				lives = 1;
 				Playing.difficulty = Wave.EASY;
 				Playing.difficulty_visual = "Easy";
@@ -282,6 +282,7 @@ public class Playing {
 			
 			Entity tile = grid.getEntity(x, y);
 			
+			//Turret upgrade system
 			if (tile.getName().contains("turret")) {
 				Turret turret = null;
 				
@@ -297,12 +298,18 @@ public class Playing {
 					break;
 				}
 				int turretLevel = Integer.parseInt((tile.getName().substring(tile.getName().length() - 1, tile.getName().length())) ) + 1;
-				if (turretLevel <= turret.getMaxLevel()) {
+				int cost = 0;
+				for (int i = 1;i<turretLevel;i++) {
+					cost = turret.upgrade();
+				}
+				if (turretLevel <= turret.getMaxLevel() && coins >= cost) {
 					String textureName = tile.getName().substring(0, tile.getName().length() - 1);
 					turret.setTexture(new Texture(textureName + turretLevel + ".png", (int) (x * grid_size), (int)(y * grid_size), (grid_size / 100),(grid_size / 100)));
 					turret.setName(textureName + turretLevel);
 					grid.turrets.remove(grid.getEntity(x, y));
 					grid.insert(x, y, textureName + turretLevel, turret, turretLevel);
+					coins -= cost;
+					Audio.play(Audio.SND_TURRET_UPGRADE);
 				}
 			
 			}

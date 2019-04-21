@@ -35,7 +35,7 @@ public class Turret_3 extends Turret {
 			level++;
 			range *= 1.2;
 			damage += 2;
-			rateOfFire -= 0.002;
+			rateOfFire -= 30;
 			cost = upgrade_cost;
 			upgrade_cost *= 1.8;
 		}
