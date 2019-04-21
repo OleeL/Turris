@@ -160,6 +160,14 @@ public class Grid {
 			return "";
 		}
 	}
+	
+	public Entity getEntity(int x, int y) {
+		try {
+			return grid[y][x];
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 	public float getCoordX(double x) {
 		return round((float)x-(grid_size/2), grid_size);

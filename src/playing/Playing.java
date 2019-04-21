@@ -12,6 +12,7 @@ import org.lwjgl.glfw.GLFW;
 
 import enemies.Enemy;
 import engine.io.Audio;
+import gui.Texture;
 import main.Main;
 import main.Main_menu;
 import turrets.*;
@@ -275,6 +276,36 @@ public class Playing {
 		// If the player right clicks, then unselect everything
 		if (Main.window.isMousePressed(Main.window.RIGHT_MOUSE)) {
 			selected = UNSELECTED;
+			float grid_size = grid.getTileSize();
+			int x = (int) (grid.getCoordX(Main.window.getMouseX()) / grid_size);
+			int y = (int)(grid.getCoordY(Main.window.getMouseY()) / grid_size);
+			
+			Entity tile = grid.getEntity(x, y);
+			
+			if (tile.getName().contains("turret")) {
+				Turret turret = null;
+				
+				switch(tile.getName().substring(8, tile.getName().length() - 1)) {
+				case "turret_1":
+					turret = new Turret_1(x,y,grid_size);
+					break;
+				case "turret_2":
+					turret = new Turret_2(x,y,grid_size);
+					break;
+				case "turret_3":
+					turret = new Turret_3(x,y,grid_size);
+					break;
+				}
+				int turretLevel = Integer.parseInt((tile.getName().substring(tile.getName().length() - 1, tile.getName().length())) ) + 1;
+				if (turretLevel <= turret.getMaxLevel()) {
+					String textureName = tile.getName().substring(0, tile.getName().length() - 1);
+					turret.setTexture(new Texture(textureName + turretLevel + ".png", (int) (x * grid_size), (int)(y * grid_size), (grid_size / 100),(grid_size / 100)));
+					turret.setName(textureName + turretLevel);
+					grid.turrets.remove(grid.getEntity(x, y));
+					grid.insert(x, y, textureName + turretLevel, turret, turretLevel);
+				}
+			
+			}
 		}
 	}
 	

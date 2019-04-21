@@ -20,7 +20,7 @@ public class Turret_3 extends Turret {
 	 * @param float grid_size
 	 */
 	public Turret_3(float x, float y, float grid_size){
-		super("turrets/turret_3", x, y, grid_size);
+		super("turrets/turret_31", x, y, grid_size);
 		range = TURRET_RANGE;
 		damage = TURRET_DAMAGE;
 		rateOfFire = TURRET_RATE_OF_FIRE;
@@ -33,7 +33,7 @@ public class Turret_3 extends Turret {
 		int cost = 0;
 		if (level < MAX_LEVEL) {
 			level++;
-			range += 0.2;
+			range *= 1.2;
 			damage += 2;
 			rateOfFire -= 0.002;
 			cost = upgrade_cost;

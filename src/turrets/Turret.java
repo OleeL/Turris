@@ -123,5 +123,9 @@ public abstract class Turret extends Entity {
 		return range;
 	}
 	
+	public int getMaxLevel() {
+		return MAX_LEVEL;
+	}
+	
 	
 }
