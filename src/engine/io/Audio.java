@@ -12,24 +12,16 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.*;
-import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.ALCCapabilities;
 
 import main.Main_menu;
 
 /* TODO
+ * FIX AUDIO DEVICE NOT CLOSED BUG
+ * 
  * Finish creating audio files
- * Make audio not sound like the beat of a song??
  * Speed up audio when game speed is sped up??? - Don't know if possible or even needed?
- * Add limit to audio sources - Too many turrets shooting on high game speeds
- * Audio looping?
  */
 
-/**
- * @author Kieran
- *
- */
 /**
  * @author Kieran
  *
@@ -55,56 +47,55 @@ public class Audio{
 	private static final String PATH = "assets/sounds/";
 	
 	private static Sound looped = null;
-
-	/**Plays a given audio file
-	 * @param filename : Name of the audio file to play. Use the class-defined constants
-	 * @param x(optional) : x coordinate of the audio in 2d space (-1 to 1)
-	 * @param y(optional) : y coordinate of the audio in 2d space (-1 to 1)
-	 * @param volume(optional) : Volume to play the audio at (0 to 1)
-	 */
-	public  static void play(String filename) {
-			float volume;
-			switch (filename.substring(0, 2)) {
-			case "m":
-				volume = Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth();
-				break;
-			default:
-				volume = Main_menu.volume_sfx.getSliderWidth() / Main_menu.volume_sfx.getMaxWidth();
-			}
-			Sound snd = new Sound(filename, 0f,0f, volume);
-			snd.start();
-
-	}
 	
-	//Play an audio file with a given volume
-	public static void play(String filename, float volume) {
-		Sound snd = new Sound(filename, 0f,0f, 1f);
-		snd.start();
+	public static long device;
+
+	public  static void play(String filename) {
+			play(filename, 0f,0f);
 	}
 	
 	//Play audio file in a given position
 	public static void play(String filename, float x, float y) {
-		Sound snd = new Sound(filename,x, y, 1f);
+		float volume;
+		switch (filename.substring(0, 2)) {
+		//Determine if sound is effect or music
+		case "m":
+			volume = Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth();
+			break;
+		default:
+			volume = Main_menu.volume_sfx.getSliderWidth() / Main_menu.volume_sfx.getMaxWidth();
+		}
+		
+		//Fit coordinates into range of -1 to 1
+		x = Math.min(Math.max(-1, x), 1);
+		y = Math.min(Math.max(-1, y), 1);
+		
+		Sound snd = new Sound(filename, x,y, volume);
 		snd.start();
 	}
 	
-	//Play audio file in a given position and volume
+	/**
+	 * Overrides game volume settings
+	 * 
+	 */
 	public static void play(String filename, float x, float y, float volume) {
-		Sound snd = new Sound(filename, x, y, volume);
+		Sound snd = new Sound(filename, x, y, 1f);
 		snd.start();
 	}
 	
+	/**
+	 * Play an audio file on loop, only works if no loop is currently running
+	 * Call stop to end the current audio loop
+	 * 
+	 */
 	public static void playLoop(String filename) {
 		if (looped == null) {
 			looped = new Sound(filename,0f,0f,Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
 			looped.loop = true;
 			looped.start();
-			//concurrentSounds += 1;
 		}
-
 	}
-	
-	
+		
 	/**
 	 * Stops current audio loop
 	 * @param restart : Determines if the audio should restart afterwards
@@ -112,7 +103,7 @@ public class Audio{
 	public static void stop(boolean restart) {
 		if (looped != null) {
 			String name = looped.name;
-			looped.terminate = true;
+			looped.stopSound();
 			looped = null;
 			if (restart) {
 				playLoop(name);
@@ -120,35 +111,9 @@ public class Audio{
 		}
 
 	}
-
-//Creates a sound object on a new thread
-static class Sound extends Thread {
-	private String name;
-	private float x;
-	private float y;
-	private float volume;
-	boolean terminate = false;
-	boolean loop = false;
 	
-	public Sound(String name, float x, float y, float volume) {
-		this.name = name;
-		this.x = Math.min(Math.max(-1, x), 1);
-		this.y = Math.min(Math.max(-1, y), 1);;
-		this.volume = Math.min(Math.max(0, volume), 1);
-	}
-	
-	//Runs the thread
-	public void run() {
-		try {
-			play();
-			
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-	
-	//Reads and plays the audio file
-	public void play() throws Exception{
+	//Setup the device for playing audio
+	public static void setup() throws Exception {
 		//Create a new audio device
 		long device = ALC10.alcOpenDevice((CharSequence)null);
 		
@@ -175,6 +140,49 @@ static class Sound extends Thread {
 		}
 		
 		AL.createCapabilities(deviceCaps);
+	}
+	
+	//Close the audio device
+	public static void destroy() {
+		stop(false);
+		//ALC10.alcCloseDevice(device);
+		ALC.destroy();
+
+
+	}
+
+//Creates a sound object on a new thread
+static class Sound extends Thread {
+	private String name;
+	private float x;
+	private float y;
+	private float volume;
+	private boolean terminate = false;
+	private boolean loop = false;
+	
+	public Sound(String name, float x, float y, float volume) {
+		this.name = name;
+		this.x = x;
+		this.y = y;
+		this.volume = volume;
+	}
+	
+	//Runs the thread
+	public void run() {
+		try {
+			play();
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void stopSound() {
+		terminate = true;
+	}
+	
+	//Reads and plays the audio file
+	public void play() throws Exception{
 		
 		//Creates a buffer to store the sound data
 		IntBuffer buffer = BufferUtils.createIntBuffer(1);
@@ -208,7 +216,6 @@ static class Sound extends Thread {
 		try {
 			if (loop) {
 				while (!terminate) {
-					//Thread.sleep(time);
 					Thread.sleep(10);
 					Thread.yield();
 				}
@@ -217,18 +224,16 @@ static class Sound extends Thread {
 			}
 
 		} catch(InterruptedException ex) {
+			
+			AL10.alSourceStop(source);
+			AL10.alDeleteSources(source);
 			throw new InterruptedException("Thread interrupted");
 	    }
-		
-		//Stop the audio
-		//Delete the source
-		//Close the device
-		
+			
 		AL10.alSourceStop(source);
 		
 		AL10.alDeleteSources(source);
 		
-		ALC10.alcCloseDevice(device);	
 	}
 	
 	//Loads the audio file into buffers

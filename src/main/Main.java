@@ -20,7 +20,7 @@ public class Main {
 	public static final int PLAYING = 1;
 	public static int state = MAIN_MENU;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args)  {
 		
 		// Setting up window settings
 		int width = 800;              // Screen Width
@@ -36,6 +36,13 @@ public class Main {
 		
 		// Creates the main menu
 		Main_menu.create();
+		
+		try {
+			Audio.setup();
+		} catch (Exception e) {
+			System.out.println("Failed to setup audio system");
+		}
+		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {
 			
@@ -63,7 +70,7 @@ public class Main {
 			}
 			
 		}
-		Audio.stop(false);
+		Audio.destroy();
 	}
 	
 	public static void printMouseCoordsOnClick() {

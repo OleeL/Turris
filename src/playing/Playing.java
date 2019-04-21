@@ -164,7 +164,11 @@ public class Playing {
 			for (int i = 0; i < enemies.size(); i++) {
 				enemies.get(i).update(dt);
 				if (enemies.get(i).reached) {
+					
 					lives--;
+					if (lives > 0) {
+						Audio.play(Audio.SND_DAMAGE_TAKEN);
+					}
 					enemies.remove(i);
 				}
 			}

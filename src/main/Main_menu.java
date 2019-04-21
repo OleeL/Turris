@@ -81,6 +81,7 @@ public class Main_menu {
 				}
 				break;
 			case LOAD_GAME:
+				
 				if (backToMenu.updateClick()) {
 					state = MAIN;
 				}
@@ -171,7 +172,7 @@ public class Main_menu {
 		state = button;
 		switch (button){
 			case EXIT:
-				Audio.stop(false);
+				Audio.destroy();
 				System.exit(-1);
 				break;	
 		}
