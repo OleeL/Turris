@@ -89,7 +89,7 @@ public class Playing {
 		// Coins and lives depends on the difficulty
 		switch (difficulty) {
 			case HARD:
-				coins = 1000;
+				coins = 100;
 				lives = 1;
 				Playing.difficulty = Wave.HARD;
 				Playing.difficulty_visual = "Hard";
@@ -101,7 +101,7 @@ public class Playing {
 				Playing.difficulty_visual = "Medium";
 				break;
 			default:
-				coins = 1000;
+				coins = 5000;
 				lives = 1;
 				Playing.difficulty = Wave.EASY;
 				Playing.difficulty_visual = "Easy";
@@ -307,8 +307,9 @@ public class Playing {
 					turret.setTexture(new Texture(textureName + turretLevel + ".png", (int) (x * grid_size), (int)(y * grid_size), (grid_size / 100),(grid_size / 100)));
 					turret.setName(textureName + turretLevel);
 					grid.turrets.remove(grid.getEntity(x, y));
-					grid.insert(x, y, textureName + turretLevel, turret, turretLevel);
+					grid.insert(x, y, textureName + turretLevel, turret, 1);
 					coins -= cost;
+					buildings_upgraded += 1;
 					Audio.play(Audio.SND_TURRET_UPGRADE);
 				}
 			

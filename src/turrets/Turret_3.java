@@ -36,7 +36,9 @@ public class Turret_3 extends Turret {
 			range *= 1.2;
 			damage += 2;
 			rateOfFire -= 30;
+			arrowSpeed += 500f;
 			cost = upgrade_cost;
+			this.cost = cost;
 			upgrade_cost *= 1.8;
 		}
 		return cost;

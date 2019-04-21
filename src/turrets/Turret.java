@@ -1,6 +1,7 @@
 package turrets;
 
 import engine.io.Audio;
+import gui.Text;
 
 /**
  * @author Team 62
@@ -11,6 +12,7 @@ import engine.io.Audio;
 import gui.Texture;
 import main.Main;
 import playing.Entity;
+import playing.Playing;
 
 public abstract class Turret extends Entity {
 
@@ -110,6 +112,20 @@ public abstract class Turret extends Entity {
 			Main.window.setColour(0f,0f,0f,0.33f);
 			Main.window.circle(true,  center_x, center_y, range, line_segments);
 			Main.window.circle(false, center_x, center_y, range, line_segments);
+			
+			if (level < MAX_LEVEL) {
+				Text upgrade_text = new Text(String.valueOf(this.cost), 0,0, 24);
+				upgrade_text.setPosition(center_x - (upgrade_text.getFont().getTextWidth(upgrade_text.text) / 2), center_y - 50);
+				
+				if (Playing.coins >= cost) {
+					Main.window.setColour(0f,1f,0f, 1f);
+				} else {
+					Main.window.setColour(1f, 0f, 0f, 1f);
+				}
+				
+				upgrade_text.draw();
+			}
+
 			
 		}
 	}
