@@ -41,6 +41,7 @@ public class Turret_1 extends Turret {
 			cost = upgrade_cost;
 			this.cost = cost;
 			upgrade_cost *= 1.8;
+		
 		}
 		return cost;
 	}
