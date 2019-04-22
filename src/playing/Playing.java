@@ -96,13 +96,13 @@ public class Playing {
 				break;
 			case MEDIUM:
 				coins = 250;
-				lives = 10;
+				lives = 3;
 				Playing.difficulty = Wave.MEDIUM;
 				Playing.difficulty_visual = "Medium";
 				break;
 			default:
-				coins = 5000;
-				lives = 1;
+				coins = 300;
+				lives = 4;
 				Playing.difficulty = Wave.EASY;
 				Playing.difficulty_visual = "Easy";
 				break;
@@ -238,7 +238,7 @@ public class Playing {
 				break;
 			case TOWER_1:
 				if (Turret_1.TURRET_COST <= coins) {
-					place(TOWER_1, 1);
+					place(TOWER_1, 0);
 					grid.turnOnLines();
 				} else {
 					selected = UNSELECTED;
@@ -247,7 +247,7 @@ public class Playing {
 				break;
 			case TOWER_2:
 				if (Turret_2.TURRET_COST <= coins) {
-					place(TOWER_2, 1);
+					place(TOWER_2, 0);
 					grid.turnOnLines();
 				} else {
 					selected = UNSELECTED;
@@ -256,7 +256,7 @@ public class Playing {
 				break;
 			case TOWER_3:
 				if (Turret_3.TURRET_COST <= coins) {
-					place(TOWER_3, 1);
+					place(TOWER_3, 0);
 					grid.turnOnLines();
 				} else {
 					selected = UNSELECTED;
@@ -281,36 +281,27 @@ public class Playing {
 			int y = (int)(grid.getCoordY(Main.window.getMouseY()) / grid_size);
 			
 			Entity tile = grid.getEntity(x, y);
-			
 			//Turret upgrade system
-			if (tile.getName().contains("turret")) {
-				Turret turret = null;
-				
-				switch(tile.getName().substring(8, tile.getName().length() - 1)) {
-				case "turret_1":
-					turret = new Turret_1(x,y,grid_size);
-					break;
-				case "turret_2":
-					turret = new Turret_2(x,y,grid_size);
-					break;
-				case "turret_3":
-					turret = new Turret_3(x,y,grid_size);
-					break;
-				}
-				int turretLevel = Integer.parseInt((tile.getName().substring(tile.getName().length() - 1, tile.getName().length())) ) + 1;
-				int cost = 0;
-				for (int i = 1;i<turretLevel;i++) {
-					cost = turret.upgrade();
-				}
-				if (turretLevel <= turret.getMaxLevel() && coins >= cost) {
-					String textureName = tile.getName().substring(0, tile.getName().length() - 1);
-					turret.setTexture(new Texture(textureName + turretLevel + ".png", (int) (x * grid_size), (int)(y * grid_size), (grid_size / 100),(grid_size / 100)));
-					turret.setName(textureName + turretLevel);
-					grid.turrets.remove(grid.getEntity(x, y));
-					grid.insert(x, y, textureName + turretLevel, turret, 1);
-					coins -= cost;
-					buildings_upgraded += 1;
-					Audio.play(Audio.SND_TURRET_UPGRADE);
+			if (tile instanceof Turret) {
+				Turret turret = (Turret) tile;
+				int turretLevel = turret.getTurretLevel()+1;
+				int cost = turret.getUpgradeCost();
+				System.out.println(cost + " - " + turret.getTurretLevel());
+				if (coins >= cost) {
+					if (turret.upgrade()) {
+						String textureName = tile.getName().substring(0, tile.getName().length() - 1);
+						turret.setTexture(
+								new Texture(
+										textureName + turretLevel + ".png", 
+										(int) (x * grid_size), 
+										(int)(y * grid_size), 
+										(grid_size / 100),
+										(grid_size / 100)));
+						turret.setName(textureName + turretLevel);
+						coins -= cost;
+						buildings_upgraded += 1;
+						Audio.play(Audio.SND_TURRET_UPGRADE);
+					}
 				}
 			
 			}
@@ -333,7 +324,13 @@ public class Playing {
 			else 
 				Main.window.setColour(1f, 0f, 0f, 0.5f);//show red
 			
-			Main.window.circle(true, grid.getCoordX(Main.window.getMouseX()) + (grid.getTileSize() / 2), grid.getCoordY(Main.window.getMouseY()) + (grid.getTileSize() / 2), selected_range, 64);
+			Main.window.circle(true, 
+					grid.getCoordX(
+							Main.window.getMouseX()) + (grid.getTileSize() / 2), 
+					grid.getCoordY(
+							Main.window.getMouseY()) + (grid.getTileSize() / 2), 
+					selected_range, 
+					64);
 			// Outlines of where the turret will go
 			Main.window.rectangle(
 					grid.getCoordX(Main.window.getMouseX()),

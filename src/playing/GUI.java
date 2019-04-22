@@ -201,36 +201,55 @@ public class GUI {
 		
 		// Updates tower buttons, pause buttons
 		if (!closed) {
-			String temp_info = "";
+			boolean gotText = false;
 			for (GUIButton button : buttons){
+				boolean canAfford = true;
+				String temp_info = "";
 				int temp_state = button.update();
 				if (temp_state > -1) {
 					guiClicked = true;
 					state = temp_state;
 				}
-				if (button.getHover() && button.getText().text != "Quit") {
-					switch (button.getText().text) {
+				switch (button.getText().text) {
 					case "Tower 1":
 						temp_info = String.valueOf(Turret_1.TURRET_COST);
+						if (Playing.coins < Integer.parseInt(temp_info)) {
+							canAfford = false;
+						}
 						break;
 					case "Tower 2":
 						temp_info = String.valueOf(Turret_2.TURRET_COST);
+						if (Playing.coins < Integer.parseInt(temp_info)) {
+							canAfford = false;
+						}
 						break;
 					case "Tower 3":
 						temp_info = String.valueOf(Turret_3.TURRET_COST);
+						if (Playing.coins < Integer.parseInt(temp_info)) {
+							canAfford = false;
+						}
 						break;
-					}
-					
 				}
-				if (temp_info != "") {
-					if (Playing.coins < Integer.parseInt(temp_info)) {
+				if (button.getHover() && temp_info != "") {
+					gotText = true;
+					if (!canAfford) {
 						turret_info.text = "xCost: " + temp_info + "c";
 					} else {
 						turret_info.text = "Cost: " + temp_info + "c";
 					}
-					
-				} else {
+				} 
+				else if (!gotText){
 					turret_info.text = "";
+				}
+				
+				if (!canAfford) {
+					button.setTempColour(0.8f, 0.0f, 0.0f, 0.5f);
+					button.setTempHoverColour(0.8f, 0.0f, 0.0f, 0.5f);
+				}
+				else
+				{
+					button.setTempColour(0.0f, 0.0f, 0.0f, 0.5f );
+					button.setTempHoverColour(0.3f, 0.3f, 0.3f, 0.5f );
 				}
 			}
 		}
@@ -244,6 +263,7 @@ public class GUI {
 			colour = HOVER_COLOUR;
 			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)
 				&& !guiClicked){
+				guiClicked = true;
 				close();
 			}
 		}
@@ -296,9 +316,6 @@ public class GUI {
 			}
 			else if (Playing.speed_modifier == 2) {
 				Playing.speed_modifier = 4;
-			}
-			else if (Playing.speed_modifier == 4) {
-				Playing.speed_modifier = 8;
 			}
 			else {
 				Playing.speed_modifier = 1;
@@ -373,7 +390,7 @@ public class GUI {
 				{
 					// Setting the colours for the GUI
 					Main.window.setColour(DEFAULT_COLOUR);
-					
+
 					// GUI side
 					Main.window.rectangle(x, y, w, h);			
 					

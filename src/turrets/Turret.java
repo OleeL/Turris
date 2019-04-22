@@ -17,8 +17,8 @@ import playing.Playing;
 public abstract class Turret extends Entity {
 
 	protected float range, damage;
-	protected int level, cost, upgrade_cost;
-	public final int MAX_LEVEL = 3;
+	protected int level = 0, cost, upgrade_cost;
+	public final int MAX_LEVEL = 2;
 	private float game_x, game_y;
 	
 	protected float arrowSpeed = 5;
@@ -26,6 +26,7 @@ public abstract class Turret extends Entity {
 	private long time, end;
 	private boolean arrowReady;
 	private float grid_size;
+	private static final int LINE_SEGMENTS = 64;
 	
 	/**
 	 * @param String filename
@@ -50,7 +51,7 @@ public abstract class Turret extends Entity {
 		arrowReady = true;
 	}
 
-	public abstract int upgrade();
+	public abstract boolean upgrade();
 	
 	// Pass the target x and target y
 	public Arrow shootAt(float tx, float ty) {
@@ -102,7 +103,6 @@ public abstract class Turret extends Entity {
 		}
 		
 		// Line segments on circle of visualised radius
-		int line_segments = 64;
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		float center_x = game_x+(w/2);
@@ -110,14 +110,14 @@ public abstract class Turret extends Entity {
 		// If the mouse is hovering over the turrets, show the radius
 		if (mx > game_x && mx < game_x + w && my > game_y && my < game_y + h){
 			Main.window.setColour(0f,0f,0f,0.33f);
-			Main.window.circle(true,  center_x, center_y, range, line_segments);
-			Main.window.circle(false, center_x, center_y, range, line_segments);
+			Main.window.circle(true,  center_x, center_y, range, LINE_SEGMENTS);
+			Main.window.circle(false, center_x, center_y, range, LINE_SEGMENTS);
 			
 			int font_size = 24;
 			int offset_y = -50;
 			
 			if (level < MAX_LEVEL) {
-				Text upgrade_text = new Text(String.valueOf(this.cost), 0,0, font_size);
+				Text upgrade_text = new Text(String.valueOf(this.upgrade_cost), 0,0, font_size);
 				upgrade_text.setPosition(center_x - (upgrade_text.getFont().getTextWidth(upgrade_text.text) / 2), center_y + offset_y);
 				
 				if (Playing.coins >= cost) {
@@ -157,5 +157,12 @@ public abstract class Turret extends Entity {
 		return upgrade_cost;
 	}
 	
+	public int getTurretLevel() {
+		return level;
+	}
+	
+//	public void setTurretLevel(int level) {
+//		this.level = level;
+//	}
 	
 }

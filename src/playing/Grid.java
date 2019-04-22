@@ -135,6 +135,8 @@ public class Grid {
 	public void insert(int x, int y, String tile, Entity turret, int level) {
 		grid[y][x] = turret;
 		turrets.add((Turret) turret);
+
+		System.out.println(level);
 		for (int i = 0; i < level; i++) ((Turret) grid[y][x]).upgrade();
 	}
 
