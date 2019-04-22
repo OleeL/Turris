@@ -287,7 +287,6 @@ public class Playing {
 				Turret turret = (Turret) tile;
 				int turretLevel = turret.getTurretLevel()+1;
 				int cost = turret.getUpgradeCost();
-				System.out.println(cost + " - " + turret.getTurretLevel());
 				if (coins >= cost) {
 					if (turret.upgrade()) {
 						String textureName = tile.getName().substring(0, tile.getName().length() - 1);

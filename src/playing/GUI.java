@@ -460,7 +460,7 @@ public class GUI {
 		
 		// Statistics:
 		final_stats[0].text = "Difficulty: "+Playing.difficulty_visual;
-		final_stats[1].text = "You made it to round: "+Playing.round;
+		final_stats[1].text = "You made it to round: "+(Playing.round-1);
 		final_stats[2].text = "Lives remaining: "+Playing.lives;
 		final_stats[3].text = "Total revenue: "+Playing.coins_revenue;
 		final_stats[4].text = "Kills: "+Playing.kills;
