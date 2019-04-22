@@ -113,9 +113,12 @@ public abstract class Turret extends Entity {
 			Main.window.circle(true,  center_x, center_y, range, line_segments);
 			Main.window.circle(false, center_x, center_y, range, line_segments);
 			
+			int font_size = 24;
+			int offset_y = -50;
+			
 			if (level < MAX_LEVEL) {
-				Text upgrade_text = new Text(String.valueOf(this.cost), 0,0, 24);
-				upgrade_text.setPosition(center_x - (upgrade_text.getFont().getTextWidth(upgrade_text.text) / 2), center_y - 50);
+				Text upgrade_text = new Text(String.valueOf(this.cost), 0,0, font_size);
+				upgrade_text.setPosition(center_x - (upgrade_text.getFont().getTextWidth(upgrade_text.text) / 2), center_y + offset_y);
 				
 				if (Playing.coins >= cost) {
 					Main.window.setColour(0f,1f,0f, 1f);
@@ -124,6 +127,13 @@ public abstract class Turret extends Entity {
 				}
 				
 				upgrade_text.draw();
+			} else {
+				Text info = new Text("Max level",0,0,font_size);
+				info.setPosition(center_x - (info.getFont().getTextWidth(info.text) / 2), center_y + offset_y);
+				
+				Main.window.setColour(1f,0f,0f,1f);
+				
+				info.draw();
 			}
 
 			
