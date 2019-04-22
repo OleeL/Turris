@@ -112,6 +112,10 @@ public class Audio{
 
 	}
 	
+	public static void updateVolume() {
+		AL10.alSourcef(looped.s, AL10.AL_GAIN, Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+	}
+	
 	//Setup the device for playing audio
 	public static void setup() throws Exception {
 		//Create a new audio device
@@ -159,6 +163,7 @@ static class Sound extends Thread {
 	private float volume;
 	private boolean terminate = false;
 	private boolean loop = false;
+	private int s;
 	
 	public Sound(String name, float x, float y, float volume) {
 		this.name = name;
@@ -208,6 +213,8 @@ static class Sound extends Thread {
 		
 		//Gain/Volume
 		AL10.alSourcef(source, AL10.AL_GAIN, volume);	
+		
+		s = source;
 		
 		//Play the audio
 		AL10.alSourcePlay(source);

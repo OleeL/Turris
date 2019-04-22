@@ -98,7 +98,6 @@ public class Main_menu {
 				break;
 			case SETTINGS:
 				if (backToMenu.updateClick()) {
-					Audio.stop(true);
 					state = MAIN;
 				}
 				// Updating the text in the slider (and the interaction)
@@ -109,6 +108,7 @@ public class Main_menu {
 				sw = volume_music.getSliderWidth();
 				sm = volume_music.getMaxWidth();
 				volume_music.update("Music: "+(int)((sw/sm)*100));
+				Audio.updateVolume();
 				sw = max_fps.getSliderWidth();
 				sm = 250;
 				int range = 220;
