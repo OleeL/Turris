@@ -49,6 +49,8 @@ public class Audio{
 	private static Sound looped = null;
 	
 	public static long device;
+	
+	public static long id;
 
 	public  static void play(String filename) {
 			play(filename, 0f,0f);
@@ -120,6 +122,7 @@ public class Audio{
 	public static void setup() throws Exception {
 		//Create a new audio device
 		long device = ALC10.alcOpenDevice((CharSequence)null);
+		id = device;
 		
 		ALCCapabilities deviceCaps = ALC.createCapabilities(device);
 		
@@ -149,7 +152,7 @@ public class Audio{
 	//Close the audio device
 	public static void destroy() {
 		stop(false);
-		//ALC10.alcCloseDevice(device);
+		ALC10.alcCloseDevice(id);
 		ALC.destroy();
 
 
