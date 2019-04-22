@@ -263,7 +263,8 @@ public class Playing {
 				}
 
 				break;
-			case SETTINGS:	
+			case SETTINGS:
+				selected = UNSELECTED;
 				break;
 			case QUIT:
 				Main.state = Main.MAIN_MENU;

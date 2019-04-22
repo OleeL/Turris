@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL11.glVertex2f;
 import engine.io.Audio;
 import gui.Button;
 import gui.Text;
+import gui.Texture;
 import main.Main;
 import main.Main_menu;
 import turrets.Turret_1;
@@ -35,6 +36,15 @@ public class GUI {
 	private float open_button_x = Main.window.getWidth() - open_button_w;
 	private float open_button_y;
 	private float open_button_radius = 6;
+	private float open_button_image_rotation = 180;
+	private float open_button_xmargin = 5;
+	private float open_button_ymargin = 13;
+	private Texture open_button_image = new Texture(
+			"gui/open_button.png",
+			open_button_x + open_button_xmargin,
+			open_button_y + open_button_ymargin,
+			.08f,
+			.08f);
 	
 	// Final screen (winning or losing)
 	private float final_w = 500;
@@ -415,6 +425,7 @@ public class GUI {
 					Main.window.drawLine(x, y, x, (y+h)-stats_h);
 				}
 				button_speed.draw();
+				open_button_image.draw(open_button_image_rotation);
 				break;
 			case Playing.WIN:
 				draw_final_screen();
@@ -491,11 +502,16 @@ public class GUI {
 		if (closed) {
 			x = Main.window.getWidth() - w;
 			open_button_x = (Main.window.getWidth() - w) - open_button_w;
+			open_button_image_rotation = 0;
 		}
 		else {
 			x = Main.window.getWidth();
 			open_button_x = Main.window.getWidth() - open_button_w;
+			open_button_image_rotation = 180;
 		}
+
+		open_button_image.setX(open_button_x + open_button_xmargin);
+		open_button_image.setY(open_button_y + open_button_ymargin);
 		closed = !closed;
 	}
 	
