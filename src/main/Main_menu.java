@@ -103,21 +103,24 @@ public class Main_menu {
 				volume_music.setEnabled(true);
 				volume_sfx.setEnabled(true);
 				max_fps.setEnabled(true);
+				
+				// Vsync
 				if(vsync.updateClick()) {
-					if(counter % 2 == 0) {
-						vsync.setButtonColour(0f, 0.7f, 0.1f);
-						//counter++;
-						
-					}
-					else if (counter % 1 != 0){
-						vsync.setButtonColour(0.4f, 0.4f, 0.4f);
-						//counter++;
-					}
-					counter++;
+					Main.window.toggleVsync();
 				}
+				if (Main.window.getVsync()){
+					vsync.setButtonColour(0.0f, 1.0f, 0.0f);
+				}
+				else{
+					vsync.setButtonColour(0.0f, 0.0f, 0.0f);
+				}
+				
+				// Back button
 				if (backToMenu.updateClick()) {
 					state = MAIN;
 				}
+				
+				// Updates the sliders
 				updateSliders();
 				break;
 		}
