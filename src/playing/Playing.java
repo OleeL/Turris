@@ -180,6 +180,7 @@ public class Playing {
 				state = ROUND_END;
 				gui.button_round.setName("Start");
 				start_new_round(++round);
+				save();
 				roundEnded = true;
 				Audio.play(Audio.SND_ROUND_COMPLETE);
 			}
@@ -300,7 +301,7 @@ public class Playing {
 
 				break;
 			case SAVE:
-				gui.toggle_settings_gui();
+				save.write();
 				selected = UNSELECTED;
 				break;
 			case SETTINGS:
@@ -330,17 +331,21 @@ public class Playing {
 				int cost = turret.getUpgradeCost();
 				if (coins >= cost) {
 					if (turret.upgrade()) {
-						String textureName = tile.getName().substring(0, tile.getName().length() - 1);
+						String textureName = tile.getName().substring(
+								0, tile.getName().length() - 1);
 						turret.setTexture(
 								new Texture(
 										textureName + turretLevel + ".png", 
-										(int) (x * grid_size), 
+										(int)(x * grid_size), 
 										(int)(y * grid_size), 
 										(grid_size / 100),
 										(grid_size / 100)));
 						turret.setName(textureName + turretLevel);
 						coins -= cost;
 						buildings_upgraded += 1;
+						if (state == ROUND_END) {
+							save();
+						}
 						Audio.play(Audio.SND_TURRET_UPGRADE);
 					}
 				}
@@ -436,6 +441,9 @@ public class Playing {
 					    level);
 			buildings_built++;
 			selected = UNSELECTED;
+			if (state == ROUND_END) {
+				save();
+			}
 			Audio.play(Audio.SND_TURRET_PLACE);
 		}
 	}
@@ -443,17 +451,6 @@ public class Playing {
 	public static void start_new_round(int round) {
 		time_end = 0;
 		spawn_num = 0;
-		save.keepVariables(
-			Playing.round,
-			Playing.coins,
-			Playing.lives,
-			Playing.coins_revenue,
-			Playing.kills,
-			Playing.arrows_fired,
-			Playing.buildings_upgraded,
-			Playing.buildings_built,
-			grid.turrets
-			);
 		wave.produceWave(round, difficulty, continuous);
 		if (wave.win) {
 			state = WIN;
@@ -473,19 +470,33 @@ public class Playing {
 		}
 	}
 	
+	public static void save() {
+		save.keepVariables(
+				round,
+				coins,
+				lives,
+				coins_revenue,
+				kills,
+				arrows_fired,
+				buildings_upgraded,
+				buildings_built,
+				grid.turrets
+				);
+	}
+	
 	public static void load(
 			int difficulty,
 			int round,
 			String level,
-			boolean continuousMode,
+			boolean cont,
 			ArrayList<Entity> turret,
-			int coins,
-			int lives,
-			int coins_revenue,
-			int kills,
-			int arrows_fired,
-			int buildings_upgraded,
-			int buildings_built) {
+			int coi,
+			int liv,
+			int rev,
+			int k,
+			int af,
+			int bu,
+			int bb) {
 		create(difficulty, round, level);
 		for (int i = 0; i < turret.size(); i++) {
 			grid.insert(
@@ -494,14 +505,15 @@ public class Playing {
 					turret.get(i), 
 					0);
 		}
-		Playing.coins = coins;
-		Playing.lives = lives;
-		Playing.continuous = continuousMode;
-		Playing.coins_revenue = coins_revenue;
-		Playing.kills = kills;
-		Playing.arrows_fired = arrows_fired;
-		Playing.buildings_upgraded = buildings_upgraded;
-		Playing.buildings_built = buildings_built;
+		coins = coi;
+		lives = liv;
+		continuous = cont;
+		coins_revenue = rev;
+		kills = k;
+		arrows_fired = af;
+		buildings_upgraded = bu;
+		buildings_built = bb;
 		start_new_round(round);
+		save();
 	}
 }

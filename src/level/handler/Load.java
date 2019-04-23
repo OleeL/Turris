@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import gui.Texture;
 import playing.Entity;
 import turrets.*;
 
@@ -19,7 +20,8 @@ public class Load {
 	private static String FILENAME = "./assets/saves/save.csv";
 	
 	// Game / Level Type
-	public int difficulty, round, grid_size;
+	public int difficulty, round;
+	public float grid_size;
 	public String level;
 	public boolean continuousMode;
 	
@@ -46,8 +48,8 @@ public class Load {
 			values = data.split(",");
 			difficulty = Integer.parseInt(values[0]);
 			round = Integer.parseInt(values[1]);
-			level = values[2];
-			grid_size = Integer.parseInt(values[3]);
+			grid_size = Float.parseFloat(values[2]);
+			level = values[3];
 			continuousMode = Boolean.parseBoolean(values[4]);
 			
 			// Line 2 (Game Dependent Stats)
@@ -86,8 +88,20 @@ public class Load {
 						break;
 				}
 				turrets.add(t);
-				for (int i = 0; i < level; i++)
+				String textureName = turrets.get(turrets.size()-1).getName();
+				for (int i = 0; i < level; i++) {
 					((Turret) turrets.get(turrets.size()-1)).upgrade();
+				}
+
+				textureName = textureName.substring(0, 
+						turrets.get(turrets.size()-1).getName().length()-1);
+				turrets.get(turrets.size()-1).setTexture(
+						new Texture(
+								textureName + level + ".png", 
+								(int)(x * grid_size), 
+								(int)(y * grid_size), 
+								(grid_size / 100),
+								(grid_size / 100)));
 			}
 			inputStream.close();
 		} catch (FileNotFoundException e) {

@@ -34,12 +34,12 @@ public class Entity {
 	}
 	
 	// Accessor methods:
-	public float getX(){
-		return x;
+	public int getX(){
+		return (int) x;
 	}
 
-	public float getY() {
-		return y;
+	public int getY() {
+		return (int) y;
 	}
 
 	public void setX(float x) {
