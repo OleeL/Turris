@@ -82,6 +82,9 @@ public class Audio{
 		muted = !muted;
 		updateVolume();
 	}
+	public static boolean isMuted() {
+		return muted;
+	}
 	
 	/**
 	 * Overrides game volume settings
