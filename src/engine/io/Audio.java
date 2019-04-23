@@ -99,7 +99,12 @@ public class Audio{
 	 */
 	public static void playLoop(String filename) {
 		if (looped == null) {
-			looped = new Sound(filename,0f,0f,Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+			if (muted) {
+				looped = new Sound(filename,0f,0f,0);
+			} else {
+				looped = new Sound(filename,0f,0f,Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+			}
+			
 			looped.loop = true;
 			looped.start();
 		}
