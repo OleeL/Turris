@@ -21,7 +21,6 @@ import turrets.Turret_3;
 /**
  * @author Oliver Legg - sgolegg - 201244658
  * Kieran Baker - sgkbaker - 201234727
- * Thomas Coupe - sgtcoupe - 201241037
  *
  */
 public class GUI {
@@ -233,11 +232,9 @@ public class GUI {
 					
 			if(Audio.isMuted()) {
 				Main_menu.mute.setButtonColour(0.0f, 1.0f, 0.0f);
-				Main_menu.mute.setName("Unmute");
 			}
 			else {
 				Main_menu.mute.setButtonColour(0.0f, 0.0f, 0.0f);
-				Main_menu.mute.setName("Mute");
 			}
 		}
 

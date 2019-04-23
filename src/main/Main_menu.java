@@ -36,7 +36,7 @@ public class Main_menu {
 	private static float boxY = (Main.window.getHeight() / 2) - (boxH/2);
 	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
 	public static Button vsync = new Button("Vsync", 150, 400, 170, 60, MAIN);
-	public static Button mute = new Button("Mute", 480 ,400, 170, 60, MAIN);
+	public static Button mute = new Button("Toggle Mute", 480 ,400, 170, 60, MAIN);
 	public static Slider volume_sfx = new Slider("Sound Effects:", 500, 50, 150, 125, 50);
 	public static Slider volume_music = new Slider("Music: ",500, 50, 150, 225, 50);
 	public static Slider max_fps = new Slider("FPS:", 500, 50, 150, 325, 500);
