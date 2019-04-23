@@ -13,6 +13,7 @@ import org.lwjgl.glfw.GLFW;
 import enemies.Enemy;
 import engine.io.Audio;
 import gui.Texture;
+import level.handler.Save;
 import main.Main;
 import main.Main_menu;
 import playing.waves.Wave;
@@ -50,8 +51,9 @@ public class Playing {
 	public static final int TOWER_1    = 1;
 	public static final int TOWER_2    = 2;
 	public static final int TOWER_3    = 3;
-	public static final int QUIT       = 99;
+	public static final int SAVE       = 97;
 	public static final int SETTINGS   = 98;
+	public static final int QUIT       = 99;
 	
 	// Difficulty
 	public static final int EASY   = 1;
@@ -74,6 +76,8 @@ public class Playing {
 	public static int buildings_built;
 	
 	// Waves | Rounds
+	private static int difficulty_n;
+	private static String level;
 	private static Wave wave;
 	private static long time_end;
 	private static int spawn_num;
@@ -89,9 +93,16 @@ public class Playing {
 	public static float speed_modifier;
 	private static long paused_time;
 	private static long previous_time;
+	
+	// Used for saving the game
+	private static Save save;
 		
 	public static void create(int difficulty, int round, String level){
+		// Instantiating
+		Playing.difficulty_n = difficulty;
+		Playing.level = level;
 		Playing.round = round;
+		
 		selected = UNSELECTED;
 		state = ROUND_END;
 		
@@ -140,6 +151,13 @@ public class Playing {
 		Enemy.find_path(grid.start_tileX, grid.start_tileY);
 		enemies = new ArrayList<Enemy>(); // Enemy list
 		arrows = new ArrayList<Arrow>();  // Arrow list
+		
+		// Used for saving the game
+		save = new Save(
+				grid.getTileSize(),
+				Playing.difficulty_n,
+				Playing.level,
+				Playing.continuous);
 		
 		// Initialising for the rounds
 		wave = new Wave();
@@ -281,6 +299,10 @@ public class Playing {
 				}
 
 				break;
+			case SAVE:
+				gui.toggle_settings_gui();
+				selected = UNSELECTED;
+				break;
 			case SETTINGS:
 				gui.toggle_settings_gui();
 				selected = UNSELECTED;
@@ -421,6 +443,17 @@ public class Playing {
 	public static void start_new_round(int round) {
 		time_end = 0;
 		spawn_num = 0;
+		save.keepVariables(
+			Playing.round,
+			Playing.coins,
+			Playing.lives,
+			Playing.coins_revenue,
+			Playing.kills,
+			Playing.arrows_fired,
+			Playing.buildings_upgraded,
+			Playing.buildings_built,
+			grid.turrets
+			);
 		wave.produceWave(round, difficulty, continuous);
 		if (wave.win) {
 			state = WIN;
@@ -444,6 +477,7 @@ public class Playing {
 			int difficulty,
 			int round,
 			String level,
+			boolean continuousMode,
 			ArrayList<Entity> turret,
 			int coins,
 			int lives,
@@ -462,10 +496,12 @@ public class Playing {
 		}
 		Playing.coins = coins;
 		Playing.lives = lives;
+		Playing.continuous = continuousMode;
 		Playing.coins_revenue = coins_revenue;
 		Playing.kills = kills;
 		Playing.arrows_fired = arrows_fired;
 		Playing.buildings_upgraded = buildings_upgraded;
 		Playing.buildings_built = buildings_built;
+		start_new_round(round);
 	}
 }

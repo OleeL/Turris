@@ -16,9 +16,12 @@ import turrets.*;
  */
 public class Load {
 
+	private static String FILENAME = "./assets/saves/save.csv";
+	
 	// Game / Level Type
 	public int difficulty, round, grid_size;
 	public String level;
+	public boolean continuousMode;
 	
 	// Game Dependent Stats
 	public int coins, lives;
@@ -32,7 +35,7 @@ public class Load {
 	// For loading the game
 	public void load() {
 		try {
-			File file = new File("./assets/saves/save.csv");
+			File file = new File(FILENAME);
 			Scanner inputStream;
 			inputStream = new Scanner(file);
 			String data;
@@ -45,6 +48,7 @@ public class Load {
 			round = Integer.parseInt(values[1]);
 			level = values[2];
 			grid_size = Integer.parseInt(values[3]);
+			continuousMode = Boolean.parseBoolean(values[4]);
 			
 			// Line 2 (Game Dependent Stats)
 			data = inputStream.next();

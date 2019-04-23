@@ -228,6 +228,7 @@ public class Main_menu {
 				game.difficulty, 
 				game.round, 
 				level,
+				game.continuousMode,
 				game.turrets,
 				game.coins,
 				game.lives,
