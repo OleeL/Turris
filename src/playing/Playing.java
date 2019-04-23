@@ -129,9 +129,9 @@ public class Playing {
 				Playing.difficulty_visual = "Easy";
 				break;
 		}
-		Main_menu.volume_sfx.toggleEnabled();
-		Main_menu.volume_music.toggleEnabled();
-		Main_menu.max_fps.toggleEnabled();
+		Main_menu.volume_sfx.setEnabled(false);
+		Main_menu.volume_music.setEnabled(false);;
+		Main_menu.max_fps.setEnabled(false);;
 		// Statistics reset
 		coins_revenue = 0;
 		kills = 0;
@@ -237,6 +237,7 @@ public class Playing {
 							coins_revenue += enemies.get(e).getReward();
 							kills++;
 							enemies.remove(e);
+							Audio.play(Audio.SND_ENEMY_DEATH);
 						}
 						else {
 							enemies.get(e).health-=arrows.get(arrow).getDamage();
@@ -497,6 +498,7 @@ public class Playing {
 			int af,
 			int bu,
 			int bb) {
+		continuous = cont;
 		create(difficulty, round, level);
 		for (int i = 0; i < turret.size(); i++) {
 			grid.insert(
@@ -507,7 +509,6 @@ public class Playing {
 		}
 		coins = coi;
 		lives = liv;
-		continuous = cont;
 		coins_revenue = rev;
 		kills = k;
 		arrows_fired = af;

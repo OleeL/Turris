@@ -88,6 +88,9 @@ public class Main_menu {
 				load_game();
 				state = MAIN;
 				Main.state = Main.PLAYING;
+				Audio.stop(false);
+				
+				Audio.playLoop(Audio.MSC_GAME);
 				break;
 			case HELP:
 				if (backToMenu.updateClick()) {
