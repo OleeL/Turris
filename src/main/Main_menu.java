@@ -28,12 +28,15 @@ public class Main_menu {
 	private static Button[] buttons = new Button[5];
 	private static Texture title, background, howtoplay;
 	private static Cloud clouds[] = new Cloud[2];
+	private static int counter = 0;
 
 	private static float boxW = 580;
 	private static float boxH = 580; 
 	private static float boxX = (Main.window.getWidth() / 2) - (boxW/2);
 	private static float boxY = (Main.window.getHeight() / 2) - (boxH/2);
 	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
+	private static Button vsync = new Button("Vsync", 150, 400, 170, 60, MAIN);
+	private static Button mute = new Button("Mute", 480 ,400, 170, 60, MAIN);
 	public static Slider volume_sfx = new Slider("Sound Effects:", 500, 50, 150, 125, 50);
 	public static Slider volume_music = new Slider("Music: ",500, 50, 150, 225, 50);
 	public static Slider max_fps = new Slider("FPS:", 500, 50, 150, 325, 500);
@@ -100,6 +103,18 @@ public class Main_menu {
 				volume_music.setEnabled(true);
 				volume_sfx.setEnabled(true);
 				max_fps.setEnabled(true);
+				if(vsync.updateClick()) {
+					if(counter % 2 == 0) {
+						vsync.setButtonColour(0f, 0.7f, 0.1f);
+						//counter++;
+						
+					}
+					else if (counter % 1 != 0){
+						vsync.setButtonColour(0.4f, 0.4f, 0.4f);
+						//counter++;
+					}
+					counter++;
+				}
 				if (backToMenu.updateClick()) {
 					state = MAIN;
 				}
@@ -158,6 +173,10 @@ public class Main_menu {
 				volume_music.draw();
 				max_fps.draw();
 				backToMenu.setFontColour(1f, 1f, 1f);
+				vsync.setFontColour(1f, 1f, 1f);
+				mute.setFontColour(1f, 1f, 1f);
+				mute.draw();
+				vsync.draw();
 				backToMenu.draw();
 				
 				break;
@@ -193,6 +212,7 @@ public class Main_menu {
 				game.difficulty, 
 				game.round, 
 				level,
+				game.continuousMode,
 				game.turrets,
 				game.coins,
 				game.lives,

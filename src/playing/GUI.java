@@ -123,7 +123,7 @@ public class GUI {
 	
 	public GUI(){
 		// Creating the buttons on the opening and closing GUI panel
-		buttons = new GUIButton[5];
+		buttons = new GUIButton[6];
 		buttons[0] = new GUIButton(
 				"Tower 1",  BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_1);
 		buttons[1] = new GUIButton(
@@ -131,8 +131,10 @@ public class GUI {
 		buttons[2] = new GUIButton(
 				"Tower 3",  BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_3);
 		buttons[3] = new GUIButton(
-				"Quit",     BUTTON_SIZE, BUTTON_SIZE, Playing.QUIT);
+				"Save",     BUTTON_SIZE, BUTTON_SIZE, Playing.SAVE);
 		buttons[4] = new GUIButton(
+				"Quit",     BUTTON_SIZE, BUTTON_SIZE, Playing.QUIT);
+		buttons[5] = new GUIButton(
 				"Settings", BUTTON_SIZE, BUTTON_SIZE, Playing.SETTINGS);
 		
 		// Repositioning the buttons on the GUI panel
