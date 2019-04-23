@@ -15,6 +15,8 @@ public class Slider {
 	private int min;
 	private int max;
 	
+	private boolean enabled = true;
+	
 	//sliderWidth = current position of slider along width.
 	private int sliderWidth;
 	private boolean interacted = false;
@@ -42,19 +44,22 @@ public class Slider {
 		if (Main.window.isMouseReleased(Main.window.LEFT_MOUSE)) {
 			interacted = false;
 		}
-		if(Main.window.getMouseX() > x &&
-		   Main.window.getMouseX() < x+width &&
-		   Main.window.getMouseY() > y &&
-		   Main.window.getMouseY() < y+height || interacted) {
-			if(Main.window.isMousePressed(Main.window.LEFT_MOUSE) || interacted) {
-				double mx = Main.window.getMouseX();
-				interacted = true;
-				sliderWidth = Math.abs((int) mx - x);
-				if (mx < x) sliderWidth = 0;
-				//if (sliderWidth > max) sliderWidth = max; else if(sliderWidth < min) sliderWidth = min;
-				sliderWidth = Math.min(sliderWidth, max); sliderWidth = Math.max(sliderWidth, min);
-			}
+		if (enabled) {
+			if(Main.window.getMouseX() > x &&
+			   Main.window.getMouseX() < x+width &&
+			   Main.window.getMouseY() > y &&
+			   Main.window.getMouseY() < y+height || interacted) {
+				if(Main.window.isMousePressed(Main.window.LEFT_MOUSE) || interacted) {
+					double mx = Main.window.getMouseX();
+					interacted = true;
+					sliderWidth = Math.abs((int) mx - x);
+					if (mx < x) sliderWidth = 0;
+					//if (sliderWidth > max) sliderWidth = max; else if(sliderWidth < min) sliderWidth = min;
+					sliderWidth = Math.min(sliderWidth, max); sliderWidth = Math.max(sliderWidth, min);
+				}
+			}	
 		}
+
 	}
 	public void draw() {
 		Main.window.setColour(SLIDER_COLOUR);
@@ -80,6 +85,22 @@ public class Slider {
 	
 	public float getSliderWidth() {
 		return sliderWidth;
+	}
+	
+	public int[] getPosition() {
+		return new int[] {x,y};
+	}
+	
+	public Text getText() {
+		return text;
+	}
+	
+	public void toggleEnabled() {
+		enabled = !enabled;
+	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

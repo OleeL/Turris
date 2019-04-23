@@ -98,27 +98,34 @@ public class Main_menu {
 				}
 				break;
 			case SETTINGS:
+				volume_music.setEnabled(true);
+				volume_sfx.setEnabled(true);
+				max_fps.setEnabled(true);
 				if (backToMenu.updateClick()) {
 					state = MAIN;
 				}
-				// Updating the text in the slider (and the interaction)
-				float sw = volume_sfx.getSliderWidth();
-				float sm = volume_sfx.getMaxWidth();
-				
-				volume_sfx.update("Sound Effects: "+(int)((sw/sm)*100));
-				sw = volume_music.getSliderWidth();
-				sm = volume_music.getMaxWidth();
-				volume_music.update("Music: "+(int)((sw/sm)*100));
-				Audio.updateVolume();
-				sw = max_fps.getSliderWidth();
-				sm = 250;
-				int range = 220;
-				int fps = (int)(range*(sw/(2*sm)) + 30);
-				max_fps.update("FPS: "+fps);
-				Main.window.setFPS(fps);
+				updateSliders();
 				break;
 		}
 		
+	}
+	
+	public static void updateSliders() {
+		// Updating the text in the slider (and the interaction)
+		float sw = volume_sfx.getSliderWidth();
+		float sm = volume_sfx.getMaxWidth();
+		
+		volume_sfx.update("Sound Effects: "+(int)((sw/sm)*100));
+		sw = volume_music.getSliderWidth();
+		sm = volume_music.getMaxWidth();
+		volume_music.update("Music: "+(int)((sw/sm)*100));
+		Audio.updateVolume();
+		sw = max_fps.getSliderWidth();
+		sm = 250;
+		int range = 220;
+		int fps = (int)(range*(sw/(2*sm)) + 30);
+		max_fps.update("FPS: "+fps);
+		Main.window.setFPS(fps);
 	}
 	
 	public static void draw()

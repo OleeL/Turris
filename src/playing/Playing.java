@@ -107,6 +107,9 @@ public class Playing {
 				Playing.difficulty_visual = "Easy";
 				break;
 		}
+		Main_menu.volume_sfx.toggleEnabled();
+		Main_menu.volume_music.toggleEnabled();
+		Main_menu.max_fps.toggleEnabled();
 		// Statistics reset
 		coins_revenue = 0;
 		kills = 0;
@@ -230,6 +233,10 @@ public class Playing {
 		// If there is something pressed on the GUI, make the new selection
 		if ( btn > -1) selected = btn;
 		
+		if (selected != SETTINGS && selected != UNSELECTED) {
+			gui.close_settings_gui();
+		}
+		
 		// If there is nothing selected
 		switch (selected)
 		{
@@ -264,6 +271,7 @@ public class Playing {
 
 				break;
 			case SETTINGS:
+				gui.toggle_settings_gui();
 				selected = UNSELECTED;
 				break;
 			case QUIT:

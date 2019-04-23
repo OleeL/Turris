@@ -108,6 +108,7 @@ public class GUI {
 	// Button variables
 	private final float BUTTON_SIZE = 50;
 	private GUIButton[] buttons;
+	private boolean showSettings = false;
 
 	private boolean closed = true;
 	private boolean guiClicked = false;
@@ -208,6 +209,8 @@ public class GUI {
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		int screenWidth = Main.window.getWidth();
+		
+		Main_menu.updateSliders();
 		
 		// Updates tower buttons, pause buttons
 		if (!closed) {
@@ -340,6 +343,7 @@ public class GUI {
 				Playing.state = Playing.PAUSED;
 				Main.state = Main.MAIN_MENU;
 				Main_menu.state = Main_menu.MAIN;
+				close_settings_gui();
 
 			}
 		}
@@ -440,6 +444,14 @@ public class GUI {
 				break;
 		}
 		
+		if (showSettings) {
+			Main.window.setColour(0f,0f,0f,0.5f);
+			Main.window.rectangle(50, 50, 600, 450,20);
+			Main_menu.volume_sfx.draw();
+			Main_menu.volume_music.draw();
+			Main_menu.max_fps.draw();
+		}
+		
 		
 	}
 	
@@ -508,6 +520,7 @@ public class GUI {
 			x = Main.window.getWidth();
 			open_button_x = Main.window.getWidth() - open_button_w;
 			open_button_image_rotation = 180;
+			close_settings_gui();
 		}
 
 		open_button_image.setX(open_button_x + open_button_xmargin);
@@ -529,5 +542,34 @@ public class GUI {
 		float bh = button_round.getHeight()/2;
 		float by = button_round.getY();
 		button_round.getText().setPosition((bx+(bw))-(btw), (by+(bh))-(bth));
+	}
+	
+	public void toggle_settings_gui() {
+		int offset = -50;
+		if(showSettings) {
+			offset = 50;
+		}
+		Main_menu.volume_sfx.toggleEnabled();
+		Main_menu.volume_music.toggleEnabled();
+		Main_menu.max_fps.toggleEnabled();
+		Main_menu.volume_sfx.setPosition(Main_menu.volume_sfx.getPosition()[0] + offset, Main_menu.volume_sfx.getPosition()[1]);
+		Main_menu.volume_sfx.getText().setPosition(Main_menu.volume_sfx.getText().x + offset, Main_menu.volume_sfx.getText().y);
+		
+		Main_menu.volume_music.setPosition(Main_menu.volume_music.getPosition()[0] + offset, Main_menu.volume_music.getPosition()[1]);
+		Main_menu.volume_music.getText().setPosition(Main_menu.volume_music.getText().x + offset, Main_menu.volume_music.getText().y);
+		
+		Main_menu.max_fps.setPosition(Main_menu.max_fps.getPosition()[0] + offset, Main_menu.max_fps.getPosition()[1]);
+		Main_menu.max_fps.getText().setPosition(Main_menu.max_fps.getText().x + offset, Main_menu.max_fps.getText().y);
+		showSettings = !showSettings;
+	}
+	
+	public void close_settings_gui() {
+		if (showSettings) {
+			toggle_settings_gui();
+		}
+	}
+	
+	public boolean settingsOpen() {
+		return showSettings;
 	}
 }
