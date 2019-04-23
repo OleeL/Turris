@@ -1,12 +1,12 @@
 package main;
 
 import org.lwjgl.glfw.GLFW;
-
 import engine.io.Audio;
 import gui.Button;
 import gui.Cloud;
 import gui.Texture;
-import turrets.Turret;
+import level.handler.Load;
+import playing.Playing;
 import gui.Slider;
 
 /**
@@ -82,10 +82,9 @@ public class Main_menu {
 				}
 				break;
 			case LOAD_GAME:
-				
-				if (backToMenu.updateClick()) {
-					state = MAIN;
-				}
+				load_game();
+				state = MAIN;
+				Main.state = Main.PLAYING;
 				break;
 			case HELP:
 				if (backToMenu.updateClick()) {
@@ -184,6 +183,24 @@ public class Main_menu {
 				System.exit(-1);
 				break;	
 		}
+	}
+	
+	public static void load_game() {
+		Load game = new Load();
+		game.load();
+		String level = "assets/levels/"+game.level+".csv";
+		Playing.load(
+				game.difficulty, 
+				game.round, 
+				level,
+				game.turrets,
+				game.coins,
+				game.lives,
+				game.revenue,
+				game.kills,
+				game.arrows_fired,
+				game.b_upgraded,
+				game.b_built);
 	}
 	
 }

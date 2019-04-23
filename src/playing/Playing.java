@@ -15,6 +15,7 @@ import engine.io.Audio;
 import gui.Texture;
 import main.Main;
 import main.Main_menu;
+import playing.waves.Wave;
 import turrets.*;
 
 /**
@@ -90,10 +91,12 @@ public class Playing {
 	private static long previous_time;
 		
 	public static void create(int difficulty, int round, String level){
-		
 		Playing.round = round;
 		selected = UNSELECTED;
 		state = ROUND_END;
+		
+		// Getting the selected level
+		char selected_level = level.charAt(level.length()-5);
 		// Coins and lives depends on the difficulty
 		switch (difficulty) {
 			case HARD:
@@ -130,7 +133,7 @@ public class Playing {
 		speed_modifier = 1;
 		
 		// Instantiating for the GUI and grid interface
-		grid = new Grid(level);
+		grid = new Grid(level, selected_level);
 		gui  = new GUI();
 
 		// Instantiates dependencies for the enemy
@@ -405,8 +408,7 @@ public class Playing {
 				coins >= ((Turret) turret).getCost()){
 			coins -= ((Turret) turret).getCost();
 			grid.insert((int)(temp_tile_x / grid.getTileSize()), 
-					    (int)(temp_tile_y / grid.getTileSize()), 
-					    turret.getName(),
+					    (int)(temp_tile_y / grid.getTileSize()),
 					    turret,
 					    level);
 			buildings_built++;
@@ -435,5 +437,35 @@ public class Playing {
 				state = PAUSED;
 				break;			
 		}
+	}
+	
+	public static void load(
+			int difficulty,
+			int round,
+			String level,
+			ArrayList<Turret> turret,
+			int coins,
+			int lives,
+			int coins_revenue,
+			int kills,
+			int arrows_fired,
+			int buildings_upgraded,
+			int buildings_built) {
+		create(difficulty, round, level);
+		for (int i = 0; i < turret.size(); i++) {
+			grid.insert(
+					(int) (turret.get(i).getX() / grid.getTileSize()),
+					(int) (turret.get(i).getY() / grid.getTileSize()), 
+					turret.get(i), 
+					0);
+			
+		}
+		Playing.coins = coins;
+		Playing.lives = lives;
+		Playing.coins_revenue = coins_revenue;
+		Playing.kills = kills;
+		Playing.arrows_fired = arrows_fired;
+		Playing.buildings_upgraded = buildings_upgraded;
+		Playing.buildings_built = buildings_built;
 	}
 }

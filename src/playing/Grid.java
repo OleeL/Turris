@@ -8,7 +8,6 @@
 package playing;
 
 import gui.Texture;
-import main.Map_select;
 import turrets.*;
 
 import static main.Main.window;
@@ -43,8 +42,10 @@ public class Grid {
 	public float spawn_x, spawn_y, finish_x, finish_y;
 	public int start_tileX, start_tileY;
 	private boolean draw_lines = true;
+	private char selected_level;
 	
-	public Grid(String level) {
+	public Grid(String level, char selected_level) {
+		this.selected_level = selected_level;
 		try {
 			File file = new File(level);
 			Scanner inputStream;
@@ -122,7 +123,7 @@ public class Grid {
 		grid[y][x] = new Entity(
 				tile, 
 				new Texture(
-						PATH+"/" + (Map_select.getSelectedMap() + 1) + "/" +tile+PNG, 
+						PATH+"/" + (selected_level) + "/" +tile+PNG, 
 						(int) (x*grid_size), 
 						(int) (y*grid_size),
 						grid_size / 100,  // The tiles are 100 x 100
@@ -132,7 +133,7 @@ public class Grid {
 	}
 	
 	// inserts a turret into the board
-	public void insert(int x, int y, String tile, Entity turret, int level) {
+	public void insert(int x, int y, Entity turret, int level) {
 		grid[y][x] = turret;
 		turrets.add((Turret) turret);
 		for (int i = 0; i < level; i++) ((Turret) grid[y][x]).upgrade();

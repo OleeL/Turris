@@ -46,7 +46,7 @@ public class Audio{
 	
 	public static long id;
 
-	public  static void play(String filename) {
+	public static void play(String filename) {
 			play(filename, 0f,0f);
 	}
 	
