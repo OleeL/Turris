@@ -146,6 +146,7 @@ public class Button {
 	public void setName(String name) {
 		this.name = name;
 		text.text = name;
+		setPosition((int)x,(int)y);
 	}
 	// returns button width
 	public float getWidth() {

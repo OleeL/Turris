@@ -213,7 +213,33 @@ public class GUI {
 		double my = Main.window.getMouseY();
 		int screenWidth = Main.window.getWidth();
 		
-		Main_menu.updateSliders();
+		if (showSettings) {
+			Main_menu.updateSliders();
+			if (Main_menu.mute.updateClick()) {
+				Audio.toggleMute();
+			}
+			
+			if(Main_menu.vsync.updateClick()) {
+				Main.window.toggleVsync();
+			}
+			
+			if (Main.window.getVsync()){
+				Main_menu.vsync.setButtonColour(0.0f, 1.0f, 0.0f);
+			}
+			else{
+				Main_menu.vsync.setButtonColour(0.0f, 0.0f, 0.0f);
+			}
+					
+			if(Audio.isMuted()) {
+				Main_menu.mute.setButtonColour(0.0f, 1.0f, 0.0f);
+				Main_menu.mute.setName("Unmute");
+			}
+			else {
+				Main_menu.mute.setButtonColour(0.0f, 0.0f, 0.0f);
+				Main_menu.mute.setName("Mute");
+			}
+		}
+
 		
 		// Updates tower buttons, pause buttons
 		if (!closed) {
@@ -453,6 +479,8 @@ public class GUI {
 			Main_menu.volume_sfx.draw();
 			Main_menu.volume_music.draw();
 			Main_menu.max_fps.draw();
+			Main_menu.mute.draw();
+			Main_menu.vsync.draw();
 		}
 		
 		
@@ -563,6 +591,9 @@ public class GUI {
 		
 		Main_menu.max_fps.setPosition(Main_menu.max_fps.getPosition()[0] + offset, Main_menu.max_fps.getPosition()[1]);
 		Main_menu.max_fps.getText().setPosition(Main_menu.max_fps.getText().x + offset, Main_menu.max_fps.getText().y);
+		
+		Main_menu.mute.setPosition((int)Main_menu.mute.getX() + offset, (int)Main_menu.mute.getY());
+		Main_menu.vsync.setPosition((int)Main_menu.vsync.getX() + offset, (int) Main_menu.vsync.getY());
 		showSettings = !showSettings;
 	}
 	
