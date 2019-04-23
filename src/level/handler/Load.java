@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import playing.Entity;
 import turrets.*;
 
 /**
@@ -25,7 +27,7 @@ public class Load {
 	public int revenue, kills, arrows_fired, b_upgraded, b_built;
 	
 	// Turrets
-	public ArrayList<Turret> turrets = new ArrayList<Turret>();
+	public ArrayList<Entity> turrets = new ArrayList<Entity>();
 	
 	// For loading the game
 	public void load() {
@@ -67,19 +69,21 @@ public class Load {
 				int level  = Integer.parseInt(values[1]);
 				int x = Integer.parseInt(values[2]);
 				int y = Integer.parseInt(values[3]);
+				Entity t = null;
 				switch (turret) {
 					case 1:
-						turrets.add( new Turret_1(x, y, grid_size) );
+						t = new Turret_1(x, y, grid_size);
 						break;
 					case 2:
-						turrets.add( new Turret_2(x, y, grid_size) );
+						t = new Turret_2(x, y, grid_size);
 						break;
 					case 3:
-						turrets.add( new Turret_3(x, y, grid_size) );
+						t = new Turret_3(x, y, grid_size);
 						break;
 				}
+				turrets.add(t);
 				for (int i = 0; i < level; i++)
-					turrets.get(turrets.size()-1).upgrade();
+					((Turret) turrets.get(turrets.size()-1)).upgrade();
 			}
 			inputStream.close();
 		} catch (FileNotFoundException e) {

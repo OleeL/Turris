@@ -96,7 +96,11 @@ public class Grid {
 		
 		// Drawing the towers
 		for (int turret = 0; turret < turrets.size(); turret++) {
-			turrets.get(turret).draw();
+			System.out.println(turret);
+			System.out.println(turrets.get(turret).game_x + ", " + turrets.get(turret).game_y );
+			System.out.println(turrets.get(turret).x + ", " + turrets.get(turret).y);
+			System.out.println();
+			((Turret) turrets.get(turret)).draw();
 		}
 		
 		// Drawing grid lines

@@ -19,7 +19,7 @@ public abstract class Turret extends Entity {
 	protected float range, damage;
 	protected int level = 0, cost, upgrade_cost;
 	public final int MAX_LEVEL = 2;
-	private float game_x, game_y;
+	public float game_x, game_y;
 	
 	protected float arrowSpeed = 5;
 	protected long rateOfFire;
@@ -168,9 +168,5 @@ public abstract class Turret extends Entity {
 	public int getTurretLevel() {
 		return level;
 	}
-	
-//	public void setTurretLevel(int level) {
-//		this.level = level;
-//	}
 	
 }

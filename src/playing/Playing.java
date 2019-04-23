@@ -443,7 +443,7 @@ public class Playing {
 			int difficulty,
 			int round,
 			String level,
-			ArrayList<Turret> turret,
+			ArrayList<Entity> turret,
 			int coins,
 			int lives,
 			int coins_revenue,
@@ -454,11 +454,10 @@ public class Playing {
 		create(difficulty, round, level);
 		for (int i = 0; i < turret.size(); i++) {
 			grid.insert(
-					(int) (turret.get(i).getX() / grid.getTileSize()),
-					(int) (turret.get(i).getY() / grid.getTileSize()), 
+					(int) (turret.get(i).getX()),
+					(int) (turret.get(i).getY()), 
 					turret.get(i), 
 					0);
-			
 		}
 		Playing.coins = coins;
 		Playing.lives = lives;
