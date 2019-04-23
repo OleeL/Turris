@@ -6,6 +6,11 @@ import gui.Text;
 import gui.Texture;
 import playing.Playing;
 
+/**
+ * @author Team 62
+ * 
+ * Kieran Baker - sgkbaker - 201234727
+ */
 
 public class Map_select {
 	

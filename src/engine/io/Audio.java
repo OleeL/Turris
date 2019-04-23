@@ -15,16 +15,10 @@ import org.lwjgl.openal.*;
 
 import main.Main_menu;
 
-/* TODO
- * FIX AUDIO DEVICE NOT CLOSED BUG
- * 
- * Finish creating audio files
- * Speed up audio when game speed is sped up??? - Don't know if possible or even needed?
- */
-
 /**
- * @author Kieran
- *
+ * @author Team 62
+ * 
+ * Kieran Baker - sgkbaker - 201234727
  */
 public class Audio{
 	

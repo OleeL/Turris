@@ -17,6 +17,13 @@ import main.Main;
 import main.Main_menu;
 import turrets.*;
 
+/**
+ * @author Team 62
+ * 
+ * Oliver Legg - sgolegg - 201244658
+ * Kieran Baker - sgkbaker - 201234727
+ */
+
 public class Playing {
 	
 	// Different Levels
