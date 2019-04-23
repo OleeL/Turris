@@ -1,7 +1,5 @@
 package main;
 
-import org.lwjgl.glfw.GLFW;
-
 import engine.io.Audio;
 import engine.io.Window;
 import playing.Playing;
@@ -25,14 +23,16 @@ public class Main {
 		// Setting up window settings
 		int width = 800;              // Screen Width
 		int height = 600;             // Screen Height
-		int fps = 250;                 // Max Frame Rate
+		int fps = 250;                // Max Frame Rate
 		boolean vsync = false;        // Vsync settings
 		String windowName = "Turris"; // Name of the window
 		
 		// Creates the game window
 		window = new Window(width, height, fps, vsync, windowName);
 		window.setIcon("TurrisIcon.png");
+		window.setFullscreen(true);
 		window.create();
+		
 		
 		// Creates the main menu
 		Main_menu.create();

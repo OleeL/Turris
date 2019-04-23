@@ -1,11 +1,13 @@
 package engine.io;
 
 import java.nio.DoubleBuffer;
+import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.glfw.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -23,7 +25,7 @@ public class Window {
 	private double lastFrame;
 	private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 	private boolean[] mouseButtons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
-	private boolean vsync, closed = false;
+	private boolean vsync, closed = false, isFullscreen;
 	public final int LEFT_MOUSE = 0;
 	public final int RIGHT_MOUSE = 1;
 	private static GLFWImage.Buffer iconBuffer;
@@ -52,7 +54,7 @@ public class Window {
 		
 		// Creates the window with the given width, height, title, the monitor
 		// it goes on and the share
-		window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
+		window = GLFW.glfwCreateWindow(width, height, title, (isFullscreen) ? GLFW.glfwGetPrimaryMonitor() : 0, window);
 		
 		// Error handling if the OS doesn't make the window right.
 		if (window == 0)
@@ -110,6 +112,15 @@ public class Window {
 	// The update loop where all the game processing will be handled
 	public void update()
 	{
+		// Window buffer
+		IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+		IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
+		GLFW.glfwGetWindowSize(window, widthBuffer, heightBuffer);
+		width = widthBuffer.get(0);
+		height = heightBuffer.get(0);
+		GL11.glViewport(0, 0, width, height);
+		
+		
 		// Checks if all keys and mouse buttons are down
 		for (int i = 0; i < GLFW.GLFW_KEY_LAST; i++) 
 			keys[i] = isKeyDown(i);
@@ -285,6 +296,14 @@ public class Window {
 	// Get vsync
 	public boolean getVsync() {
 		return vsync;
+	}
+
+	public boolean isFullscreen() {
+		return isFullscreen;
+	}
+
+	public void setFullscreen(boolean isFullscreen) {
+		this.isFullscreen = isFullscreen;
 	}
 
 	// Draws a rectangle with rounded edges
