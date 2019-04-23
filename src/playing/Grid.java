@@ -23,6 +23,7 @@ public class Grid {
 	public static final String PNG             = ".png";
 	public static final String PATH            = "/tiles/";
 	public static final String BLANK           = "x";
+	public static final String DECORATION	   = "d";
 	public static final String ACROSS          = "path_as";
 	public static final String DOWN            = "path_ds";
 	public static final String STOP_BOTTOM     = "path_sb";

@@ -367,8 +367,9 @@ public class Playing {
 		double my = Main.window.getMouseY();
 		float temp_tile_x = grid.getCoordX(mx);
 		float temp_tile_y = grid.getCoordY(my);
-		return grid.getTile((int)(temp_tile_x / grid.getTileSize()),
-                (int)(temp_tile_y / grid.getTileSize())).equals(Grid.BLANK);
+		String tile = grid.getTile((int)(temp_tile_x / grid.getTileSize()),(int)(temp_tile_y / grid.getTileSize()));
+		if (tile.equals(Grid.BLANK) || tile.equals(Grid.DECORATION)) return true;
+		return false;
 	}
 	
 	// Place function for placing turrets
