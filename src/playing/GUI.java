@@ -235,6 +235,7 @@ public class GUI {
 			}
 			else {
 				Main_menu.mute.setButtonColour(0.0f, 0.0f, 0.0f);
+
 			}
 		}
 
