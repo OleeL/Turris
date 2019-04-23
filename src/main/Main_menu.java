@@ -35,8 +35,8 @@ public class Main_menu {
 	private static float boxX = (Main.window.getWidth() / 2) - (boxW/2);
 	private static float boxY = (Main.window.getHeight() / 2) - (boxH/2);
 	private static Button backToMenu = new Button("Back", 580, 535, 100, 50, MAIN);
-	private static Button vsync = new Button("Vsync", 150, 400, 170, 60, MAIN);
-	private static Button mute = new Button("Mute", 480 ,400, 170, 60, MAIN);
+	public static Button vsync = new Button("Vsync", 150, 400, 170, 60, MAIN);
+	public static Button mute = new Button("Mute", 480 ,400, 170, 60, MAIN);
 	public static Slider volume_sfx = new Slider("Sound Effects:", 500, 50, 150, 125, 50);
 	public static Slider volume_music = new Slider("Music: ",500, 50, 150, 225, 50);
 	public static Slider max_fps = new Slider("FPS:", 500, 50, 150, 325, 500);
@@ -114,20 +114,20 @@ public class Main_menu {
 				else{
 					vsync.setButtonColour(0.0f, 0.0f, 0.0f);
 				}
-				
+			
 				if(mute.updateClick()) {
 					Audio.toggleMute();
 				}
-				if(Audio.isMuted() == true) {
+				if(Audio.isMuted()) {
 					mute.setButtonColour(0.0f, 1.0f, 0.0f);
-					mute.setName("Unmute");
+					
 				}
 				else {
 					mute.setButtonColour(0.0f, 0.0f, 0.0f);
-					mute.setName("Mute");
+				
 				}
 				
-				
+			
 				// Back button
 				if (backToMenu.updateClick()) {
 					state = MAIN;
