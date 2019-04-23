@@ -8,8 +8,8 @@ package playing.waves;
 public class PairedWave extends WaveStyle{
 	private static final int size = 2;
 	
-	public PairedWave(float[] ratios, int total_enemies) {
-		super(ratios, total_enemies);
+	public PairedWave(float[] ratios, int total_enemies, int round, float multiplier) {
+		super(ratios, total_enemies, round, multiplier);
 	}
 	
 	public void generate() {

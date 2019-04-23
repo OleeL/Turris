@@ -6,8 +6,8 @@ package playing.waves;
  */
 
 public class ContinuousWave extends WaveStyle{
-	public ContinuousWave(float[] ratios, int total_enemies) {
-		super(ratios, total_enemies);
+	public ContinuousWave(float[] ratios, int total_enemies, int round, float multiplier) {
+		super(ratios, total_enemies, round, multiplier);
 	}
 	
 	public void generate() {

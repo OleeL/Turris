@@ -8,8 +8,8 @@ package playing.waves;
 public class BurstWave extends WaveStyle{
 	float[] bursts;
 	
-	public BurstWave(float[] ratios, int total_enemies) {
-		super(ratios, total_enemies);
+	public BurstWave(float[] ratios, int total_enemies, int round, float multiplier) {
+		super(ratios, total_enemies, round, multiplier);
 		bursts = new float[] {0.25f,0.25f,0.5f};
 	}
 	

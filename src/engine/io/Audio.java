@@ -45,6 +45,8 @@ public class Audio{
 	public static long device;
 	
 	public static long id;
+	
+	private static boolean muted = false;
 
 	public static void play(String filename) {
 			play(filename, 0f,0f);
@@ -53,13 +55,19 @@ public class Audio{
 	//Play audio file in a given position
 	public static void play(String filename, float x, float y) {
 		float volume;
-		switch (filename.substring(0, 2)) {
+		
 		//Determine if sound is effect or music
-		case "m":
-			volume = Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth();
-			break;
-		default:
-			volume = Main_menu.volume_sfx.getSliderWidth() / Main_menu.volume_sfx.getMaxWidth();
+		if (muted) {
+			volume = 0;
+		} else {
+			switch (filename.substring(0, 2)) {
+				case "m":
+					volume = Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth();
+					break;
+				default:
+					volume = Main_menu.volume_sfx.getSliderWidth() / Main_menu.volume_sfx.getMaxWidth();
+					break;
+			}
 		}
 		
 		//Fit coordinates into range of -1 to 1
@@ -68,6 +76,11 @@ public class Audio{
 		
 		Sound snd = new Sound(filename, x,y, volume);
 		snd.start();
+	}
+	
+	public static void toggleMute() {
+		muted = !muted;
+		updateVolume();
 	}
 	
 	/**
@@ -110,7 +123,12 @@ public class Audio{
 	
 	public static void updateVolume() {
 		if (looped != null) {
-			AL10.alSourcef(looped.s, AL10.AL_GAIN, Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+			if (muted) {
+				AL10.alSourcef(looped.s, AL10.AL_GAIN, 0);
+			} else {
+				AL10.alSourcef(looped.s, AL10.AL_GAIN, Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+			}
+			
 		}
 
 

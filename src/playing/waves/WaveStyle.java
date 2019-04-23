@@ -8,14 +8,18 @@ package playing.waves;
 abstract class WaveStyle {
 	protected int total_enemies;
 	protected float[] ratios;
+	protected int round;
+	protected float multiplier;
 	protected int[] enemy_split;
 	protected int[] available;
 	protected String[] enemies;
 	protected String[] timings;
 	
-	public WaveStyle(float[] ratios,int total_enemies) {
+	public WaveStyle(float[] ratios,int total_enemies, int round, float multiplier) {
 		this.ratios = ratios;
 		this.enemy_split = new int[3];
+		this.round = round;
+		this.multiplier = multiplier;
 		available = new int[3];
 		int count = 0;
 		for (int i = 0;i<enemy_split.length;i++) {
@@ -35,13 +39,13 @@ abstract class WaveStyle {
 			enemies[i] = enemy;
 			switch(enemy) {
 			case "1":
-				timings[i] = String.valueOf(0.2 * 1/Wave.multiplier);
+				timings[i] = String.valueOf(Math.max(0.05, 0.2 * 1/multiplier - round/1000));
 				break;
 			case "2":
-				timings[i] = String.valueOf(0.3 * 1/Wave.multiplier);
+				timings[i] = String.valueOf(Math.max(0.05, 0.3 * 1/multiplier - round/1000));
 				break;
 			case "3":
-				timings[i] = String.valueOf(0.4 * 1/Wave.multiplier);
+				timings[i] = String.valueOf(Math.max(0.05, 0.4 * 1/multiplier - round/1000));
 				break;
 			}
 		}
