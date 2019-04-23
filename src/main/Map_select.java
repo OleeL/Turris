@@ -174,7 +174,7 @@ public class Map_select {
 			break;
 		}
 		Playing.continuous = continuous;
-		Playing.create(difficulty, 30, name);
+		Playing.create(difficulty, 1, name);
 		
 	}
 	
