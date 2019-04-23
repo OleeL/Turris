@@ -36,8 +36,6 @@ public class Wave {
 	public double[] spawn_delays;
 	public boolean win;
 	
-	public static float multiplier;
-	
 	public Wave() {
 		win = false;
 	}
@@ -65,7 +63,7 @@ public class Wave {
 			} else if (string_enemies == null && continuous) {
 				inputStream.close();
 				//String[][] wave = ContinuousWave.create(round,difficulty);
-				multiplier = 1;
+				float multiplier = 1;
 				float[] ratios = new float[] {0.4f, 0.3f, 0.3f};
 				switch (difficulty) {
 				case Wave.MEDIUM:
@@ -84,11 +82,11 @@ public class Wave {
 				
 				WaveStyle wave;
 				if (round % 5 == 0) {
-					wave = new ContinuousWave(ratios,total_enemies);
+					wave = new ContinuousWave(ratios,total_enemies, round, multiplier);
 				} else if (round % 3 == 0) {
-					wave = new PairedWave(ratios, total_enemies);
+					wave = new PairedWave(ratios, total_enemies, round, multiplier);
 				} else {
-					wave = new BurstWave(ratios, total_enemies);
+					wave = new BurstWave(ratios, total_enemies, round, multiplier);
 				}
 
 				wave.generate();
