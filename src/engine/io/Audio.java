@@ -109,7 +109,11 @@ public class Audio{
 	}
 	
 	public static void updateVolume() {
-		AL10.alSourcef(looped.s, AL10.AL_GAIN, Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+		if (looped != null) {
+			AL10.alSourcef(looped.s, AL10.AL_GAIN, Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+		}
+
+
 	}
 	
 	//Setup the device for playing audio

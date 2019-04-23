@@ -94,16 +94,10 @@ public class Map_select {
 		
 		//Start the game on the selected map when button clicked
 		if (buttons[0].updateClick()) {
-
-			Main.state = Main.PLAYING;
-			
-			Audio.stop(false);
-			
-			Audio.playLoop(Audio.MSC_GAME);
-			Playing.create(Playing.EASY, 1, convert_to_map_name(selected_map));
-			
+			startSelectedMap(false);
+		} else if (buttons[1].updateClick()) {
+			startSelectedMap(true);
 		}
-		buttons[1].updateClick();
 		
 		if (btn_back.updateClick()) {
 
@@ -154,20 +148,34 @@ public class Map_select {
 		
 	}
 	
-	//Takes a map number and returns the file name of that map
-	private static String convert_to_map_name(int selected) {
-		switch(selected) {
-		case 1:
-			return Playing.LEVEL_2;
-		case 2:
-			return Playing.LEVEL_3;
-		default:
-			return Playing.LEVEL_1;
-		}
-	}
-	
 	public static int getSelectedMap() {
 		return selected_map;
+	}
+	
+	public static void startSelectedMap(boolean continuous) {
+
+		Main.state = Main.PLAYING;
+		
+		Audio.stop(false);
+		
+		Audio.playLoop(Audio.MSC_GAME);
+		
+		String name = Playing.LEVEL_1;
+		int difficulty = Playing.EASY;
+		
+		switch(selected_map) {
+		case 1:
+			name = Playing.LEVEL_2;
+			difficulty = Playing.MEDIUM;
+			break;
+		case 2:
+			name = Playing.LEVEL_3;
+			difficulty = Playing.HARD;
+			break;
+		}
+		Playing.continuous = continuous;
+		Playing.create(difficulty, 1, name);
+		
 	}
 	
 }

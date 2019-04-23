@@ -77,6 +77,7 @@ public class Playing {
 	private static long time_end;
 	private static int spawn_num;
 	public static boolean roundEnded;
+	public static boolean continuous;
 	
 	// Enemies and arrows
 	private static ArrayList<Enemy> enemies;
@@ -417,7 +418,7 @@ public class Playing {
 	public static void start_new_round(int round) {
 		time_end = 0;
 		spawn_num = 0;
-		wave.produceWave(round, difficulty);
+		wave.produceWave(round, difficulty, continuous);
 		if (wave.win) {
 			state = WIN;
 		}
