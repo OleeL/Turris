@@ -1,14 +1,15 @@
-package playing;
+package playing.waves;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import enemies.*;
-import engine.io.Random;
+import playing.Playing;
 
-/*
+/**
  * @author Oliver Legg - 201244658 - sgolegg
+ * Kieran Baker - 201234727 - sgkbaker
  * 
  */
 
@@ -35,48 +36,72 @@ public class Wave {
 	public double[] spawn_delays;
 	public boolean win;
 	
+	public static float multiplier;
+	
 	public Wave() {
 		win = false;
 	}
 
 	public void produceWave(int round, String difficulty, boolean continuous) {
-		String[] string_enemies = null;
-		String[] string_spawn_delays = null;
-		if (continuous) {
-			string_enemies = new String[round];
-			string_spawn_delays = new String[round];
-			for (int i = 0;i < round;i++) {
-				string_enemies[i] = String.valueOf(Random.integer(1, 3));
-				string_spawn_delays[i] = "0.5";
+		
+		try {
+			String[] string_enemies = null;
+			String[] string_spawn_delays = null;
+			File file = new File(difficulty);
+			Scanner inputStream;
+			inputStream = new Scanner(file);
+			while (inputStream.hasNext()) {
+				String raw_data = inputStream.next();
+				if (raw_data.split(",")[0].equals("round"+round)) {
+					raw_data = inputStream.next();
+					string_enemies = raw_data.split(",");
+					raw_data = inputStream.next();
+					string_spawn_delays = raw_data.split(",");
+					break;
+				}
 			}
-			spawnWave(string_enemies, string_spawn_delays);
-		} else {
-			try {
-				File file = new File(difficulty);
-				Scanner inputStream;
-				inputStream = new Scanner(file);
-				while (inputStream.hasNext()) {
-					String raw_data = inputStream.next();
-					if (raw_data.split(",")[0].equals("round"+round)) {
-						raw_data = inputStream.next();
-						string_enemies = raw_data.split(",");
-						raw_data = inputStream.next();
-						string_spawn_delays = raw_data.split(",");
-						break;
-					}
+			if (string_enemies == null && !continuous) {
+				win = true;
+			} else if (string_enemies == null && continuous) {
+				inputStream.close();
+				//String[][] wave = ContinuousWave.create(round,difficulty);
+				multiplier = 1;
+				float[] ratios = new float[] {0.4f, 0.3f, 0.3f};
+				switch (difficulty) {
+				case Wave.MEDIUM:
+					multiplier = 1.2f;
+					ratios[0] -= 0.1f;
+					ratios[1] += 0.1f;
+					break;
+				case Wave.HARD:
+					multiplier = 1.5f;
+					ratios[0] -= 0.3f;
+					ratios[1] += 0.2f;
+					ratios[2] += 0.1f;
+					break;
 				}
-				if (string_enemies == null) {
-					win = true;
+				int total_enemies = (int) Math.ceil(3 * round * multiplier);
+				
+				WaveStyle wave;
+				if (round % 5 == 0) {
+					wave = new ContinuousWave(ratios,total_enemies);
+				} else if (round % 3 == 0) {
+					wave = new PairedWave(ratios, total_enemies);
+				} else {
+					wave = new BurstWave(ratios, total_enemies);
 				}
-				else
-				{
-					inputStream.close();
-					spawnWave(string_enemies, string_spawn_delays);
-				}
-			} 
-			catch (FileNotFoundException e) {
-				e.printStackTrace();
+
+				wave.generate();
+				spawnWave(wave.getEnemies(), wave.getTimings());
 			}
+			else
+			{
+				inputStream.close();
+				spawnWave(string_enemies, string_spawn_delays);
+			}
+		} 
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 		
 	}
