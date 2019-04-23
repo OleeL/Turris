@@ -189,7 +189,7 @@ public class Playing {
 			for (int turret = 0; turret < grid.turrets.size(); turret++) {
 				for (int e = 0; e < enemies.size(); e++) {
 					Enemy enemy = enemies.get(e);
-					Arrow arrow = grid.turrets.get(turret).shootAt(
+					Arrow arrow = grid.turrets.get(turret).aimAt(
 							enemy.getCX(),
 							enemy.getCY()
 						);

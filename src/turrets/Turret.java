@@ -54,7 +54,8 @@ public abstract class Turret extends Entity {
 	public abstract boolean upgrade();
 	
 	// Pass the target x and target y
-	public Arrow shootAt(float tx, float ty) {
+	// If the target is in range, fire an arrow there. If it's not, return null
+	public Arrow aimAt(float tx, float ty) {
 		if (inRange(tx, ty)){
 			return fire_at(tx, ty);
 		}
@@ -77,8 +78,8 @@ public abstract class Turret extends Entity {
 	}
 	
 	// fires an arrow at the tx and ty
+	// Arrows are no longer made ready and the reload timer has started
 	private Arrow fire_at(float tx, float ty) {
-		// Arrows are no longer made ready and the reload timer has started
 		arrowReady = false;
 		Audio.play(Audio.SND_TURRET_SHOOT);
 		end = (long) (System.currentTimeMillis( ) + rateOfFire);
@@ -117,10 +118,14 @@ public abstract class Turret extends Entity {
 			int offset_y = -50;
 			
 			if (level < MAX_LEVEL) {
-				Text upgrade_text = new Text(String.valueOf(this.upgrade_cost), 0,0, font_size);
-				upgrade_text.setPosition(center_x - (upgrade_text.getFont().getTextWidth(upgrade_text.text) / 2), center_y + offset_y);
+				Text upgrade_text = new Text(
+						String.valueOf(upgrade_cost), 0, 0, font_size);
+				upgrade_text.setPosition(
+						center_x - (upgrade_text.getFont().getTextWidth(
+								upgrade_text.text) / 2), center_y + offset_y
+						);
 				
-				if (Playing.coins >= cost) {
+				if (Playing.coins >= upgrade_cost) {
 					Main.window.setColour(0f,1f,0f, 1f);
 				} else {
 					Main.window.setColour(1f, 0f, 0f, 1f);
@@ -129,7 +134,10 @@ public abstract class Turret extends Entity {
 				upgrade_text.draw();
 			} else {
 				Text info = new Text("Max level",0,0,font_size);
-				info.setPosition(center_x - (info.getFont().getTextWidth(info.text) / 2), center_y + offset_y);
+				info.setPosition(
+						center_x - (info.getFont().getTextWidth(info.text) / 2),
+						center_y + offset_y
+						);
 				
 				Main.window.setColour(1f,0f,0f,1f);
 				
