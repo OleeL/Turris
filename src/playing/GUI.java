@@ -388,6 +388,7 @@ public class GUI {
 				Playing.state = Playing.QUIT;
 				Main.state = Main.MAIN_MENU;
 				Main_menu.state = Main_menu.MAIN;
+				Audio.stop(false);
 			}
 			//showSavePrompt changed to false to close the prompt.
 			if(cont.updateClick()) {
@@ -401,6 +402,7 @@ public class GUI {
 				Playing.state = Playing.QUIT;
 				Main.state = Main.MAIN_MENU;
 				Main_menu.state = Main_menu.MAIN;
+				Audio.stop(false);
 			}
 			if(cont.updateClick()) {
 				Main.state = Main.PLAYING;
@@ -411,6 +413,7 @@ public class GUI {
 				Playing.state = Playing.QUIT;
 				Main.state = Main.MAIN_MENU;
 				Main_menu.state = Main_menu.MAIN;
+				Audio.stop(false);
 			}
 		}
 		// Updating the winning and losing state
@@ -533,6 +536,9 @@ public class GUI {
 		if(showSavePrompt) {
 			Main.window.setColour(0f,0f,0f,0.5f);
 			Main.window.rectangle((x/2)-(400/2),(h/2)-(200/2), 400, 200, 20);
+			//340 100
+			cont.setPosition(400,340);
+			quit.setPosition(200,340);
 			quit.draw();
 			game_saved.draw();
 			cont.draw();
@@ -677,5 +683,13 @@ public class GUI {
 	
 	public boolean settingsOpen() {
 		return showSettings;
+	}
+	
+	public boolean saveOpen() {
+		return showSavePrompt;
+	}
+	
+	public boolean quitOpen() {
+		return showQuitPrompt;
 	}
 }

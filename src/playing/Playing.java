@@ -280,16 +280,22 @@ public class Playing {
 		if (Main.window.isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) selected = UNSELECTED;
 		
 		// If the gui is clicked and there is something selected: unselect item
-		if (gui.isClicked() && selected != UNSELECTED) selected = UNSELECTED;
-		
+		if (gui.isClicked()) {
+			if(selected != UNSELECTED) {
+				selected = UNSELECTED;
+			} else if(gui.settingsOpen()) {
+				gui.close_settings_gui();
+			} else if(gui.saveOpen()) {
+				gui.display_save_prompt();
+			} else if(gui.quitOpen()) {
+				gui.display_quit_prompt();
+			}
+
+		}
+			
 		// If there is something pressed on the GUI, make the new selection
 		if ( btn > -1) selected = btn;
 		
-		if (selected != SETTINGS && selected != UNSELECTED) {
-			gui.close_settings_gui();
-		}
-		
-		// If there is nothing selected
 		switch (selected)
 		{
 			case UNSELECTED:
@@ -334,7 +340,7 @@ public class Playing {
 			case QUIT:
 				gui.display_quit_prompt();
 				selected = UNSELECTED;
-				Audio.stop(false);
+				//Audio.stop(false);
 				break;
 		}
 	
