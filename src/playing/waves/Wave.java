@@ -72,7 +72,7 @@ public class Wave {
 					ratios[1] += 0.1f;
 					break;
 				case Wave.HARD:
-					multiplier = 1.5f;
+					multiplier = 1.6f;
 					ratios[0] -= 0.3f;
 					ratios[1] += 0.2f;
 					ratios[2] += 0.1f;

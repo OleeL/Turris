@@ -39,13 +39,13 @@ abstract class WaveStyle {
 			enemies[i] = enemy;
 			switch(enemy) {
 			case "1":
-				timings[i] = String.valueOf(Math.max(0.05, 0.2 * 1/multiplier - round/1000));
+				timings[i] = String.valueOf(Math.max(0.01, 0.2 * 1/multiplier - round/100));
 				break;
 			case "2":
-				timings[i] = String.valueOf(Math.max(0.05, 0.3 * 1/multiplier - round/1000));
+				timings[i] = String.valueOf(Math.max(0.02, 0.3 * 1/multiplier - round/100));
 				break;
 			case "3":
-				timings[i] = String.valueOf(Math.max(0.05, 0.4 * 1/multiplier - round/1000));
+				timings[i] = String.valueOf(Math.max(0.03, 0.4 * 1/multiplier - round/100));
 				break;
 			}
 		}
