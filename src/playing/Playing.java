@@ -24,6 +24,7 @@ import turrets.*;
  * 
  * Oliver Legg - sgolegg - 201244658
  * Kieran Baker - sgkbaker - 201234727
+ * Thomas Coupe - sgtcoupe - 201241037
  */
 
 public class Playing {
@@ -95,7 +96,7 @@ public class Playing {
 	private static long previous_time;
 	
 	// Used for saving the game
-	private static Save save;
+	public static Save save;
 		
 	public static void create(int difficulty, int round, String level){
 		// Instantiating
@@ -303,6 +304,7 @@ public class Playing {
 				break;
 			case SAVE:
 				save.write();
+				gui.display_save_prompt();
 				selected = UNSELECTED;
 				break;
 			case SETTINGS:
@@ -310,8 +312,7 @@ public class Playing {
 				selected = UNSELECTED;
 				break;
 			case QUIT:
-				Main.state = Main.MAIN_MENU;
-				Main_menu.state = Main_menu.MAIN;
+				gui.display_quit_prompt();
 				selected = UNSELECTED;
 				Audio.stop(false);
 				break;

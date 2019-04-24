@@ -21,6 +21,7 @@ import turrets.Turret_3;
 /**
  * @author Oliver Legg - sgolegg - 201244658
  * Kieran Baker - sgkbaker - 201234727
+ * Thomas Coupe - sgtcoupe - 201241037
  *
  */
 public class GUI {
@@ -45,7 +46,22 @@ public class GUI {
 			open_button_x + open_button_xmargin,
 			open_button_y + open_button_ymargin,
 			.08f,
-			.08f);
+			.08f),
+					game_saved = new Texture(
+			"game_saved.png",
+			(x/2)-(400/2)+20,//200
+			250, 
+			1f,
+			1f), 
+					save_progress = new Texture(
+			"save_progress.png",
+			220,
+			250,
+			1f,
+			1f);
+			
+			
+					
 	
 	// Final screen (winning or losing)
 	private float final_w = 500;
@@ -109,7 +125,10 @@ public class GUI {
 	// Button variables
 	private final float BUTTON_SIZE = 50;
 	private GUIButton[] buttons;
-	private boolean showSettings = false;
+	private boolean showSettings = false, showSavePrompt = false, showQuitPrompt = false;
+	public Button quit = new Button("Quit", 200, 340, 100, 50, 1);
+	public Button cont = new Button("Continue", 400, 340, 100, 50, 1);
+	public Button saveQuit = new Button("Save & Quit", 435, 340, 100, 50, 1); 
 
 	private boolean closed = true;
 	private boolean guiClicked = false;
@@ -363,7 +382,37 @@ public class GUI {
 			}
 			button_speed.setName((int) Playing.speed_modifier+"x");
 		}
-		
+		//if True save prompt == open.
+		if(showSavePrompt) {
+			if (quit.updateClick()) {
+				Playing.state = Playing.QUIT;
+				Main.state = Main.MAIN_MENU;
+				Main_menu.state = Main_menu.MAIN;
+			}
+			//showSavePrompt changed to false to close the prompt.
+			if(cont.updateClick()) {
+				//Playing.state = Playing.PLAYING;
+				Main.state =Main.PLAYING;
+				display_save_prompt();
+			}
+		}
+		if(showQuitPrompt) {
+			if(quit.updateClick()){
+				Playing.state = Playing.QUIT;
+				Main.state = Main.MAIN_MENU;
+				Main_menu.state = Main_menu.MAIN;
+			}
+			if(cont.updateClick()) {
+				Main.state = Main.PLAYING;
+				display_quit_prompt();
+			}
+			if(saveQuit.updateClick()) {
+				Playing.save.write();
+				Playing.state = Playing.QUIT;
+				Main.state = Main.MAIN_MENU;
+				Main_menu.state = Main_menu.MAIN;
+			}
+		}
 		// Updating the winning and losing state
 		if (Playing.state == Playing.WIN || Playing.state == Playing.LOSE) {
 			Audio.stop(false);
@@ -481,6 +530,24 @@ public class GUI {
 			Main_menu.mute.draw();
 			Main_menu.vsync.draw();
 		}
+		if(showSavePrompt) {
+			Main.window.setColour(0f,0f,0f,0.5f);
+			Main.window.rectangle((x/2)-(400/2),(h/2)-(200/2), 400, 200, 20);
+			quit.draw();
+			game_saved.draw();
+			cont.draw();
+		}
+		if(showQuitPrompt) {
+			Main.window.setColour(0f,0f,0f,0.5f);
+			Main.window.rectangle((x/2)-(400/2),(h/2)-(200/2), 400, 200, 20);
+			quit.setPosition(165, 340);
+			quit.draw();
+			save_progress.draw();
+			cont.setPosition(300, 340);
+			cont.draw();
+			saveQuit.draw();
+			
+		}
 		
 		
 	}
@@ -594,6 +661,12 @@ public class GUI {
 		Main_menu.mute.setPosition((int)Main_menu.mute.getX() + offset, (int)Main_menu.mute.getY());
 		Main_menu.vsync.setPosition((int)Main_menu.vsync.getX() + offset, (int) Main_menu.vsync.getY());
 		showSettings = !showSettings;
+	}
+	public void display_save_prompt() {
+		showSavePrompt = !showSavePrompt;
+	}
+	public void display_quit_prompt() {
+		showQuitPrompt = !showQuitPrompt;
 	}
 	
 	public void close_settings_gui() {
