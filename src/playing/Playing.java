@@ -417,7 +417,7 @@ public class Playing {
 		float temp_tile_x = grid.getCoordX(mx);
 		float temp_tile_y = grid.getCoordY(my);
 		String tile = grid.getTile((int)(temp_tile_x / grid.getTileSize()),(int)(temp_tile_y / grid.getTileSize()));
-		if (tile.equals(Grid.BLANK) || tile.equals(Grid.DECORATION)) return true;
+		if (tile.equals(Grid.BLANK) || tile.contains(Grid.DECORATION)) return true;
 		return false;
 	}
 	
