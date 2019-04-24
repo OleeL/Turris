@@ -24,10 +24,10 @@ public class Audio{
 	
 	//Audio file references
 	
+	//Sound effects
 	public static final String SND_TURRET_PLACE = "effects/turret_place.wav";
 	public static final String SND_TURRET_UPGRADE = "effects/turret_upgrade.wav";
 	public static final String SND_TURRET_SHOOT = "effects/turret_shoot.wav";
-	public static final String SND_ENEMY_STEP = "effects/enemy_step.wav";
 	public static final String SND_ENEMY_DEATH = "effects/enemy_death.wav";
 	public static final String SND_ENEMY_DEATH_1 = "effects/splat1.wav";
 	public static final String SND_ENEMY_DEATH_2 = "effects/splat2.wav";
@@ -39,31 +39,33 @@ public class Audio{
 	public static final String SND_DEFEAT = "effects/defeat.wav";
 	public static final String SND_MENU_CLICK = "effects/menu_click.wav";
 	
-	public static final String MSC_MENU = "music/menu1.wav";
+	//Background music
+	public static final String MSC_MENU = "music/menu.wav";
 	public static final String MSC_GAME = "music/game.wav";
 	
-	private static final String PATH = "assets/sounds/";
+	//Path to all the sound files
+	public static final String PATH = "assets/sounds/";
 	
-	private static Sound looped = null;
+	//Stores the current background music Sound object
+	private static Sound background_music = null;
 	
-	public static long device;
+	//Stores the device id for playing audio
+	private static long device;
 	
-	public static long id;
-	
+	//Used to determine if audio should be muted or not
 	private static boolean muted = false;
 
-	public static void play(String filename) {
-			play(filename, 0f,0f);
-	}
 	
 	//Play audio file in a given position
-	public static void play(String filename, float x, float y) {
+	public static void play(String filename) {
 		float volume;
 		
 		//Determine if sound is effect or music
 		if (muted) {
 			volume = 0;
 		} else {
+			//Takes the first letter of the audio file name
+			//'m' Means it will be music, any other name will represent sound effect
 			switch (filename.substring(0, 2)) {
 				case "m":
 					volume = Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth();
@@ -74,12 +76,63 @@ public class Audio{
 			}
 		}
 		
-		//Fit coordinates into range of -1 to 1
-		x = Math.min(Math.max(-1, x), 1);
-		y = Math.min(Math.max(-1, y), 1);
-		
-		Sound snd = new Sound(filename, x,y, volume);
+		Sound snd = new Sound(filename,volume);
 		snd.start();
+	}
+	
+	/**
+	 * Overrides game volume settings
+	 * 
+	 */
+	public static void play(String filename, float volume) {
+		Sound snd = new Sound(filename, 1f);
+		snd.start();
+	}
+	
+	/**
+	 * Play an audio file on loop, only works if no loop is currently running
+	 * Call stop to end the current audio loop
+	 * 
+	 */
+	public static void playLoop(String filename) {
+		if (background_music == null) {
+			if (muted) {
+				background_music = new Sound(filename,0);
+			} else {
+				background_music = new Sound(filename,Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+			}
+			
+			background_music.setLooping(true);
+			background_music.start();
+		}
+	}
+		
+	/**
+	 * Stops current audio loop
+	 * @param restart : Determines if the audio should restart afterwards
+	 */
+	public static void stop(boolean restart) {
+		if (background_music != null) {
+			String name = background_music.getFileName();
+			background_music.stopSound();
+			background_music = null;
+			if (restart) {
+				playLoop(name);
+			}
+		}
+
+	}
+	
+	//Updates the volume of the background music
+	public static void updateVolume() {
+		if (background_music != null) {
+			if (muted) {
+				AL10.alSourcef(background_music.getSource(), AL10.AL_GAIN, 0);
+			} else {
+				AL10.alSourcef(background_music.getSource(), AL10.AL_GAIN, Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
+			}
+			
+		}
 	}
 	
 	public static void toggleMute() {
@@ -90,67 +143,10 @@ public class Audio{
 		return muted;
 	}
 	
-	/**
-	 * Overrides game volume settings
-	 * 
-	 */
-	public static void play(String filename, float x, float y, float volume) {
-		Sound snd = new Sound(filename, x, y, 1f);
-		snd.start();
-	}
-	
-	/**
-	 * Play an audio file on loop, only works if no loop is currently running
-	 * Call stop to end the current audio loop
-	 * 
-	 */
-	public static void playLoop(String filename) {
-		if (looped == null) {
-			if (muted) {
-				looped = new Sound(filename,0f,0f,0);
-			} else {
-				looped = new Sound(filename,0f,0f,Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
-			}
-			
-			looped.loop = true;
-			looped.start();
-		}
-	}
-		
-	/**
-	 * Stops current audio loop
-	 * @param restart : Determines if the audio should restart afterwards
-	 */
-	public static void stop(boolean restart) {
-		if (looped != null) {
-			String name = looped.name;
-			looped.stopSound();
-			looped = null;
-			if (restart) {
-				playLoop(name);
-			}
-		}
-
-	}
-	
-	public static void updateVolume() {
-		if (looped != null) {
-			if (muted) {
-				AL10.alSourcef(looped.s, AL10.AL_GAIN, 0);
-			} else {
-				AL10.alSourcef(looped.s, AL10.AL_GAIN, Main_menu.volume_music.getSliderWidth() / Main_menu.volume_music.getMaxWidth());
-			}
-			
-		}
-
-
-	}
-	
 	//Setup the device for playing audio
 	public static void setup() throws Exception {
 		//Create a new audio device
-		long device = ALC10.alcOpenDevice((CharSequence)null);
-		id = device;
+		device = ALC10.alcOpenDevice((CharSequence)null);
 		
 		ALCCapabilities deviceCaps = ALC.createCapabilities(device);
 		
@@ -171,35 +167,31 @@ public class Audio{
 		long newContext = ALC10.alcCreateContext(device, contextAttribList);
 		
 		if (!ALC10.alcMakeContextCurrent(newContext)) {
-			throw new Exception("Failed to make context current");
+			throw new Exception("Failed to make audio context current");
 		}
 		
 		AL.createCapabilities(deviceCaps);
 	}
 	
-	//Close the audio device
+	//Close the audio device and cleanup
 	public static void destroy() {
 		stop(false);
-		ALC10.alcCloseDevice(id);
+		ALC10.alcCloseDevice(device);
 		ALC.destroy();
-
-
 	}
+	
+}
 
 //Creates a sound object on a new thread
-static class Sound extends Thread {
+class Sound extends Thread {
 	private String name;
-	private float x;
-	private float y;
 	private float volume;
 	private boolean terminate = false;
 	private boolean loop = false;
-	private int s;
+	private int src;
 	
-	public Sound(String name, float x, float y, float volume) {
+	public Sound(String name, float volume) {
 		this.name = name;
-		this.x = x;
-		this.y = y;
 		this.volume = volume;
 	}
 	
@@ -233,19 +225,13 @@ static class Sound extends Thread {
 		//Setup the source
 		AL10.alSourcei(source, AL10.AL_BUFFER, buffer.get(0));	
 		
-		//Audio looping - Not implemented yet
+		//Audio looping
 		AL10.alSourcei(source, AL10.AL_LOOPING, AL10.AL_TRUE);
-		
-		//Pitch
-		AL10.alSourcef(source, AL10.AL_PITCH,1f);
-		
-		//Position of audio source in 3d space
-		AL10.alSource3f(source, AL10.AL_POSITION, x, y, 0f);
 		
 		//Gain/Volume
 		AL10.alSourcef(source, AL10.AL_GAIN, volume);	
 		
-		s = source;
+		src = source;
 		
 		//Play the audio
 		AL10.alSourcePlay(source);
@@ -254,10 +240,12 @@ static class Sound extends Thread {
 		try {
 			if (loop) {
 				while (!terminate) {
+					//Keep looping until told to terminate
 					Thread.sleep(10);
 					Thread.yield();
 				}
 			} else {
+				//Make thread sleep until audio complete
 				Thread.sleep(time);
 			}
 
@@ -268,29 +256,32 @@ static class Sound extends Thread {
 			throw new InterruptedException("Thread interrupted");
 	    }
 			
-		AL10.alSourceStop(source);
-		
+		//Stop audio and delete source
+		AL10.alSourceStop(source);		
 		AL10.alDeleteSources(source);
 		
 	}
 	
 	//Loads the audio file into buffers
+	//Returns length of audio
 	private long createBufferData(int p) throws UnsupportedAudioFileException {
 		final int MONO = 1, STEREO = 2;
 		
-		File audio = new File(PATH + name);
+		//Load the audio file
+		File audio = new File(Audio.PATH + name);
 		
+		//Create a stream out of the audio file
 		AudioInputStream stream = null;
 		try {
 			stream = AudioSystem.getAudioInputStream(audio);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		AudioFormat format = stream.getFormat();
 		if (format.isBigEndian()) throw new UnsupportedAudioFileException("Big Endian files are not supported");
 		
+		//Determine the format of the audio
 		int openALFormat = -1;
 		switch(format.getChannels()) {
 		case MONO:
@@ -325,11 +316,22 @@ static class Sound extends Thread {
 		ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
 		data.flip();
 		
+		//Loads the audio data into buffer
 		AL10.alBufferData(p, openALFormat, data, (int)format.getSampleRate());
 		
-		return (long)(1000f * stream.getFrameLength() / format.getFrameRate());
-		
+		return (long)(1000f * stream.getFrameLength() / format.getFrameRate());		
+	}
+	
+	public String getFileName() {
+		return name;
+	}
+	
+	public int getSource() {
+		return src;
+	}
+	
+	public void setLooping(boolean loop) {
+		this.loop = loop;
 	}
 }
 
-}
