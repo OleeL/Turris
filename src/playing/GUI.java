@@ -19,7 +19,8 @@ import turrets.Turret_2;
 import turrets.Turret_3;
 
 /**
- * @author Oliver Legg - sgolegg - 201244658
+ * @author Team 62
+ * Oliver Legg - sgolegg - 201244658
  * Kieran Baker - sgkbaker - 201234727
  * Thomas Coupe - sgtcoupe - 201241037
  *
@@ -29,7 +30,7 @@ public class GUI {
 	// x, y, w and h of the side panel
 	private float x = Main.window.getWidth();
 	private float y = 0;
-	private float w = 100;
+	private float w = 85.7142857f;
 	private float h = Main.window.getHeight();
 	
 	// Button that opens and closes the GUI
@@ -59,9 +60,6 @@ public class GUI {
 			250,
 			1f,
 			1f);
-			
-			
-					
 	
 	// Final screen (winning or losing)
 	private float final_w = 500;
@@ -70,7 +68,8 @@ public class GUI {
 	private float final_y = (Main.window.getHeight()/2)-(final_h/2);
 	private float final_r = 6;
 	
-	private Text turret_info = new Text("Price:", 650,520,18);
+	private Text turret_info = new Text("Price:", 596,480,18);
+	private boolean showCost = false;
 	
 	// Winning Text & Losing Text
 	private Text win_text  = new Text("Congratulations! You win!", 0, 0, 18);
@@ -113,7 +112,7 @@ public class GUI {
 			2);
 	
 	// Statistics GUI panel variables
-	private float stats_w = 200f;
+	private float stats_w = 150f;
 	private float stats_h = 100f;
 	private float stats_x = Main.window.getWidth() - stats_w;
 	private float stats_y = Main.window.getHeight() - stats_h;
@@ -123,7 +122,7 @@ public class GUI {
 	private int text_size = 20;
 
 	// Button variables
-	private final float BUTTON_SIZE = 50;
+	private final float BUTTON_SIZE = w;
 	private GUIButton[] buttons;
 	private boolean showSettings = false, showSavePrompt = false, showQuitPrompt = false;
 	public Button quit = new Button("Quit", 200, 340, 100, 50, 1);
@@ -142,29 +141,37 @@ public class GUI {
 	
 	public GUI(){
 		// Creating the buttons on the opening and closing GUI panel
-		buttons = new GUIButton[6];
+		buttons = new GUIButton[7];
 		buttons[0] = new GUIButton(
-				"Tower 1",  BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_1);
+				"Tower I",  BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_1);
 		buttons[1] = new GUIButton(
-				"Tower 2",  BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_2);
+				"Tower II", BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_2);
 		buttons[2] = new GUIButton(
-				"Tower 3",  BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_3);
+				"Tower III",BUTTON_SIZE, BUTTON_SIZE, Playing.TOWER_3);
 		buttons[3] = new GUIButton(
-				"Save",     BUTTON_SIZE, BUTTON_SIZE, Playing.SAVE);
+				"Sell",BUTTON_SIZE, BUTTON_SIZE, Playing.SELL);
 		buttons[4] = new GUIButton(
-				"Quit",     BUTTON_SIZE, BUTTON_SIZE, Playing.QUIT);
+				"Save",     BUTTON_SIZE, BUTTON_SIZE, Playing.SAVE);
 		buttons[5] = new GUIButton(
+				"Quit",     BUTTON_SIZE, BUTTON_SIZE, Playing.QUIT);
+		buttons[6] = new GUIButton(
 				"Settings", BUTTON_SIZE, BUTTON_SIZE, Playing.SETTINGS);
 		
 		// Repositioning the buttons on the GUI panel
-		int btn_len = (int) Math.ceil(buttons.length/2.0);
-		for (int by = 0; by < btn_len; by++) {
-			for (int bx = 0; bx <= 2; bx++){
-				if ( by*2+bx == buttons.length) break; 
-				buttons[by*2+bx].setPosition(
-						x-w+(bx*BUTTON_SIZE), by*BUTTON_SIZE);
-			}
+		// Used for having a 2 x n button array
+//		int btn_len = (int) Math.ceil(buttons.length/2.0);
+//		for (int by = 0; by < btn_len; by++) {
+//			for (int bx = 0; bx <= 2; bx++){
+//				if ( by*2+bx == buttons.length) break; 
+//				buttons[by*2+bx].setPosition(
+//					x-w+(bx*BUTTON_SIZE), by*BUTTON_SIZE);
+//			}
+//		}
+		// Repositioning the buttons on the GUI panel
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i].setPosition(x-BUTTON_SIZE, i*BUTTON_SIZE);
 		}
+		
 		// Setting the position of the statistics text
 		text_coins = new Text(
 				"Coins: ", 
@@ -271,19 +278,19 @@ public class GUI {
 					state = temp_state;
 				}
 				switch (button.getText().text) {
-					case "Tower 1":
+					case "Tower I":
 						temp_info = String.valueOf(Turret_1.TURRET_COST);
 						if (Playing.coins < Integer.parseInt(temp_info)) {
 							canAfford = false;
 						}
 						break;
-					case "Tower 2":
+					case "Tower II":
 						temp_info = String.valueOf(Turret_2.TURRET_COST);
 						if (Playing.coins < Integer.parseInt(temp_info)) {
 							canAfford = false;
 						}
 						break;
-					case "Tower 3":
+					case "Tower III":
 						temp_info = String.valueOf(Turret_3.TURRET_COST);
 						if (Playing.coins < Integer.parseInt(temp_info)) {
 							canAfford = false;
@@ -292,6 +299,7 @@ public class GUI {
 				}
 				if (button.getHover() && temp_info != "") {
 					gotText = true;
+					showCost = true;
 					if (!canAfford) {
 						turret_info.text = "xCost: " + temp_info + "c";
 					} else {
@@ -300,6 +308,7 @@ public class GUI {
 				} 
 				else if (!gotText){
 					turret_info.text = "";
+					showCost = false;
 				}
 				
 				if (!canAfford) {
@@ -594,10 +603,20 @@ public class GUI {
 		Main.window.setColour(DEFAULT_COLOUR);
 		Main.window.rectangle(stats_x, stats_y, stats_w, stats_h);
 		Main.window.setColour(LINE_COLOUR);
-		Main.window.drawLine(stats_x, stats_y, stats_x+stats_w, stats_y);
 		Main.window.drawLine(stats_x, stats_y, stats_x, stats_y+stats_h);
+
+		Main.window.drawLine(stats_x, stats_y, stats_x+stats_w, stats_y);
+		if (showCost) {
+			Main.window.setColour(DEFAULT_COLOUR);
+			Main.window.rectangle(stats_x,stats_y-20,stats_w,20);
+
+			Main.window.setColour(LINE_COLOUR);
+			Main.window.drawLine(stats_x, stats_y-20, stats_x, stats_y);
+			Main.window.drawLine(stats_x, stats_y-20, stats_x+stats_w, stats_y-20);
+		}
 		
 		// Statistics
+		Main.window.setColour(LINE_COLOUR);
 		text_coins.text = "Coins: "+Playing.coins;
 		text_round.text = "Level: "+Playing.round;
 		text_lives.text = "Lives: "+Playing.lives;
@@ -623,6 +642,7 @@ public class GUI {
 			x = Main.window.getWidth();
 			open_button_x = Main.window.getWidth() - open_button_w;
 			open_button_image_rotation = 180;
+			showCost = false;
 			close_settings_gui();
 		}
 

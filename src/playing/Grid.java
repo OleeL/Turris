@@ -139,6 +139,19 @@ public class Grid {
 		turrets.add((Turret) turret);
 		for (int i = 0; i < level; i++) ((Turret) grid[y][x]).upgrade();
 	}
+	
+	public boolean removeTurret(int x, int y) {
+		if (grid[y][x] instanceof Turret) {
+			Turret turret = (Turret) getEntity(x, y);
+			if (turrets.contains(turret)) {
+				System.out.println(true);
+				turrets.remove(turret);
+				insert(x, y, "x");
+				return true;
+			}
+		}
+		return false;
+	}
 
 	// Hides the grid lines 
 	public void turnOnLines() {

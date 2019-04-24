@@ -53,9 +53,11 @@ public class Playing {
 	public static final int TOWER_1    = 1;
 	public static final int TOWER_2    = 2;
 	public static final int TOWER_3    = 3;
+	public static final int SELL       = 96;
 	public static final int SAVE       = 97;
 	public static final int SETTINGS   = 98;
 	public static final int QUIT       = 99;
+	public static int selected;
 	
 	// Difficulty
 	public static final int EASY   = 1;
@@ -63,7 +65,6 @@ public class Playing {
 	public static final int HARD   = 3;
 	public static String difficulty;
 	public static String difficulty_visual;
-	public static int selected;
 	
 	// Player stats (Game Dependent)
 	public static int coins;
@@ -326,7 +327,9 @@ public class Playing {
 				} else {
 					selected = UNSELECTED;
 				}
-
+				break;
+			case SELL:
+				sell();
 				break;
 			case SAVE:
 				save.write();
@@ -383,13 +386,41 @@ public class Playing {
 	}
 	
 	public static void draw() {
+		double mx = Main.window.getMouseX();
+		double my = Main.window.getMouseY();
 		grid.draw();
 		for (int i = 0; i < enemies.size(); i++)
 			enemies.get(i).draw();
 		for (int i = 0; i < arrows.size(); i++)
 			arrows.get(i).draw();
 		
-		if (selected != PAUSE && selected != UNSELECTED) {
+		// Drawing for selling turrets
+		if (selected == SELL) {
+			if (!gui.isClosed()) gui.close();
+
+			int x = (int) (grid.getCoordX(mx)/grid.getTileSize());
+			int y = (int) (grid.getCoordY(my)/grid.getTileSize());
+			
+			// If you can sell the turret, show green
+			if (grid.getEntity(x, y) instanceof Turret)
+				Main.window.setColour(0f, 1f, 0f, 0.3f); //show green
+			else 
+				Main.window.setColour(1f, 0f, 0f, 0.5f); //show red
+			
+			Main.window.circle(true, 
+					grid.getCoordX(mx) + (grid.getTileSize() / 2), 
+					grid.getCoordY(my) + (grid.getTileSize() / 2), 
+					selected_range, 
+					64);
+			// Outlines of where the turret will go
+			Main.window.rectangle(
+					grid.getCoordX(mx),
+					grid.getCoordY(my),
+					grid.getTileSize(),
+					grid.getTileSize());
+			
+		} // Drawing for placing turrets
+		else if (selected != PAUSE && selected != UNSELECTED) {
 			if (!gui.isClosed()) gui.close();
 			
 			// If you can place the tile in that place, then 
@@ -399,16 +430,14 @@ public class Playing {
 				Main.window.setColour(1f, 0f, 0f, 0.5f);//show red
 			
 			Main.window.circle(true, 
-					grid.getCoordX(
-							Main.window.getMouseX()) + (grid.getTileSize() / 2), 
-					grid.getCoordY(
-							Main.window.getMouseY()) + (grid.getTileSize() / 2), 
+					grid.getCoordX(mx) + (grid.getTileSize() / 2), 
+					grid.getCoordY(my) + (grid.getTileSize() / 2), 
 					selected_range, 
 					64);
 			// Outlines of where the turret will go
 			Main.window.rectangle(
-					grid.getCoordX(Main.window.getMouseX()),
-					grid.getCoordY(Main.window.getMouseY()),
+					grid.getCoordX(mx),
+					grid.getCoordY(my),
 					grid.getTileSize(),
 					grid.getTileSize());
 			
@@ -473,6 +502,38 @@ public class Playing {
 				save();
 			}
 			Audio.play(Audio.SND_TURRET_PLACE);
+		}
+	}
+	
+	// Function for selling / removing turrets
+	public static void sell() {
+		double mx = Main.window.getMouseX();
+		double my = Main.window.getMouseY();
+		int x = (int) (grid.getCoordX(mx)/grid.getTileSize());
+		int y = (int) (grid.getCoordY(my)/grid.getTileSize());
+		if (Main.window.isMousePressed(Main.window.LEFT_MOUSE) && 
+				!gui.isClicked() &&
+				hasTurret(x, y)){
+
+			int value = ((Turret) grid.getEntity(x, y)).getValue();
+			if (grid.removeTurret(x, y)) {
+				coins += value;
+			}
+			selected = UNSELECTED;
+			if (state == ROUND_END) {
+				save();
+			}
+			Audio.play(Audio.SND_TURRET_PLACE);
+		}
+	}
+	
+	public static boolean hasTurret(int x, int y) {
+		if (grid.getEntity(x, y) instanceof Turret) {
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 	

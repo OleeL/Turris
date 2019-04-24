@@ -63,7 +63,7 @@ public class Main {
 						Playing.draw();
 						break;
 				}
-
+				printMouseCoordsOnClick();
 				// Finish update
 				window.swapBuffers();
 			}

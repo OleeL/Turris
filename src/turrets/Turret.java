@@ -153,6 +153,10 @@ public abstract class Turret extends Entity {
 		return cost;
 	}
 	
+	public int getValue() {
+		return (int) (cost + (upgrade_cost * level))/3;
+	}
+	
 	public float getRange() {
 		return range;
 	}
