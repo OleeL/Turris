@@ -196,6 +196,8 @@ public class Playing {
 				Audio.play(Audio.SND_DEFEAT);
 				state = LOSE;
 				lives = 0;
+				save.delete();
+				save.write();
 			}
 			
 			grid.update(); // Updates the grid

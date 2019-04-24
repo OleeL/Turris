@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import playing.Playing;
+import playing.waves.Wave;
 import turrets.*;
 
 /**
@@ -119,5 +121,31 @@ public class Save {
 	      } catch (FileNotFoundException e) {
 	        System.out.println(e.getMessage());
 	      }  
+	}
+	
+	public void delete() {
+		// Coins and lives depends on the difficulty
+		switch (difficulty) {
+			case 3:
+				coins = 100;
+				lives = 1;
+				break;
+			case 2:
+				coins = 250;
+				lives = 3;
+				break;
+			default:
+				coins = 300;
+				lives = 4;
+				break;
+		}
+		
+		// Statistics reset
+		round = 0;
+		revenue = 0;
+		kills = 0;
+		arrows_fired = 0;
+		b_upgraded= 0;
+		b_built = 0;
 	}
 }
