@@ -12,6 +12,7 @@ import org.lwjgl.glfw.GLFW;
 
 import enemies.Enemy;
 import engine.io.Audio;
+import engine.io.Random;
 import gui.Texture;
 import level.handler.Save;
 import main.Main;
@@ -242,9 +243,22 @@ public class Playing {
 							coins_revenue += enemies.get(e).getReward();
 							kills++;
 							enemies.remove(e);
-							Audio.play(Audio.SND_ENEMY_DEATH);
+							int randomSound = Random.integer(1, 1000);
+							if (randomSound == 1) {
+								Audio.play(Audio.SND_ENEMY_DEATH);
+							}
+							else {
+								randomSound = Random.integer(1, 2);
+								if (randomSound == 1) {
+									Audio.play(Audio.SND_ENEMY_DEATH_1);
+								}
+								else {
+									Audio.play(Audio.SND_ENEMY_DEATH_2);
+								}
+							}
 						}
 						else {
+							Audio.play(Audio.SND_ENEMY_HIT_2);
 							enemies.get(e).health-=arrows.get(arrow).getDamage();
 						}
 						arrows.remove(arrow);

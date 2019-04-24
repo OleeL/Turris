@@ -29,6 +29,10 @@ public class Audio{
 	public static final String SND_TURRET_SHOOT = "effects/turret_shoot.wav";
 	public static final String SND_ENEMY_STEP = "effects/enemy_step.wav";
 	public static final String SND_ENEMY_DEATH = "effects/enemy_death.wav";
+	public static final String SND_ENEMY_DEATH_1 = "effects/splat1.wav";
+	public static final String SND_ENEMY_DEATH_2 = "effects/splat2.wav";
+	public static final String SND_ENEMY_HIT_1 = "effects/hit1.wav";
+	public static final String SND_ENEMY_HIT_2 = "effects/hit2.wav";
 	public static final String SND_DAMAGE_TAKEN = "effects/damage_taken.wav";
 	public static final String SND_ROUND_COMPLETE = "effects/round_complete.wav";
 	public static final String SND_VICTORY = "effects/victory.wav";
