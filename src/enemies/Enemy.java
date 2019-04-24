@@ -191,7 +191,8 @@ public abstract class Enemy {
 		}
 		
 		// Is the path below feasible?
-		if ((   down.equals(Grid.DOWN) || 
+		if ((   down.equals(Grid.DOWN) ||
+				down.equals(Grid.DOWN_BRIDGE) ||
 				down.equals(Grid.TOP_TO_RIGHT) || 
 				down.equals(Grid.TOP_TO_LEFT)) && 
 				!(previous.x == x  && previous.y == y+1)) {
@@ -200,6 +201,7 @@ public abstract class Enemy {
 		
 		// Is the path above feasible?
 		if ((   up.equals(Grid.DOWN) || 
+				up.equals(Grid.DOWN_BRIDGE) ||
 				up.equals(Grid.BOTTOM_TO_RIGHT) || 
 				up.equals(Grid.BOTTOM_TO_LEFT)) && 
 				!(previous.x == x  && previous.y == y-1)) {

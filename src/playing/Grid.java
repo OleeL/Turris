@@ -35,6 +35,7 @@ public class Grid {
 	public static final String TOWER_1         = "tower_1";
 	public static final String TOWER_2         = "tower_2";
 	public static final String TOWER_3         = "tower_3";
+	public static final String DOWN_BRIDGE	   = "path_ds_bridge";
 	
 	private Entity[][] grid;
 	public ArrayList<Turret> turrets = new ArrayList<Turret>();
