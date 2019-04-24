@@ -91,7 +91,7 @@ public class Playing {
 	
 	// Gameplay
 	private static float selected_range;
-	public static float speed_modifier;
+	public static double speed_modifier;
 	private static long paused_time;
 	private static long previous_time;
 	
@@ -170,14 +170,18 @@ public class Playing {
 		if (state == PLAYING) {
 			//Spawning
 			long time = System.currentTimeMillis();
-			time += paused_time;
+			time_end += paused_time;
 			if ( time > time_end && spawn_num < wave.enemies.length) {
 				enemies.add(wave.enemies[spawn_num]);
 				long delay = (long)(wave.spawn_delays[spawn_num++]*1000F);
 				delay /= speed_modifier;
 				time_end = time+delay;
 			}
-			if (enemies.isEmpty() && !roundEnded) {
+			
+			// Checks if round has ended
+			if (spawn_num >= wave.enemies.length-1 &&
+					!roundEnded &&
+					enemies.isEmpty()) {
 				state = ROUND_END;
 				gui.button_round.setName("Start");
 				start_new_round(++round);

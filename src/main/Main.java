@@ -30,9 +30,8 @@ public class Main {
 		// Creates the game window
 		window = new Window(width, height, fps, vsync, windowName);
 		window.setIcon("TurrisIcon.png");
-		window.setFullscreen(false); // set fullscrn to false for testing
 		window.create();
-		
+		window.setFullscreen(false); // set fullscrn to false for testing
 		
 		// Creates the main menu
 		Main_menu.create();

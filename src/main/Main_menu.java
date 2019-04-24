@@ -130,9 +130,15 @@ public class Main_menu {
 					mute.setButtonColour(0.0f, 0.0f, 0.0f);
 				
 				}
-				
+
 				if (fullscreen.updateClick()) {
 					Main.window.setFullscreen(!Main.window.isFullscreen());
+				}
+				if (Main.window.isFullscreen()){
+					fullscreen.setButtonColour(0.0f, 1.0f, 0.0f);
+				}
+				else{
+					fullscreen.setButtonColour(0.0f, 0.0f, 0.0f);
 				}
 				
 			
@@ -162,8 +168,14 @@ public class Main_menu {
 		sm = 250;
 		int range = 220;
 		int fps = (int)(range*(sw/(2*sm)) + 30);
-		max_fps.update("FPS: "+fps);
-		Main.window.setFPS(fps);
+		if (fps == 250) {
+			Main.window.setFPS(999999999);
+			max_fps.update("FPS: Max");
+		}
+		else {
+			Main.window.setFPS(fps);
+			max_fps.update("FPS: "+fps);	
+		}
 	}
 	
 	public static void draw()

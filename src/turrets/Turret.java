@@ -82,7 +82,7 @@ public abstract class Turret extends Entity {
 	private Arrow fire_at(float tx, float ty) {
 		arrowReady = false;
 		Audio.play(Audio.SND_TURRET_SHOOT);
-		end = (long) (System.currentTimeMillis( ) + rateOfFire);
+		end = (long) (System.currentTimeMillis( ) + (rateOfFire/Playing.speed_modifier));
 		return new Arrow(
 				game_x+(w/2), 
 				game_y+(h/2), 

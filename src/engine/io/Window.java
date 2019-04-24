@@ -76,25 +76,28 @@ public class Window {
 		if(iconBuffer != null) {
             GLFW.glfwSetWindowIcon(window, iconBuffer);
         }
+		// Turns vsync on (or off)
+		GLFW.glfwSwapInterval(vsync ? 1 : 0);
+		
 		// Shows the window when done
 		GLFW.glfwShowWindow(window);
-
+		
+		// Setting the window ready for drawing.
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
 		glLineWidth(0.5f);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity(); // Resets any previous projection matrices
-		glOrtho(0, width, height, 0, 1, -1);
+		//glOrtho(0, width, height, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		if (vsync) 
-			GLFW.glfwSwapInterval(1);
-		else
-			GLFW.glfwSwapInterval(0);
-		
 		time = getTime();
+		
+		float aspect = width / height;
+		glViewport(0, 0, width, height);
+		glOrtho (0, width / aspect, height / aspect, 0.0, 0.0, 1.0);
 	}
 	
 	// Returns whether the window should be closed
@@ -119,7 +122,7 @@ public class Window {
 		GLFW.glfwGetWindowSize(window, widthBuffer, heightBuffer);
 		width = widthBuffer.get(0);
 		height = heightBuffer.get(0);
-		GL11.glViewport(0, 0, width, height);
+		//glViewport(0, 0, width, height);
 		
 		
 		// Checks if all keys and mouse buttons are down
@@ -295,6 +298,7 @@ public class Window {
 	// Toggles vsync
 	public void toggleVsync() {
 		vsync = !vsync;
+		GLFW.glfwSwapInterval(vsync ? 1 : 0);
 	}
 	
 	// Get vsync
@@ -308,6 +312,12 @@ public class Window {
 
 	public void setFullscreen(boolean isFullscreen) {
 		this.isFullscreen = isFullscreen;
+		GLFW.glfwSetWindowMonitor(window, (isFullscreen) ? GLFW.glfwGetPrimaryMonitor() : 0, 0, 0, width, height, GLFW.GLFW_REFRESH_RATE );
+
+		GLFWVidMode videoMode;
+		videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+		GLFW.glfwSetWindowPos(window, (videoMode.width() - width)/2, 
+		                              (videoMode.height() - height)/2);
 	}
 
 	// Draws a rectangle with rounded edges
