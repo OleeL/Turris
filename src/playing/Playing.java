@@ -282,10 +282,9 @@ public class Playing {
 		
 		// If the gui is clicked and there is something selected: unselect item
 		if (gui.isClicked()) {
+			System.out.println("test");
 			if(selected != UNSELECTED) {
 				selected = UNSELECTED;
-			} else if(gui.settingsOpen()) {
-				gui.close_settings_gui();
 			} else if(gui.saveOpen()) {
 				gui.display_save_prompt();
 			} else if(gui.quitOpen()) {
@@ -296,6 +295,10 @@ public class Playing {
 			
 		// If there is something pressed on the GUI, make the new selection
 		if ( btn > -1) selected = btn;
+		
+		if(gui.isClicked() && gui.settingsOpen() && selected != SETTINGS) {
+				gui.close_settings_gui();
+			}
 		
 		switch (selected)
 		{
