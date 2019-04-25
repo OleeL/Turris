@@ -1,4 +1,4 @@
 ## Group Software Project - Team 62 - Turris
-
-![alt text](https://i.gyazo.com/82d990d422bc329a8ccd483e2a801c5c.png "Main Menu")
-![alt text](https://i.gyazo.com/aa2015136e6f656e2d19ecc2d1071f8e.png "Gameplay")
+# Implementation
+![alt text](https://i.gyazo.com/3abd4ef60664e07dcf85210ed60deeb0.png "Main Menu")
+![alt text](https://i.gyazo.com/9d44e3fb0799f39768d18e34e0ee84ed.png "Gameplay")
