@@ -92,6 +92,20 @@ public class Grid {
 		// Drawing the tiles
 		for (int y = 0; y < grid.length; y++) {
 			for (int x = 0; x < grid[0].length; x++) {
+				Texture tile_texture = grid[y][x].getTexture();
+				if(grid[y][x] instanceof Turret) {
+					int map_num = 1;
+					switch(Playing.level) {
+					case Playing.LEVEL_2:
+						map_num = 2;
+						break;
+					case Playing.LEVEL_3:
+						map_num = 3;
+						break;
+					}
+					Texture blank_tile = new Texture("tiles/" + map_num + "/x.png", tile_texture.getX(),tile_texture.getY(),  grid_size / 100, grid_size / 100);
+					blank_tile.draw();
+				}
 				grid[y][x].getTexture().draw();
 			}
 		}

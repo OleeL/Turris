@@ -80,7 +80,7 @@ public class Playing {
 	
 	// Waves | Rounds
 	private static int difficulty_n;
-	private static String level;
+	public static String level;
 	private static Wave wave;
 	private static long time_end;
 	private static int spawn_num;
@@ -282,7 +282,6 @@ public class Playing {
 		
 		// If the gui is clicked and there is something selected: unselect item
 		if (gui.isClicked()) {
-			System.out.println("test");
 			if(selected != UNSELECTED) {
 				selected = UNSELECTED;
 			} else if(gui.saveOpen()) {
