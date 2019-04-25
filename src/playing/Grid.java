@@ -38,6 +38,7 @@ public class Grid {
 	public static final String DOWN_BRIDGE	   = "path_ds_bridge";
 	
 	private Entity[][] grid;
+	private Entity[][] map_tiles;
 	public ArrayList<Turret> turrets = new ArrayList<Turret>();
 	private int x_tiles, y_tiles;
 	private float grid_size;
@@ -69,13 +70,16 @@ public class Grid {
 			}
 			// Setting up the grid
 			grid = new Entity[y_tiles][x_tiles];
+			map_tiles = new Entity[y_tiles][x_tiles];
 			int y = 0;
 			while (inputStream.hasNext()) {
 				String data = inputStream.next();
 				String[] values = data.split(",");
 				for(int x = 0; x < x_tiles; x++){
 					insert(x, y, values[x]);
+					map_tiles[y][x] = grid[y][x];
 				}
+				
 				y++;
 			}
 			inputStream.close();
@@ -103,7 +107,15 @@ public class Grid {
 						map_num = 3;
 						break;
 					}
-					Texture blank_tile = new Texture("tiles/" + map_num + "/x.png", tile_texture.getX(),tile_texture.getY(),  grid_size / 100, grid_size / 100);
+					String tile_name;
+					switch(map_tiles[y][x].getName()) {
+					case "decor_lilypad":
+						tile_name = map_tiles[y][x].getName();
+						break;
+					default:
+						tile_name = "x";
+					}
+					Texture blank_tile = new Texture("tiles/" + map_num + "/" + tile_name + ".png", tile_texture.getX(),tile_texture.getY(),  grid_size / 100, grid_size / 100);
 					blank_tile.draw();
 				}
 				grid[y][x].getTexture().draw();
@@ -161,7 +173,7 @@ public class Grid {
 			if (turrets.contains(turret)) {
 				System.out.println(true);
 				turrets.remove(turret);
-				insert(x, y, "x");
+				insert(x, y, map_tiles[y][x].getName());
 				return true;
 			}
 		}
