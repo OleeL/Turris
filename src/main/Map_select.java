@@ -71,7 +71,7 @@ public class Map_select {
 		map_images[2] = new Texture("maps/level_3.png", offset_x + ((map_images[0].getWidth() + 20) * 2), offset_y, 1f,1f);
 		
 		map_names[0] = "Grassy Greens";
-		map_names[1] = "Pipe down";
+		map_names[1] = "Sand Dunes";
 		map_names[2] = "Tricky track";		
 	}
 	
