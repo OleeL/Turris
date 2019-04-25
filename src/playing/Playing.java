@@ -408,13 +408,7 @@ public class Playing {
 				Main.window.setColour(0f, 1f, 0f, 0.3f); //show green
 			else 
 				Main.window.setColour(1f, 0f, 0f, 0.5f); //show red
-			
-			Main.window.circle(true, 
-					grid.getCoordX(mx) + (grid.getTileSize() / 2), 
-					grid.getCoordY(my) + (grid.getTileSize() / 2), 
-					selected_range, 
-					64);
-			// Outlines of where the turret will go
+			// Outlines what is being deleted
 			Main.window.rectangle(
 					grid.getCoordX(mx),
 					grid.getCoordY(my),

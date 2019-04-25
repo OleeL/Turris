@@ -2,8 +2,6 @@ package main;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.sun.jndi.toolkit.url.Uri;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 

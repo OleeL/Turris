@@ -28,6 +28,9 @@ public abstract class Turret extends Entity {
 	private float grid_size;
 	private static final int LINE_SEGMENTS = 64;
 	
+	public Text upgrade_text = new Text("", 0, 0, 24);
+	public Text info = new Text("Max level",0,0, 24);
+	
 	/**
 	 * @param String filename
 	 * @param float x position 
@@ -108,43 +111,53 @@ public abstract class Turret extends Entity {
 		double my = Main.window.getMouseY();
 		float center_x = game_x+(w/2);
 		float center_y = game_y+(h/2);
+		
 		// If the mouse is hovering over the turrets, show the radius
 		if (mx > game_x && mx < game_x + w && my > game_y && my < game_y + h){
 			Main.window.setColour(0f,0f,0f,0.33f);
 			Main.window.circle(true,  center_x, center_y, range, LINE_SEGMENTS);
 			Main.window.circle(false, center_x, center_y, range, LINE_SEGMENTS);
-			
-			int font_size = 24;
 			int offset_y = -50;
-			
-			if (level < MAX_LEVEL) {
-				Text upgrade_text = new Text(
-						String.valueOf(upgrade_cost), 0, 0, font_size);
-				upgrade_text.setPosition(
-						center_x - (upgrade_text.getFont().getTextWidth(
-								upgrade_text.text) / 2), center_y + offset_y
-						);
-				
-				if (Playing.coins >= upgrade_cost) {
-					Main.window.setColour(0f,1f,0f, 1f);
-				} else {
-					Main.window.setColour(1f, 0f, 0f, 1f);
-				}
-				
-				upgrade_text.draw();
-			} else {
-				Text info = new Text("Max level",0,0,font_size);
-				info.setPosition(
-						center_x - (info.getFont().getTextWidth(info.text) / 2),
-						center_y + offset_y
-						);
-				
-				Main.window.setColour(1f,0f,0f,1f);
-				
-				info.draw();
+			switch (Playing.selected) {
+				case Playing.SELL:
+						Main.window.setColour(0.8f,0.82f,0.1f,1f);
+						upgrade_text.text = String.valueOf(getValue());
+						upgrade_text.setPosition(
+								center_x - (upgrade_text.getFont().getTextWidth(
+										upgrade_text.text)/2),center_y+offset_y
+								);
+						
+						upgrade_text.draw();
+					break;
+				default:
+					if (level < MAX_LEVEL) {
+						upgrade_text.text = String.valueOf(upgrade_cost);
+						upgrade_text.setPosition(
+								center_x - (upgrade_text.getFont().getTextWidth(
+										upgrade_text.text)/2),center_y+offset_y
+								);
+						
+						if (Playing.coins >= upgrade_cost) {
+							Main.window.setColour(0f,1f,0f, 1f);
+						} else {
+							Main.window.setColour(1f, 0f, 0f, 1f);
+						}
+						
+						upgrade_text.draw();
+					} 
+					else {
+						upgrade_text.text = String.valueOf("Max upgrade");
+						info.setPosition(
+							center_x-(info.getFont().getTextWidth(info.text)/2),
+							center_y + offset_y
+							);
+						
+						Main.window.setColour(1f,0f,0f,1f);
+						
+						info.draw();
+					}
+					break;
 			}
-
-			
 		}
 	}
 	
@@ -154,7 +167,7 @@ public abstract class Turret extends Entity {
 	}
 	
 	public int getValue() {
-		return (int) (cost + (upgrade_cost * level))/3;
+		return (int) ((cost + (upgrade_cost * level))/2.33);
 	}
 	
 	public float getRange() {
