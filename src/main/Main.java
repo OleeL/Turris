@@ -23,7 +23,7 @@ public class Main {
 		// Setting up window settings
 		int width = 800;              // Screen Width
 		int height = 600;             // Screen Height
-		int fps = 250;                // Max Frame Rate
+		int fps = 60;                // Max Frame Rate
 		boolean vsync = false;        // Vsync settings
 		String windowName = "Turris"; // Name of the window
 		
@@ -63,7 +63,7 @@ public class Main {
 						Playing.draw();
 						break;
 				}
-				printMouseCoordsOnClick();
+				//printMouseCoordsOnClick();
 				// Finish update
 				window.swapBuffers();
 			}
