@@ -4,9 +4,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import playing.Playing;
-import playing.waves.Wave;
 import turrets.*;
 
 /**
@@ -43,6 +40,7 @@ public class Save {
 		this.continuousMode = cont;
 	}
 
+	// Keeps the following variables at the start of the round
 	public void keepVariables(
 			int round,
 			int coins,
@@ -65,6 +63,7 @@ public class Save {
 		this.turrets = turrets;
 	}
 	
+	// Writes the variables to save.csv
 	public void write() {
 		try (PrintWriter writer = new PrintWriter(new File(FILENAME))) {
 	    	Pattern p = Pattern.compile("-?\\d+");
@@ -123,6 +122,7 @@ public class Save {
 	      }  
 	}
 	
+	// When you die, this should be called as it saves the fact that you lost.
 	public void delete() {
 		// Coins and lives depends on the difficulty
 		lives = 0;

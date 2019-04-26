@@ -14,7 +14,6 @@ import playing.Playing;
 import gui.Slider;
 
 import java.awt.Desktop;
-import java.awt.desktop.*;
 import java.io.IOException;
 
 /**

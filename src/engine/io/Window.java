@@ -7,7 +7,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.glfw.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -28,7 +27,6 @@ public class Window {
 	private boolean vsync, closed = false, isFullscreen;
 	public final int LEFT_MOUSE = 0;
 	public final int RIGHT_MOUSE = 1;
-	private String text;
 	private static GLFWImage.Buffer iconBuffer;
 	
 	public Window(int width, int height, int fps, boolean vsync, String title)
@@ -166,9 +164,6 @@ public class Window {
 	public double getTime()
 	{
 		return (double) System.nanoTime() / (double) 1000000000;
-	}
-	public void setText(String text) {
-		this.text = text;
 	}
 	
 	// Returns whether
