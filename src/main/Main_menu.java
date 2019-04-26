@@ -125,7 +125,7 @@ public class Main_menu {
 				if(website.updateClick()) {
 					if (Desktop.isDesktopSupported() && d.isSupported(Desktop.Action.BROWSE)) {
 						try {
-							d.browse(new URI("https://student.csc.liv.ac.uk/~sgkbaker/Turris.html"));
+							d.browse(new URI("https://student.csc.liv.ac.uk/~sgkbaker/Turris/Documentation.html"));
 						} catch (IOException | URISyntaxException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
