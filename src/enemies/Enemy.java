@@ -94,9 +94,9 @@ public abstract class Enemy {
         
         double dist = Math.sqrt(Math.pow(cx-orb_x,2) + Math.pow(cy-orb_y,2));
         if (dist < 30)
-        	orb_speed += (float) ((1*Playing.speed_modifier) * dt);
+        	orb_speed += 1f;
         else
-        	orb_speed = (float) ((speed*Playing.speed_modifier) * dt);
+        	orb_speed = speed;
         
         // Moves the invisible orb the enemy is following
         orb_xvel = orb_dx * orb_speed;
@@ -115,8 +115,8 @@ public abstract class Enemy {
         float direction_y = (float) Math.sin(direction * Math.PI / 180);
         
         // Moves the enemy
-        xvel = (float) (direction_x * (speed*Playing.speed_modifier) * dt);
-        yvel = (float) (direction_y * (speed*Playing.speed_modifier) * dt);
+        xvel = direction_x * speed;
+        yvel = direction_y * speed;
         x += xvel;
         y += yvel;
 	}

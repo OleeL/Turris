@@ -82,7 +82,7 @@ public class Playing {
 	private static int difficulty_n;
 	public static String level;
 	private static Wave wave;
-	private static long time_end;
+	private static int delay;
 	private static int spawn_num;
 	public static boolean roundEnded;
 	public static boolean continuous;
@@ -94,8 +94,6 @@ public class Playing {
 	// Gameplay
 	private static float selected_range;
 	public static double speed_modifier;
-	private static long paused_time;
-	private static long previous_time;
 	
 	// Used for saving the game
 	public static Save save;
@@ -133,8 +131,8 @@ public class Playing {
 				break;
 		}
 		Main_menu.volume_sfx.setEnabled(false);
-		Main_menu.volume_music.setEnabled(false);;
-		Main_menu.max_fps.setEnabled(false);;
+		Main_menu.volume_music.setEnabled(false);
+		
 		// Statistics reset
 		coins_revenue = 0;
 		kills = 0;
@@ -143,7 +141,6 @@ public class Playing {
 		buildings_built = 0;
 		
 		// Gameplay variables reset
-		paused_time = 0;
 		speed_modifier = 1;
 		
 		// Instantiating for the GUI and grid interface
@@ -171,13 +168,10 @@ public class Playing {
 	public static void update(double dt){
 		if (state == PLAYING) {
 			//Spawning
-			long time = System.currentTimeMillis();
-			time_end += paused_time;
-			if ( time > time_end && spawn_num < wave.enemies.length) {
+			delay--;
+			if ( delay <= 0 && spawn_num < wave.enemies.length) {
 				enemies.add(wave.enemies[spawn_num]);
-				long delay = (long)(wave.spawn_delays[spawn_num++]*1000F);
-				delay /= speed_modifier;
-				time_end = time+delay;
+				delay = (int) (wave.spawn_delays[spawn_num++]*100);
 			}
 			
 			// Checks if round has ended
@@ -230,8 +224,8 @@ public class Playing {
 					}
 				}
 			}
-			paused_time = 0;
 		}
+		
 		if (state == PLAYING || state == ROUND_END) {
 			// Updates the arrows & checks if the enemies are hit by the arrows
 			for (int arrow = 0; arrow < arrows.size(); arrow++) {
@@ -271,10 +265,6 @@ public class Playing {
 			}
 		}
 		
-		if (state == PAUSED) {
-			paused_time += System.currentTimeMillis() - previous_time;
-			previous_time = System.currentTimeMillis();
-		}
 		// Updates the gui and gets the button if it is pushed
 		int btn = gui.update();
 		
@@ -534,7 +524,6 @@ public class Playing {
 	}
 	
 	public static void start_new_round(int round) {
-		time_end = 0;
 		spawn_num = 0;
 		wave.produceWave(round, difficulty, continuous);
 		if (wave.win) {
@@ -549,7 +538,6 @@ public class Playing {
 				state = PLAYING;
 				break;
 			case PLAYING:
-				previous_time = System.currentTimeMillis();
 				state = PAUSED;
 				break;			
 		}

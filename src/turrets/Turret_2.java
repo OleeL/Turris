@@ -10,9 +10,9 @@ public class Turret_2 extends Turret {
 
 	public static float TURRET_RANGE = 135;
 	public static float TURRET_DAMAGE = 40;
-	public static long TURRET_RATE_OF_FIRE = 500;
+	public static long TURRET_RATE_OF_FIRE = 25;
 	public static int TURRET_COST = 100;	
-	public static float TURRET_ARROW_SPEED = 1500f;	
+	public static float TURRET_ARROW_SPEED = 15f;	
 	public static int TURRET_UPGRADE_COST = 60;
 
 	/**
@@ -35,8 +35,9 @@ public class Turret_2 extends Turret {
 			level++;
 			range *= 1.2;
 			damage += 2;
-			rateOfFire -= 0.2;
+			rateOfFire /= 1.2;
 			upgrade_cost *= 1.8;
+			arrowSpeed += 0.8f;
 			return true;
 		}
 		else {

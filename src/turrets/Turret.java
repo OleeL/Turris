@@ -23,7 +23,7 @@ public abstract class Turret extends Entity {
 	
 	protected float arrowSpeed = 5;
 	protected long rateOfFire;
-	private long time, end;
+	private long time;
 	private boolean arrowReady;
 	private float grid_size;
 	private static final int LINE_SEGMENTS = 64;
@@ -85,7 +85,7 @@ public abstract class Turret extends Entity {
 	private Arrow fire_at(float tx, float ty) {
 		arrowReady = false;
 		Audio.play(Audio.SND_TURRET_SHOOT);
-		end = (long) (System.currentTimeMillis( ) + (rateOfFire/Playing.speed_modifier));
+		time = rateOfFire;
 		return new Arrow(
 				game_x+(w/2), 
 				game_y+(h/2), 
@@ -99,11 +99,13 @@ public abstract class Turret extends Entity {
 	@Override
 	public void draw() {
 		// finding the time before the operation is executed
-		time = (long) System.currentTimeMillis( );
 		
 		// finding the time after the operation is executed
-		if (time > end) {
+		if (time <= 0) {
 			arrowReady = true;
+		}
+		else {
+			time--;
 		}
 		
 		// Line segments on circle of visualised radius

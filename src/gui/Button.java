@@ -21,10 +21,11 @@ public class Button {
 	private int corner_radius = 9;
 	private final static float BOX_ALPHA = 0.5f;
 	private final static float FONT_ALPHA = 1f;
-	private Text text;
+	public Text text;
 	private float font_r = 1f;
 	private float font_g = 1f;
 	private float font_b = 1f;
+	private boolean roundedEdges = true;
 	
 	private boolean hover;
 	
@@ -132,9 +133,16 @@ public class Button {
 	public void draw()
 	{
 		Main.window.setColour(r, g, b, BOX_ALPHA);
-		Main.window.rectangle(x, y, width, height, corner_radius);
+		if (roundedEdges)
+			Main.window.rectangle(x, y, width, height, corner_radius);
+		else
+			Main.window.rectangle(x, y, width, height);
 		Main.window.setColour(font_r, font_g, font_b, FONT_ALPHA);
 		text.draw();
+	}
+
+	public void setRoundedEdges(boolean roundedEdges) {
+		this.roundedEdges = roundedEdges;
 	}
 
 	// Gets the name of the button

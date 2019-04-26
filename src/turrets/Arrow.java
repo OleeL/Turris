@@ -63,8 +63,8 @@ public class Arrow {
 		}
         
 		// Moves the arrow based on it's current velocity
-		x += xvel * dt;
-        y += yvel * dt;
+		x += xvel;
+        y += yvel;
         
 
         // Moves the texture of the arrow

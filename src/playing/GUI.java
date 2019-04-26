@@ -244,17 +244,6 @@ public class GUI {
 			if (Main_menu.mute.updateClick()) {
 				Audio.toggleMute();
 			}
-			
-			if(Main_menu.vsync.updateClick()) {
-				Main.window.toggleVsync();
-			}
-			
-			if (Main.window.getVsync()){
-				Main_menu.vsync.setButtonColour(0.0f, 1.0f, 0.0f);
-			}
-			else{
-				Main_menu.vsync.setButtonColour(0.0f, 0.0f, 0.0f);
-			}
 					
 			if(Audio.isMuted()) {
 				Main_menu.mute.setButtonColour(0.0f, 1.0f, 0.0f);
@@ -262,6 +251,15 @@ public class GUI {
 			else {
 				Main_menu.mute.setButtonColour(0.0f, 0.0f, 0.0f);
 
+			}
+			if (Main_menu.fullscreen.updateClick()) {
+				Main.window.setFullscreen(!Main.window.isFullscreen());
+			}
+			if (Main.window.isFullscreen()){
+				Main_menu.fullscreen.setButtonColour(0.0f, 1.0f, 0.0f);
+			}
+			else{
+				Main_menu.fullscreen.setButtonColour(0.0f, 0.0f, 0.0f);
 			}
 		}
 
@@ -382,12 +380,15 @@ public class GUI {
 		if (button_speed.updateClick()) {
 			if (Playing.speed_modifier == 1) {
 				Playing.speed_modifier = 2;
+				Main.window.setFPS(120);
 			}
 			else if (Playing.speed_modifier == 2) {
 				Playing.speed_modifier = 4;
+				Main.window.setFPS(240);				
 			}
 			else {
 				Playing.speed_modifier = 1;
+				Main.window.setFPS(60);
 			}
 			button_speed.setName((int) Playing.speed_modifier+"x");
 		}
@@ -538,9 +539,8 @@ public class GUI {
 			Main.window.rectangle(50, 50, 600, 450,20);
 			Main_menu.volume_sfx.draw();
 			Main_menu.volume_music.draw();
-			Main_menu.max_fps.draw();
 			Main_menu.mute.draw();
-			Main_menu.vsync.draw();
+			Main_menu.fullscreen.draw();
 		}
 		if(showSavePrompt) {
 			Main.window.setColour(0f,0f,0f,0.5f);
@@ -674,18 +674,14 @@ public class GUI {
 		}
 		Main_menu.volume_sfx.toggleEnabled();
 		Main_menu.volume_music.toggleEnabled();
-		Main_menu.max_fps.toggleEnabled();
 		Main_menu.volume_sfx.setPosition(Main_menu.volume_sfx.getPosition()[0] + offset, Main_menu.volume_sfx.getPosition()[1]);
 		Main_menu.volume_sfx.getText().setPosition(Main_menu.volume_sfx.getText().x + offset, Main_menu.volume_sfx.getText().y);
 		
 		Main_menu.volume_music.setPosition(Main_menu.volume_music.getPosition()[0] + offset, Main_menu.volume_music.getPosition()[1]);
 		Main_menu.volume_music.getText().setPosition(Main_menu.volume_music.getText().x + offset, Main_menu.volume_music.getText().y);
 		
-		Main_menu.max_fps.setPosition(Main_menu.max_fps.getPosition()[0] + offset, Main_menu.max_fps.getPosition()[1]);
-		Main_menu.max_fps.getText().setPosition(Main_menu.max_fps.getText().x + offset, Main_menu.max_fps.getText().y);
-		
 		Main_menu.mute.setPosition((int)Main_menu.mute.getX() + offset, (int)Main_menu.mute.getY());
-		Main_menu.vsync.setPosition((int)Main_menu.vsync.getX() + offset, (int) Main_menu.vsync.getY());
+		Main_menu.fullscreen.setPosition((int)Main_menu.fullscreen.getX() + offset, (int)Main_menu.fullscreen.getY());
 		showSettings = !showSettings;
 	}
 	public void display_save_prompt() {
