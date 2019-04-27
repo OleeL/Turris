@@ -1,7 +1,6 @@
 package enemies;
 
 import gui.Texture;
-import main.Main;
 import playing.Grid;
 import playing.Playing;
 
@@ -18,7 +17,6 @@ import engine.io.Node;
  */
 public abstract class Enemy {
 	private final static byte RESET_TIME = 15;
-	private static float scale = 1f;
 	private static float w, h;
 	
 	protected static HashMap<String, Texture> textures = new HashMap<String, Texture>();
