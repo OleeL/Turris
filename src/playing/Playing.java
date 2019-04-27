@@ -342,6 +342,7 @@ public class Playing {
 				selected = UNSELECTED;
 				//Audio.stop(false);
 				break;
+
 		}
 	
 		// If the player right clicks, then unselect everything
@@ -386,10 +387,11 @@ public class Playing {
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		grid.draw();
-		for (int i = 0; i < enemies.size(); i++)
-			enemies.get(i).draw();
-		for (int i = 0; i < arrows.size(); i++)
-			arrows.get(i).draw();
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).draw();}
+		
+		for (int i = 0; i < arrows.size(); i++) {
+			arrows.get(i).draw();}
 		
 		// Drawing for selling turrets
 		if (selected == SELL) {

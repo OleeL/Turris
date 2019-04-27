@@ -47,6 +47,9 @@ public class Grid {
 	private boolean draw_lines = true;
 	private char selected_level;
 	
+	Texture blank_tile;
+	Texture lilyp_tile;
+	
 	public Grid(String level, char selected_level) {
 		this.selected_level = selected_level;
 		try {
@@ -86,6 +89,19 @@ public class Grid {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		int map_num = 1;
+		switch(Playing.level) {
+			case Playing.LEVEL_2:
+				map_num = 2;
+				break;
+			case Playing.LEVEL_3:
+				map_num = 3;
+				break;
+			default:
+				lilyp_tile = new Texture("tiles/" + map_num + "/decor_lilypad.png", 0,0, grid_size / 100, grid_size / 100);
+				break;
+		}
+		blank_tile = new Texture("tiles/" + map_num + "/x.png", 0,0, grid_size / 100, grid_size / 100);
 	}
 	
 	public void update() {
@@ -96,27 +112,19 @@ public class Grid {
 		// Drawing the tiles
 		for (int y = 0; y < grid.length; y++) {
 			for (int x = 0; x < grid[0].length; x++) {
-				Texture tile_texture = grid[y][x].getTexture();
 				if(grid[y][x] instanceof Turret) {
-					int map_num = 1;
-					switch(Playing.level) {
-					case Playing.LEVEL_2:
-						map_num = 2;
-						break;
-					case Playing.LEVEL_3:
-						map_num = 3;
-						break;
-					}
-					String tile_name;
 					switch(map_tiles[y][x].getName()) {
-					case "decor_lilypad":
-						tile_name = map_tiles[y][x].getName();
-						break;
-					default:
-						tile_name = "x";
+						case "decor_lilypad":
+							lilyp_tile.setX(grid[y][x].getX()*grid_size);
+							lilyp_tile.setY(grid[y][x].getY()*grid_size);
+							lilyp_tile.draw();
+							break;
+						default:
+							blank_tile.setX(grid[y][x].getX()*grid_size);
+							blank_tile.setY(grid[y][x].getY()*grid_size);
+							blank_tile.draw();
+							break;
 					}
-					Texture blank_tile = new Texture("tiles/" + map_num + "/" + tile_name + ".png", tile_texture.getX(),tile_texture.getY(),  grid_size / 100, grid_size / 100);
-					blank_tile.draw();
 				}
 				grid[y][x].getTexture().draw();
 			}
