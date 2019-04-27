@@ -11,7 +11,7 @@ import engine.io.Image;
 
 public class Texture {
 	private int id;
-	private float x, y, w, h;
+	private float x, y, w, h, sx, sy;
 	private Image texture;
 	
 	/**
@@ -27,6 +27,8 @@ public class Texture {
 		texture = Image.loadImage("./assets/images/"+filename);
 		this.x = x;
 		this.y = y;
+		this.sx = sx;
+		this.sy = sy;
 		this.w = texture.getWidth() * sx;
 		this.h = texture.getHeight() * sy;
 		
@@ -90,6 +92,24 @@ public class Texture {
 	// Gets the Y coordinate
 	public float getY()	{
 		return y;
+	}
+	
+	public float getScaleX() {
+		return sx;
+	}
+	
+	public float getScaleY() {
+		return sy;
+	}
+	
+	public void setScaleX(float sx) {
+		this.sx = sx;
+		this.w = texture.getWidth() * sx;
+	}
+	
+	public void setScaleY(float sy) {
+		this.sy = sy;
+		this.h = texture.getHeight() * sy;
 	}
 
 	// Draws the texture on a frame

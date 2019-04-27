@@ -11,7 +11,7 @@ public class Arrow {
 	private float xvel;
 	private float yvel;
 	private float damage;
-	private Texture texture;
+	private static Texture texture = new Texture( "turrets/arrow.png", 0, 0, 1, 1);
 	private float texture_rotation;
 	
 	public Arrow( 
@@ -23,7 +23,13 @@ public class Arrow {
 			float damage, 
 			float speed) {
 
-        texture = new Texture( "turrets/arrow.png", x, y, scale, scale);
+		if (texture.getScaleX() != scale) {
+			System.out.println("Correcting");
+			texture.setScaleX(scale);
+		}
+		if (texture.getScaleY() != scale) {
+			texture.setScaleY(scale);
+		}
         
         // Gets the centre coordinates of the texture
         x -= texture.getWidth()/2;
@@ -65,15 +71,13 @@ public class Arrow {
 		// Moves the arrow based on it's current velocity
 		x += xvel;
         y += yvel;
-        
-
-        // Moves the texture of the arrow
-		texture.setX(x);
-		texture.setY(y);
 		
 	}
 	
 	public void draw() {
+        // Moves the texture of the arrow
+		texture.setX(x);
+		texture.setY(y);
 		// Draw the enemy (at a rotation too)
 		texture.draw(-((float) Math.toDegrees(texture_rotation)));
 	}
