@@ -111,6 +111,7 @@ public class Playing {
 		
 		// Getting the selected level
 		char selected_level = level.charAt(level.length()-5);
+		
 		// Coins and lives depends on the difficulty
 		switch (difficulty) {
 			case HARD:
@@ -275,7 +276,9 @@ public class Playing {
 		// Updates the gui and gets the button if it is pushed
 		int btn = gui.update();
 		
-		if (Main.window.isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) selected = UNSELECTED;
+		if (Main.window.isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) {
+			selected = UNSELECTED;
+		}
 		
 		// If the gui is clicked and there is something selected: unselect item
 		if (gui.isClicked()) {
@@ -288,7 +291,7 @@ public class Playing {
 			}
 
 		}
-			
+		
 		// If there is something pressed on the GUI, make the new selection
 		if ( btn > -1) selected = btn;
 		
@@ -453,39 +456,52 @@ public class Playing {
 	
 	// Place function for placing turrets
 	public static void place(int tower_num, int level) {
+		int turret_cost = 0;
 		double mx = Main.window.getMouseX();
 		double my = Main.window.getMouseY();
 		float temp_tile_x = grid.getCoordX(mx);
 		float temp_tile_y = grid.getCoordY(my);
-		Entity turret = null;
 		switch (tower_num) {
 			case TOWER_1:
-				turret = new Turret_1(
-							(float)(temp_tile_x / grid.getTileSize()),
-							(float)(temp_tile_y / grid.getTileSize()),
-							grid.getTileSize());
-				selected_range = ((Turret) turret).getRange();
+				selected_range = Turret_1.TURRET_RANGE;
+				turret_cost = Turret_1.TURRET_COST;
 				break;
 			case TOWER_2:
-				turret = new Turret_2(
-							(float)(temp_tile_x / grid.getTileSize()),
-							(float)(temp_tile_y / grid.getTileSize()),
-							grid.getTileSize());
-				selected_range = ((Turret) turret).getRange();
+				selected_range = Turret_2.TURRET_RANGE;
+				turret_cost = Turret_2.TURRET_COST;
 				break;
 			case TOWER_3:
-				turret = new Turret_3(
-							(float)(temp_tile_x / grid.getTileSize()),
-							(float)(temp_tile_y / grid.getTileSize()),
-							grid.getTileSize());
-				selected_range = ((Turret) turret).getRange();
+				selected_range = Turret_3.TURRET_RANGE;
+				turret_cost = Turret_3.TURRET_COST;
 				break;
 		}
 			
 		if (Main.window.isMousePressed(Main.window.LEFT_MOUSE) && 
 				!gui.isClicked() &&
 				canPlace() &&
-				coins >= ((Turret) turret).getCost()){
+				coins >= turret_cost){
+
+			Entity turret = null;
+			switch (tower_num) {
+				case TOWER_1:
+					turret = new Turret_1(
+								(float)(temp_tile_x / grid.getTileSize()),
+								(float)(temp_tile_y / grid.getTileSize()),
+								grid.getTileSize());
+					break;
+				case TOWER_2:
+					turret = new Turret_2(
+								(float)(temp_tile_x / grid.getTileSize()),
+								(float)(temp_tile_y / grid.getTileSize()),
+								grid.getTileSize());
+					break;
+				case TOWER_3:
+					turret = new Turret_3(
+								(float)(temp_tile_x / grid.getTileSize()),
+								(float)(temp_tile_y / grid.getTileSize()),
+								grid.getTileSize());
+					break;
+		}
 			coins -= ((Turret) turret).getCost();
 			grid.insert((int)(temp_tile_x / grid.getTileSize()), 
 					    (int)(temp_tile_y / grid.getTileSize()),

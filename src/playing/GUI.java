@@ -250,7 +250,6 @@ public class GUI {
 			}
 			else {
 				Main_menu.mute.setButtonColour(0.0f, 0.0f, 0.0f);
-
 			}
 			if (Main_menu.fullscreen.updateClick()) {
 				Main.window.setFullscreen(!Main.window.isFullscreen());
