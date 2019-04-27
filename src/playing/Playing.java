@@ -229,37 +229,42 @@ public class Playing {
 		if (state == PLAYING || state == ROUND_END) {
 			// Updates the arrows & checks if the enemies are hit by the arrows
 			for (int arrow = 0; arrow < arrows.size(); arrow++) {
-				arrows.get(arrow).update(dt);
-				for (int e = 0; e < enemies.size(); e++) {
-					float x = enemies.get(e).getCX();
-					float y = enemies.get(e).getCY();
-					float r = enemies.get(e).getRadius();
-					if (arrows.get(arrow).collidesWith(x, y, r)) {
-						if (enemies.get(e).health < 0) {
-							coins += enemies.get(e).getReward();
-							coins_revenue += enemies.get(e).getReward();
-							kills++;
-							enemies.remove(e);
-							int randomSound = Random.integer(1, 1000);
-							if (randomSound == 1) {
-								Audio.play(Audio.SND_ENEMY_DEATH);
-							}
-							else {
-								randomSound = Random.integer(1, 2);
+				arrows.get(arrow).update();
+				if (arrows.get(arrow).isDestroyed()) {
+					arrows.remove(arrow);
+				}
+				else {
+					for (int e = 0; e < enemies.size(); e++) {
+						float x = enemies.get(e).getCX();
+						float y = enemies.get(e).getCY();
+						float r = enemies.get(e).getRadius();
+						if (arrows.get(arrow).collidesWith(x, y, r)) {
+							if (enemies.get(e).health < 0) {
+								coins += enemies.get(e).getReward();
+								coins_revenue += enemies.get(e).getReward();
+								kills++;
+								enemies.remove(e);
+								int randomSound = Random.integer(1, 1000);
 								if (randomSound == 1) {
-									Audio.play(Audio.SND_ENEMY_DEATH_1);
+									Audio.play(Audio.SND_ENEMY_DEATH);
 								}
 								else {
-									Audio.play(Audio.SND_ENEMY_DEATH_2);
+									randomSound = Random.integer(1, 2);
+									if (randomSound == 1) {
+										Audio.play(Audio.SND_ENEMY_DEATH_1);
+									}
+									else {
+										Audio.play(Audio.SND_ENEMY_DEATH_2);
+									}
 								}
 							}
+							else {
+								Audio.play(Audio.SND_ENEMY_HIT_2);
+								enemies.get(e).health-=arrows.get(arrow).getDamage();
+							}
+							arrows.remove(arrow);
+							break;
 						}
-						else {
-							Audio.play(Audio.SND_ENEMY_HIT_2);
-							enemies.get(e).health-=arrows.get(arrow).getDamage();
-						}
-						arrows.remove(arrow);
-						break;
 					}
 				}
 			}

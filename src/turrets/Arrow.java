@@ -56,7 +56,7 @@ public class Arrow {
 
 	}
 	
-	public void update( double dt ) {
+	public void update( ) {
 		// if the arrow goes off the screen, it is then removed
 		if (x < 0 || y < 0 || x > Main.window.getWidth() || y > Main.window.getHeight()) {
 			destroy = true;
