@@ -1,5 +1,7 @@
 package enemies;
 
+import gui.Texture;
+
 /**
  * @author Team 62
  * 
@@ -9,8 +11,15 @@ package enemies;
  */
 public class Enemy_2 extends Enemy{
 	
+	static {
+		for (int i = 0; i < 3; i++) {
+			Texture texture = new Texture("enemies/enemy_2/"+i+".png",0,0,1,1);
+			textures.put("2"+i, texture);
+		}
+	}
+	
 	public Enemy_2(float x, float y, float grid_size) {
-		super("enemies/enemy_2/", x, y, grid_size);
+		super((byte) 2, x, y, grid_size);
 		health = 5;
 		value = 10;
 		speed = 2.5f;

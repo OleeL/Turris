@@ -111,6 +111,13 @@ public class Texture {
 		this.sy = sy;
 		this.h = texture.getHeight() * sy;
 	}
+	
+	public void setScale(float scale) {
+		this.sx = scale;
+		this.w = texture.getWidth() * scale;
+		this.sy = scale;
+		this.h = texture.getHeight() * scale;
+	}
 
 	// Draws the texture on a frame
 	public void draw(){

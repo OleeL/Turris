@@ -103,6 +103,8 @@ public class Playing {
 		Playing.difficulty_n = difficulty;
 		Playing.level = level;
 		Playing.round = round;
+		Playing.speed_modifier = 1;
+		Main.window.setFPS(60);
 		
 		selected = UNSELECTED;
 		state = ROUND_END;

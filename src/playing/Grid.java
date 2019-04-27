@@ -179,7 +179,6 @@ public class Grid {
 		if (grid[y][x] instanceof Turret) {
 			Turret turret = (Turret) getEntity(x, y);
 			if (turrets.contains(turret)) {
-				System.out.println(true);
 				turrets.remove(turret);
 				insert(x, y, map_tiles[y][x].getName());
 				return true;

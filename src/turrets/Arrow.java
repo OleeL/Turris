@@ -23,13 +23,7 @@ public class Arrow {
 			float damage, 
 			float speed) {
 
-		if (texture.getScaleX() != scale) {
-			System.out.println("Correcting");
-			texture.setScaleX(scale);
-		}
-		if (texture.getScaleY() != scale) {
-			texture.setScaleY(scale);
-		}
+		texture.setScale(scale);
         
         // Gets the centre coordinates of the texture
         x -= texture.getWidth()/2;

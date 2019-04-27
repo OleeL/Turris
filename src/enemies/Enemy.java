@@ -1,8 +1,12 @@
 package enemies;
 
 import gui.Texture;
+import main.Main;
 import playing.Grid;
 import playing.Playing;
+
+import java.util.HashMap;
+
 import engine.io.Node;
 
 /**
@@ -13,16 +17,20 @@ import engine.io.Node;
  *
  */
 public abstract class Enemy {
+	private final static byte RESET_TIME = 15;
+	private static float scale = 1f;
+	private static float w, h;
+	
+	protected static HashMap<String, Texture> textures = new HashMap<String, Texture>();
 	public int health;
-	protected float x, y, w, h, scale, xvel, yvel, end_time, speed, radius;
-	private float time = 90000000;
-	protected Texture texture;
+	private float x, y, xvel, yvel, radius;
+	protected float speed;
 	protected int value = 5;
+	private byte time = 8;
 	
 	// Used for animation
-	private int t_num = 0; // Texture number
-	private int prev_t_num = 0;
-	private String path;
+	private byte t_num = 0; // Texture number
+	private byte prev_t_num = 0;
 	
 	// The center of the enemy
 	private float cx;
@@ -30,29 +38,33 @@ public abstract class Enemy {
 	
 	// Used for path finding
 	private static Node head;
+	private byte type;
 	private Node target;
 	private float dest_x, dest_y, grid_size;
 	public boolean reached = false;
 	public float direction;
 	private float orb_x, orb_y, orb_xvel, orb_yvel, orb_speed;
 	
-	public Enemy(String path, float x, float y, float grid_size) {
+	public Enemy(byte type, float x, float y, float grid_size) {
 		this.x = x;
 		this.y = y;
+		this.type = type;
 		this.speed = 100;
 		this.xvel = 0;
 		this.yvel = 0;
-		this.scale = grid_size / 100;
-		this.path = path;
-		this.texture = new Texture(path+t_num+".png", x, y, scale, scale);
-		this.w = texture.getWidth();
-		this.h = texture.getHeight();
-		this.end_time = 0;
 		this.target = head;
 		this.grid_size = grid_size;
 		this.orb_x = (head.x * grid_size) + 25;
 		this.orb_y = (head.y * grid_size) + 25;
 		this.direction = (float) Math.toDegrees(Math.atan2(orb_y-cy, orb_x-cx));
+		float newScale = grid_size / 100;
+
+		String key1 = Byte.toString(type);
+		for (int i = 0; i < 3; i++) {
+			textures.get(key1+i).setScale(newScale);
+		}
+		w = textures.get(key1+0).getWidth();
+		h = textures.get(key1+0).getHeight();
 		this.radius = ((w - h)/2);
 	}
 	
@@ -124,7 +136,7 @@ public abstract class Enemy {
 	public void draw() {
 		
 		// Walking animation
-		if (System.nanoTime() > end_time && Playing.state == Playing.PLAYING) {
+		if (time < 0 && Playing.state == Playing.PLAYING) {
 			if (t_num == 0) {
 				if (prev_t_num == 1){
 					t_num = 2;
@@ -138,23 +150,38 @@ public abstract class Enemy {
 			else{
 				t_num = 0;
 			}
-			
-			end_time = System.nanoTime()+time;
-			texture.setTexture(path+t_num+".png");
+			time = RESET_TIME;
+		}
+		else if (Playing.state == Playing.PLAYING) {
+			time--;
 		}
         
         // Sets the rotation of the enemy so they're facing 
         float rotation = (float) Math.atan2( dest_x-cx, dest_y-cy);
 
         // Moves the enemy
-		texture.setX(x);
-		texture.setY(y);
+        String key = Byte.toString(type) + Byte.toString(t_num);
+		textures.get(key).setX(x);
+		textures.get(key).setY(y);
 		
 		// Draw the enemy (at a rotation too)
-		texture.draw(-((float) Math.toDegrees(rotation)));
+		textures.get(key).draw(-((float) Math.toDegrees(rotation)));
 		
-		// Shows the invisible orb
-		//Main.window.circle(true, orb_x, orb_y, 10, 10);
+//		// Shows the invisible orb (white)
+//		Main.window.setColour(0f, 0, 0f, 0.5f);
+//		Main.window.circle(true, orb_x, orb_y, 2, 10);
+//		
+//		// Shows the enemy's actual position (green)
+//		Main.window.setColour(0f, 1.0f, 0f, 0.5f);
+//		Main.window.circle(true, x, y, 2, 10);
+//		
+//		// Shows the enemy's center position (red)
+//		Main.window.setColour(1.0f, 0f, 0f, 0.5f);
+//		Main.window.circle(true, cx, cy, 2, 10);
+//		
+//		// Shows the enemy's hitbox;
+//		Main.window.setColour(0f, 0f, 1.0f, 0.5f);
+//		Main.window.circle(true, cx, cy, radius, 10);
 	}
 	
 	// finds the path for the enemies to go.
