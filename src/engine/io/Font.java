@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class Font {
@@ -86,6 +88,9 @@ public class Font {
         glBindTexture(GL_TEXTURE_2D, this.fontTextureId);
         glBegin(GL_QUADS);
         
+		float colour[] = new float[4];
+		glGetFloatv(GL_CURRENT_COLOR, colour);
+        GL11.glClearColor(colour[0], colour[1], colour[2], colour[3]);
         float xTmp = x;
         for (char c : text.toCharArray()) {
             float width = getCharWidth(c);

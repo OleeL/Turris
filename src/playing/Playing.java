@@ -183,6 +183,7 @@ public class Playing {
 					!roundEnded &&
 					enemies.isEmpty()) {
 				state = ROUND_END;
+				gui.lcomplete_fade_away = 2;
 				gui.button_round.setName("Start");
 				start_new_round(++round);
 				save();
