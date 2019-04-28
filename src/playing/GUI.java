@@ -265,6 +265,7 @@ public class GUI {
 		
 		// Updates tower buttons, pause buttons
 		if (!closed) {
+			Playing.state = Playing.PAUSED;
 			boolean gotText = false;
 			for (GUIButton button : buttons){
 				boolean canAfford = true;
@@ -404,6 +405,7 @@ public class GUI {
 				//Playing.state = Playing.PLAYING;
 				Main.state =Main.PLAYING;
 				display_save_prompt();
+				close();
 			}
 		}
 		if(showQuitPrompt) {
@@ -416,6 +418,7 @@ public class GUI {
 			if(cont.updateClick()) {
 				Main.state = Main.PLAYING;
 				display_quit_prompt();
+				close();
 			}
 			if(saveQuit.updateClick()) {
 				Playing.save.write();
@@ -583,7 +586,7 @@ public class GUI {
 		
 		// Statistics:
 		final_stats[0].text = "Difficulty: "+Playing.difficulty_visual;
-		final_stats[1].text = "You made it to round: "+(Playing.round-1);
+		final_stats[1].text = "You made it to round: "+(Playing.round);
 		final_stats[2].text = "Lives remaining: "+Playing.lives;
 		final_stats[3].text = "Total revenue: "+Playing.coins_revenue;
 		final_stats[4].text = "Kills: "+Playing.kills;
@@ -643,6 +646,9 @@ public class GUI {
 			open_button_image_rotation = 180;
 			showCost = false;
 			close_settings_gui();
+			if(button_round.getName().equals("Pause")) {
+				Playing.state = Playing.PLAYING;
+			}
 		}
 
 		open_button_image.setX(open_button_x + open_button_xmargin);
