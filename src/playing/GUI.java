@@ -266,7 +266,6 @@ public class GUI {
 		
 		// Updates tower buttons, pause buttons
 		if (!closed) {
-			Playing.state = Playing.PAUSED;
 			boolean gotText = false;
 			for (GUIButton button : buttons){
 				boolean canAfford = true;
@@ -446,8 +445,7 @@ public class GUI {
 		return state;
 	}
 	
-	public void draw(){
-		
+	public void draw() {
 		switch (Playing.state) {
 			// Draws for the winning state
 			case Playing.PAUSED:
@@ -564,10 +562,7 @@ public class GUI {
 			cont.setPosition(300, 340);
 			cont.draw();
 			saveQuit.draw();
-			
 		}
-		
-		
 	}
 	
 	// Draws for the winning and losing state

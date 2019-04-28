@@ -42,6 +42,7 @@ public class Playing {
 	public static final int WIN       = 3;
 	public static final int LOSE      = 4;
 	public static int state;
+	public static int previous_state;
 	
 	// Graphics
 	public static Grid grid;
@@ -297,6 +298,7 @@ public class Playing {
 		
 		if(gui.isClicked() && gui.settingsOpen() && selected != SETTINGS) {
 				gui.close_settings_gui();
+				state = previous_state;
 			}
 		
 		switch (selected)
@@ -334,15 +336,36 @@ public class Playing {
 				sell();
 				break;
 			case SAVE:
+				if (!gui.saveOpen()) {
+					previous_state = state;
+					state = PAUSED;
+				}
+				else {
+					state = previous_state;
+				}
 				save.write();
 				gui.display_save_prompt();
 				selected = UNSELECTED;
 				break;
 			case SETTINGS:
+				if (!gui.settingsOpen()) {
+					previous_state = state;
+					state = PAUSED;
+				}
+				else {
+					state = previous_state;
+				}
 				gui.toggle_settings_gui();
 				selected = UNSELECTED;
 				break;
 			case QUIT:
+				if (!gui.quitOpen()) {
+					previous_state = state;
+					state = PAUSED;
+				}
+				else {
+					state = previous_state;
+				}
 				gui.display_quit_prompt();
 				selected = UNSELECTED;
 				//Audio.stop(false);
