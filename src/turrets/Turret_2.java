@@ -11,9 +11,9 @@ public class Turret_2 extends Turret {
 	public static float TURRET_RANGE = 135;
 	public static float TURRET_DAMAGE = 40;
 	public static long TURRET_RATE_OF_FIRE = 25;
-	public static int TURRET_COST = 100;	
+	public static int TURRET_COST = 200;	
 	public static float TURRET_ARROW_SPEED = 15f;	
-	public static int TURRET_UPGRADE_COST = 60;
+	public static int TURRET_UPGRADE_COST = 80;
 
 	/**
 	 * @param float x position 
