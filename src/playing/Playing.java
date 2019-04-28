@@ -116,13 +116,13 @@ public class Playing {
 		// Coins and lives depends on the difficulty
 		switch (difficulty) {
 			case HARD:
-				coins = 100;
+				coins = 150;
 				lives = 1;
 				Playing.difficulty = Wave.HARD;
 				Playing.difficulty_visual = "Hard";
 				break;
 			case MEDIUM:
-				coins = 100;
+				coins = 150;
 				lives = 3;
 				Playing.difficulty = Wave.MEDIUM;
 				Playing.difficulty_visual = "Medium";
