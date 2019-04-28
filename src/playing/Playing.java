@@ -121,13 +121,13 @@ public class Playing {
 				Playing.difficulty_visual = "Hard";
 				break;
 			case MEDIUM:
-				coins = 250;
+				coins = 100;
 				lives = 3;
 				Playing.difficulty = Wave.MEDIUM;
 				Playing.difficulty_visual = "Medium";
 				break;
 			default:
-				coins = 300;
+				coins = 150;
 				lives = 4;
 				Playing.difficulty = Wave.EASY;
 				Playing.difficulty_visual = "Easy";

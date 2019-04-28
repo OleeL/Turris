@@ -22,7 +22,7 @@ public class Enemy_1 extends Enemy{
 		super((byte) 1, x, y, grid_size);
 		speed = 2.0f;
 		health = 25;
-		value = 5;
+		value = 2;
 	}
 	
 }
