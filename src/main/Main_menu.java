@@ -4,18 +4,13 @@ import org.lwjgl.glfw.GLFW;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import engine.io.Audio;
-import gui.Button;
-import gui.Cloud;
-import gui.Texture;
-import level.handler.Load;
-import playing.Playing;
-import gui.Slider;
-import gui.Text;
-
 import java.awt.Desktop;
 import java.io.IOException;
+import engine.io.Audio;
+import gui.*;
+import level.handler.Load;
+import settings.io.Save;
+import playing.Playing;
 
 /**
  * @author Team 62
@@ -174,6 +169,7 @@ public class Main_menu {
 			
 				// Back button
 				if (backToMenu.updateClick()) {
+					Save.write();
 					state = MAIN;
 				}
 				

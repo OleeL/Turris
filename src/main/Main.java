@@ -3,6 +3,7 @@ package main;
 import engine.io.Audio;
 import engine.io.Window;
 import playing.Playing;
+import settings.io.Load;
 
 /**
  * @author Team 62
@@ -41,6 +42,8 @@ public class Main {
 		} catch (Exception e) {
 			System.out.println("Failed to setup audio system");
 		}
+		
+		Load.load();
 		
 		// While the windows isn't closed print to the screen
 		while (!window.closed()) {

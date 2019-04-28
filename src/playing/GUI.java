@@ -14,6 +14,7 @@ import gui.Text;
 import gui.Texture;
 import main.Main;
 import main.Main_menu;
+import settings.io.Save;
 import turrets.Turret_1;
 import turrets.Turret_2;
 import turrets.Turret_3;
@@ -153,9 +154,9 @@ public class GUI {
 		buttons[4] = new GUIButton(
 				"Save",     BUTTON_SIZE, BUTTON_SIZE, Playing.SAVE);
 		buttons[5] = new GUIButton(
-				"Quit",     BUTTON_SIZE, BUTTON_SIZE, Playing.QUIT);
+					"Settings", BUTTON_SIZE, BUTTON_SIZE, Playing.SETTINGS);
 		buttons[6] = new GUIButton(
-				"Settings", BUTTON_SIZE, BUTTON_SIZE, Playing.SETTINGS);
+				"Quit",     BUTTON_SIZE, BUTTON_SIZE, Playing.QUIT);
 		
 		// Repositioning the buttons on the GUI panel
 		// Used for having a 2 x n button array
@@ -682,6 +683,7 @@ public class GUI {
 		Main_menu.mute.setPosition((int)Main_menu.mute.getX() + offset, (int)Main_menu.mute.getY());
 		Main_menu.fullscreen.setPosition((int)Main_menu.fullscreen.getX() + offset, (int)Main_menu.fullscreen.getY());
 		showSettings = !showSettings;
+		Save.write();
 	}
 	public void display_save_prompt() {
 		showSavePrompt = !showSavePrompt;

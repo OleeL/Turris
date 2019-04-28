@@ -139,6 +139,12 @@ public class Audio{
 		muted = !muted;
 		updateVolume();
 	}
+	
+	public static void setMute(boolean m) {
+		muted = m;
+		updateVolume();
+	}
+	
 	public static boolean isMuted() {
 		return muted;
 	}
