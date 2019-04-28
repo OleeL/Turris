@@ -141,9 +141,9 @@ public class GUI {
 	private static float[]       colour         = DEFAULT_COLOUR;
 	
 	// Text to show when you finish the round
-	private Text txt_lcomplete = new Text("Level complete!",250, 10, 48);
-	public float lcomplete_fade_away = 0.0f;
-	private float lcomplete_fade_away_dec = 0.003f;
+	private Text txt_rcomplete = new Text("Round complete!",250, 10, 48);
+	public float rcomplete_fade_away = 0.0f;
+	private float rcomplete_fade_away_dec = 0.003f;
 	
 	public GUI(){
 		// Creating the buttons on the opening and closing GUI panel
@@ -458,14 +458,14 @@ public class GUI {
 			case Playing.ROUND_END:
 			case Playing.PLAYING:
 				
-				// Shows "level complete!" just after you complete a level
-				if (lcomplete_fade_away >= 0) {
+				// Shows "round complete!" just after you complete a level
+				if (rcomplete_fade_away >= 0) {
 					Main.window.setColour(0f, 0f, 0f, 
-							Math.min(0.5f*lcomplete_fade_away, 0.5f));
+							Math.min(0.5f*rcomplete_fade_away, 0.5f));
 					Main.window.rectangle(175, 5, 483, 60, 10);
-					Main.window.setColour(1f, 1f, 1f, lcomplete_fade_away);
-					txt_lcomplete.draw();
-					lcomplete_fade_away -= lcomplete_fade_away_dec; 
+					Main.window.setColour(1f, 1f, 1f, rcomplete_fade_away);
+					txt_rcomplete.draw();
+					rcomplete_fade_away -= rcomplete_fade_away_dec; 
 				}
 				
 				button_round.draw();
