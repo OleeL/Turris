@@ -34,7 +34,7 @@ public class Main_menu {
 	public static final int EXIT = 6;
 	public static int state = 0;
 	private static Button[] buttons = new Button[6];
-	private static Texture title, background, howtoplay, creators;
+	private static Texture title, background, creators;
 	private static Cloud clouds[] = new Cloud[2];
 	private static float boxW = 580;
 	private static float boxH = 580; 
@@ -71,7 +71,6 @@ public class Main_menu {
 		background = new Texture("background_small.jpg", 0, 0, 1f, 1f);
 		creators = new Texture("creators.png", 132, 50, 1f ,1f);
 		title = new Texture("turris_text.png", 283, 25, 1f, 1f);
-		howtoplay = new Texture("howtoplay.png", boxX, boxY, 1f, 1f);
 		for (int i = 0; i < clouds.length; i++){
 			clouds[i] = new Cloud(i+1);
 		}
@@ -119,9 +118,6 @@ public class Main_menu {
 				Audio.playLoop(Audio.MSC_GAME);
 				break;
 			case HELP:
-				if (backToMenu.updateClick()) {
-					state = MAIN;
-				}
 				break;
 			case ABOUT:
 				if (backToMenu.updateClick()) {
@@ -232,14 +228,6 @@ public class Main_menu {
 				backToMenu.draw();
 				
 				break;
-				
-			case HELP:
-				Main.window.setColour(0f, 0f, 0f, 0.5f);
-				Main.window.rectangle(boxX, boxY, boxW, boxH, 20);
-				howtoplay.draw();
-				backToMenu.setFontColour(1f, 1f, 1f);
-				backToMenu.draw();
-				break;
 			case ABOUT:
 				Main.window.setColour(0f, 0f, 0f, 0.5f);
 				Main.window.rectangle(boxX, boxY, boxW, boxH, 20);
@@ -258,7 +246,18 @@ public class Main_menu {
 			case EXIT:
 				Audio.destroy();
 				System.exit(-1);
-				break;	
+				break;
+			case HELP:
+				if (Desktop.isDesktopSupported() && d.isSupported(Desktop.Action.BROWSE)) {
+					try {
+						d.browse(new URI("https://student.csc.liv.ac.uk/~sgkbaker/Turris/Documentation.html#howtoplay"));
+					} catch (IOException | URISyntaxException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				state = MAIN;
+				break;
 		}
 	}
 	
