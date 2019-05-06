@@ -143,17 +143,17 @@ public class Main_menu {
 			case SETTINGS:
 				volume_music.setEnabled(true);
 				volume_sfx.setEnabled(true);
-			
+
 				if(mute.updateClick()) {
 					Audio.toggleMute();
 				}
 				if(Audio.isMuted()) {
 					mute.setButtonColour(0.0f, 1.0f, 0.0f);
-					
+					mute.setHoverColour(0.0f, 0.75f, 0.0f, 0.5f);
 				}
 				else {
 					mute.setButtonColour(0.0f, 0.0f, 0.0f);
-				
+					mute.setHoverColour(0.4f, 0.4f, 0.4f, 0.5f);
 				}
 
 				if (fullscreen.updateClick()) {
@@ -161,9 +161,11 @@ public class Main_menu {
 				}
 				if (Main.window.isFullscreen()){
 					fullscreen.setButtonColour(0.0f, 1.0f, 0.0f);
+					fullscreen.setHoverColour(0.0f, 0.75f, 0.0f, 0.5f);
 				}
 				else{
 					fullscreen.setButtonColour(0.0f, 0.0f, 0.0f);
+					fullscreen.setHoverColour(0.4f, 0.4f, 0.4f, 0.5f);
 				}
 				
 			

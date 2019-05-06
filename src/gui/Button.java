@@ -26,7 +26,7 @@ public class Button {
 	private float font_g = 1f;
 	private float font_b = 1f;
 	private boolean roundedEdges = true;
-	
+	private float[] hover_colour = {0.4f, 0.4f, 0.4f, BOX_ALPHA};
 	private boolean hover;
 	
 	public Button(String name, float x, float y, float width, float height, int state)
@@ -104,12 +104,7 @@ public class Button {
 				Main.window.getMouseY() > y &&
 				Main.window.getMouseY() < y+height)
 		{
-			r = 0.4f;
-			g = 0.4f;
-			b = 0.4f;
-			
 			hover = true;
-			
 			
 			if (Main.window.isMousePressed(Main.window.LEFT_MOUSE)){
 				Audio.play(Audio.SND_MENU_CLICK);
@@ -119,10 +114,6 @@ public class Button {
 		}
 		else
 		{
-			r = 0f;
-			g = 0f;
-			b = 0f;
-			
 			hover = false;
 		}
 
@@ -132,7 +123,12 @@ public class Button {
 	// draws the button (update this every frame in the draw function)
 	public void draw()
 	{
-		Main.window.setColour(r, g, b, BOX_ALPHA);
+		if (!hover)
+			Main.window.setColour(r, g, b, BOX_ALPHA);
+		else {
+			Main.window.setColour(hover_colour[0], hover_colour[1], 
+					hover_colour[2], hover_colour[3]);
+		}
 		if (roundedEdges)
 			Main.window.rectangle(x, y, width, height, corner_radius);
 		else
@@ -149,6 +145,18 @@ public class Button {
 	public String getName() {
 		return name;
 	}
+	
+	public float[] getColour() {
+		return new float[] {r, g, b, BOX_ALPHA};
+	}
+	
+	public void setHoverColour(float r, float g, float b, float a) {
+		this.hover_colour[0] = r;
+		this.hover_colour[1] = g;
+		this.hover_colour[2] = b;
+		this.hover_colour[3] = a;
+	}
+	
 
 	// Sets the name of the button.
 	public void setName(String name) {
