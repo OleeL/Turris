@@ -385,6 +385,7 @@ public class GUI {
 			}
 		}
 		
+		// Changes the speed modifier when you press the speed modifier button
 		if (button_speed.updateClick()) {
 			if (Playing.speed_modifier == 1) {
 				Playing.speed_modifier = 2;
@@ -400,6 +401,7 @@ public class GUI {
 			}
 			button_speed.setName((int) Playing.speed_modifier+"x");
 		}
+		
 		//if True save prompt == open.
 		if(showSavePrompt) {
 			if (quit.updateClick()) {
