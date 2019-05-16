@@ -418,6 +418,8 @@ public class GUI {
 				close();
 			}
 		}
+		
+		// When you try and quit the game, show the prompt
 		if(showQuitPrompt) {
 			if(quit.updateClick()){
 				Playing.state = Playing.QUIT;
@@ -438,6 +440,7 @@ public class GUI {
 				Audio.stop(false);
 			}
 		}
+		
 		// Updating the winning and losing state
 		if (Playing.state == Playing.WIN || Playing.state == Playing.LOSE) {
 			Audio.stop(false);
