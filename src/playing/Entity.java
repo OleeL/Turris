@@ -30,6 +30,7 @@ public class Entity {
 		
 	}
 	
+	// This draw method can be overriden
 	public void draw() {
 	}
 	

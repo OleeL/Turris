@@ -281,6 +281,8 @@ public class GUI {
 					guiClicked = true;
 					state = temp_state;
 				}
+				
+				// Tells you if you can afford depending on which button it is.
 				switch (button.getText().text) {
 					case "Tower I":
 						temp_info = String.valueOf(Turret_1.TURRET_COST);
