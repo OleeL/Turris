@@ -109,7 +109,6 @@ public class Main_menu {
 				state = MAIN;
 				Main.state = Main.PLAYING;
 				Audio.stop(false);
-				
 				Audio.playLoop(Audio.MSC_GAME);
 				break;
 			case HELP:

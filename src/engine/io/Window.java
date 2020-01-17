@@ -40,7 +40,6 @@ public class Window {
 	
 	public void create()
 	{
-		
 		// Closes the program if GLFW didn't initialise correctly
 		if (!GLFW.glfwInit())
 		{

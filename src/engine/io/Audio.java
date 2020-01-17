@@ -2,16 +2,19 @@ package engine.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.*;
+
 
 import main.Main_menu;
 
@@ -120,7 +123,6 @@ public class Audio{
 				playLoop(name);
 			}
 		}
-
 	}
 	
 	//Updates the volume of the background music
@@ -190,11 +192,14 @@ public class Audio{
 
 //Creates a sound object on a new thread
 class Sound extends Thread {
+	private static final int BUFFER_SIZE = 128000;
 	private String name;
 	private float volume;
 	private boolean terminate = false;
 	private boolean loop = false;
 	private int src;
+
+	private SourceDataLine sourceLine;
 	
 	public Sound(String name, float volume) {
 		this.name = name;
@@ -204,8 +209,11 @@ class Sound extends Thread {
 	//Runs the thread
 	public void run() {
 		try {
-			play();
-			
+			do
+			{
+				play();
+			} while (!terminate && loop);
+				
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -213,6 +221,7 @@ class Sound extends Thread {
 	
 	public void stopSound() {
 		terminate = true;
+		if (sourceLine != null) sourceLine.stop();
 	}
 	
 	//Reads and plays the audio file
@@ -223,6 +232,7 @@ class Sound extends Thread {
 		AL10.alGenBuffers(buffer);
 		
 		//Gets the length of the audio file
+		@SuppressWarnings("unused")
 		long time = createBufferData(buffer.get(0));
 		
 		//Generate a source to play the audio through
@@ -243,35 +253,23 @@ class Sound extends Thread {
 		AL10.alSourcePlay(source);
 		
 		//Make thread sleep until the audio is complete
-		try {
-			if (loop) {
-				while (!terminate) {
-					//Keep looping until told to terminate
-					Thread.sleep(10);
-					Thread.yield();
-				}
-			} else {
-				//Make thread sleep until audio complete
-				Thread.sleep(time);
+		if (loop) {
+			while (!terminate) {
+				return;
 			}
-
-		} catch(InterruptedException ex) {
-			
-			AL10.alSourceStop(source);
-			AL10.alDeleteSources(source);
-			throw new InterruptedException("Thread interrupted");
-	    }
-			
+		}
 		//Stop audio and delete source
-		AL10.alSourceStop(source);		
+		AL10.alSourceStop(source);
 		AL10.alDeleteSources(source);
-		
+        sourceLine.drain();
+        sourceLine.close();
+        sourceLine.stop();
+		System.out.println("Stopped "+name);
 	}
 	
 	//Loads the audio file into buffers
 	//Returns length of audio
 	private long createBufferData(int p) throws UnsupportedAudioFileException {
-		final int MONO = 1, STEREO = 2;
 		
 		//Load the audio file
 		File audio = new File(Audio.PATH + name);
@@ -285,45 +283,39 @@ class Sound extends Thread {
 		}
 		
 		AudioFormat format = stream.getFormat();
+		
 		if (format.isBigEndian()) throw new UnsupportedAudioFileException("Big Endian files are not supported");
 		
-		//Determine the format of the audio
-		int openALFormat = -1;
-		switch(format.getChannels()) {
-		case MONO:
-			switch(format.getSampleSizeInBits()) {
-			case 8:
-				openALFormat = AL10.AL_FORMAT_MONO8;
-				break;
-			case 16:
-				openALFormat = AL10.AL_FORMAT_MONO16;
-				break;
-			}
-			break;
-		case STEREO:
-			switch(format.getSampleSizeInBits()) {
-			case 8:
-				openALFormat = AL10.AL_FORMAT_STEREO8;
-				break;
-			case 16:
-				openALFormat = AL10.AL_FORMAT_STEREO16;
-				break;
-			}
-			break;
-		}
-		byte[] b = null;
-		try {
-			b = stream.readAllBytes();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
-		data.flip();
-		
-		//Loads the audio data into buffer
-		AL10.alBufferData(p, openALFormat, data, (int)format.getSampleRate());
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        try {
+            sourceLine = (SourceDataLine) AudioSystem.getLine(info);
+            sourceLine.open(format);
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        sourceLine.start();
+
+        int nBytesRead = 0;
+        byte[] abData = new byte[BUFFER_SIZE];
+        while (nBytesRead != -1) {
+            try {
+                nBytesRead = stream.read(abData, 0, abData.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (nBytesRead >= 0) {
+                @SuppressWarnings("unused")
+                int nBytesWritten = sourceLine.write(abData, 0, nBytesRead);
+            }
+        }
+
+        sourceLine.drain();
+        sourceLine.close();
 		
 		return (long)(1000f * stream.getFrameLength() / format.getFrameRate());		
 	}
