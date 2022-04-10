@@ -1,0 +1,13 @@
+16,12,50,-25,120,-50,250,0,2,,,,,,,
+x,x,x,path_br,path_as,path_bl,x,path_br,path_as,path_bl,cone,path_br,path_as,path_bl,x,x
+x,x,x,path_ds,x,path_ds,x,path_ds,x,path_ds,cone,path_ds,x,path_tr,path_as,path_bl
+path_as,path_bl,x,path_ds,x,path_tr,path_as,path_tl,x,path_ds,cone,path_ds,x,x,x,path_ds
+x,path_tr,path_as,path_tl,x,x,rock_tl,rock_tr,x,path_ds,x,path_tr,path_as,path_bl,x,path_ds
+cone,cone,cone,cone,cone,cone,rock_bl,rock_br,x,path_ds,x,x,x,path_ds,x,path_ds
+path_as,path_as,path_as,path_as,path_as,path_as,path_as,path_bl,x,path_tr,path_as,path_bl,x,path_ds,x,path_ds
+x,x,x,x,x,x,x,path_tr,path_bl,x,x,path_ds,x,path_ds,x,path_ds
+x,path_br,path_as,path_as,path_as,path_bl,x,x,path_ds,rock_tl,rock_tr,path_ds,x,path_ds,cone,path_ds
+x,path_ds,x,x,x,path_tr,path_as,path_as,path_tl,rock_bl,rock_br,path_ds,x,path_ds,cone,path_ds
+x,path_tr,path_as,path_bl,rock_tl,rock_tr,x,cone,cone,cone,x,path_tr,path_as,path_tl,cone,path_ds
+x,x,x,path_ds,rock_bl,rock_br,cone,path_br,path_as,path_bl,x,x,x,x,x,path_ds
+x,x,x,path_tr,path_as,path_as,path_as,path_tl,x,path_tr,path_as,path_as,path_as,path_as,path_as,path_tl
