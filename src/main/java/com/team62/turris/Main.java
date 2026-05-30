@@ -5,6 +5,7 @@ import com.team62.turris.engine.io.Window;
 import com.team62.turris.playing.Playing;
 import com.team62.turris.settings.io.Load;
 import java.io.File;
+import java.net.URISyntaxException;
 import org.lwjgl.system.Platform;
 
 /**
@@ -31,6 +32,7 @@ public class Main {
         boolean vsync = false; // Vsync settings
         String windowName = "Turris"; // Name of the window
 
+        configureWorkingDirectoryForAssets();
         final String userDir = System.getProperty("user.dir");
         System.out.println("Working Directory = " + userDir);
 
@@ -90,6 +92,38 @@ public class Main {
         }
 
         Audio.destroy();
+    }
+
+    private static void configureWorkingDirectoryForAssets()
+        throws URISyntaxException {
+        if (new File("assets").isDirectory()) {
+            return;
+        }
+
+        File codePath = new File(
+            Main.class
+                .getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .toURI()
+        );
+        File codeDir = codePath.isDirectory()
+            ? codePath
+            : codePath.getParentFile();
+        File[] candidates = {
+            codeDir,
+            codeDir == null ? null : codeDir.getParentFile(),
+            new File("target"),
+        };
+
+        for (File candidate : candidates) {
+            if (
+                candidate != null && new File(candidate, "assets").isDirectory()
+            ) {
+                System.setProperty("user.dir", candidate.getAbsolutePath());
+                return;
+            }
+        }
     }
 
     public static void printMouseCoordsOnClick() {
