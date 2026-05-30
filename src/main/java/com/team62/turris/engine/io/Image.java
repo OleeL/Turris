@@ -3,7 +3,6 @@
  */
 package com.team62.turris.engine.io;
 
-import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -20,21 +19,21 @@ public class Image {
     }
 
     public int getHeight() {
-        return heigh;
+        return height;
     }
 
     private ByteBuffer image;
-    private int width, heigh;
+    private int width, height;
 
-    Image(int width, int heigh, ByteBuffer image) {
+    Image(int width, int height, ByteBuffer image) {
         this.image = image;
-        this.heigh = heigh;
+        this.height = height;
         this.width = width;
     }
     
     public static Image loadImage(String path) {
         ByteBuffer image;
-        int width, heigh;
+        int width, height;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer comp = stack.mallocInt(1);
             IntBuffer w = stack.mallocInt(1);
@@ -45,8 +44,8 @@ public class Image {
                 System.err.println("Couldn't load " + path);
             }
             width = w.get();
-            heigh = h.get();
+            height = h.get();
         }
-        return new Image(width, heigh, image);
+        return new Image(width, height, image);
     }
 }
