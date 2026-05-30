@@ -228,12 +228,14 @@ jobs:
 
           - asset_name: Turris-macos-arm64-dmg
             os: macos-14
+            expected_arch: arm64
             maven_profile: macos-arm64
             jar_classifier: natives-macos-arm64
             archive_ext: dmg
 
           - asset_name: Turris-macos-x64-dmg
-            os: macos-13
+            os: macos-latest
+            expected_arch: x86_64
             maven_profile: macos-x64
             jar_classifier: natives-macos
             archive_ext: dmg
@@ -256,6 +258,17 @@ jobs:
           distribution: temurin
           java-version: "17"
           cache: maven
+
+      - name: Verify runner architecture
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual_arch="$(uname -m)"
+          expected_arch="${{ matrix.expected_arch }}"
+          echo "actual_arch=${actual_arch}"
+          echo "expected_arch=${expected_arch}"
+          test "${actual_arch}" = "${expected_arch}"
 
       - name: Set Maven project version
         shell: bash
