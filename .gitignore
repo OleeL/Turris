@@ -1,6 +1,7 @@
 # Maven / Java build output
 /target/
 /bin/
+/assets
 /assets/
 *.class
 

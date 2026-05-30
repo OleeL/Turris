@@ -4,104 +4,239 @@ on:
   push:
     branches:
       - main
+      - master
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  release:
-    name: Build and publish release
+  prepare-release:
+    name: Prepare release tag
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    outputs:
+      tag_name: ${{ steps.version.outputs.tag_name }}
+      release_name: ${{ steps.version.outputs.release_name }}
+      version: ${{ steps.version.outputs.version }}
+      target_sha: ${{ steps.version.outputs.target_sha }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Show trigger context
+        shell: bash
+        run: |
+          echo "event=${GITHUB_EVENT_NAME}"
+          echo "ref=${GITHUB_REF}"
+          echo "ref_name=${GITHUB_REF_NAME}"
+          echo "sha=${GITHUB_SHA}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
         with:
-          distribution: temurin
-          java-version: '17'
-          cache: maven
+          dotnet-version: "8.x"
 
-      - name: Set up GitVersion
-        uses: gittools/actions/gitversion/setup@v3.2.1
-        with:
-          versionSpec: '6.x'
+      - name: Install GitVersion
+        shell: bash
+        run: |
+          dotnet tool install --global GitVersion.Tool --version "6.0.*"
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
 
       - name: Calculate version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v3.2.1
-        with:
-          useConfigFile: true
-          configFilePath: GitVersion.yml
-
-      - name: Set release version
         id: version
         shell: bash
         run: |
           set -euo pipefail
-          VERSION="${{ steps.gitversion.outputs.semVer }}"
-          TAG="v${VERSION}"
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
-          echo "Release version: ${VERSION}"
-          echo "Release tag: ${TAG}"
+
+          if dotnet-gitversion /output json /config GitVersion.yml > gitversion.json; then
+            cat gitversion.json
+            version="$(jq -r '.SemVer // empty' gitversion.json)"
+          else
+            echo "GitVersion failed. Falling back to GitHub run number version." >&2
+            version="0.0.${GITHUB_RUN_NUMBER}"
+          fi
+
+          if [ -z "${version}" ] || [ "${version}" = "null" ]; then
+            echo "GitVersion did not produce SemVer. Falling back to GitHub run number version." >&2
+            version="0.0.${GITHUB_RUN_NUMBER}"
+          fi
+
+          tag_name="v${version}"
+          release_name="Turris ${version}"
+          target_sha="$(git rev-parse HEAD)"
+
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tag_name=${tag_name}" >> "$GITHUB_OUTPUT"
+          echo "release_name=${release_name}" >> "$GITHUB_OUTPUT"
+          echo "target_sha=${target_sha}" >> "$GITHUB_OUTPUT"
+
+          echo "version=${version}"
+          echo "tag_name=${tag_name}"
+          echo "target_sha=${target_sha}"
+
+      - name: Create and push git tag
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tag_name="${{ steps.version.outputs.tag_name }}"
+          target_sha="${{ steps.version.outputs.target_sha }}"
+
+          echo "Creating release tag ${tag_name} for ${target_sha}"
+          git remote -v
+
+          if git ls-remote --exit-code --tags origin "refs/tags/${tag_name}" >/dev/null 2>&1; then
+            echo "Tag ${tag_name} already exists; leaving it unchanged."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "${tag_name}" "${target_sha}" -m "Release ${tag_name}"
+            git push origin "refs/tags/${tag_name}"
+            echo "Pushed tag ${tag_name}"
+          fi
+
+          git ls-remote --tags origin "refs/tags/${tag_name}"
+
+  build-release-assets:
+    name: Build ${{ matrix.asset_name }}
+    needs: prepare-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - asset_name: Turris-windows-x64
+            maven_profile: windows-x64
+            jar_classifier: natives-windows
+
+          - asset_name: Turris-windows-x86
+            maven_profile: windows-x86
+            jar_classifier: natives-windows-x86
+
+          - asset_name: Turris-macos-arm64
+            maven_profile: macos-arm64
+            jar_classifier: natives-macos-arm64
+
+          - asset_name: Turris-macos-x64
+            maven_profile: macos-x64
+            jar_classifier: natives-macos
+
+          - asset_name: Turris-linux-x64
+            maven_profile: linux-x64
+            jar_classifier: natives-linux
+
+          - asset_name: Turris-linux-arm32
+            maven_profile: linux-arm32
+            jar_classifier: natives-linux-arm32
+
+          - asset_name: Turris-linux-arm64
+            maven_profile: linux-arm64
+            jar_classifier: natives-linux-arm64
+
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare-release.outputs.target_sha }}
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
 
       - name: Set Maven project version
         shell: bash
         run: |
-          mvn -B versions:set -DnewVersion="${{ steps.version.outputs.version }}" -DgenerateBackupPoms=false
+          mvn -B versions:set \
+            -DnewVersion="${{ needs.prepare-release.outputs.version }}" \
+            -DgenerateBackupPoms=false
 
-      - name: Build all platform jars
-        run: make package-all
+      - name: Build platform jar
+        shell: bash
+        run: |
+          mvn -B -P "${{ matrix.maven_profile }}" package
 
-      - name: Package release bundles
+      - name: Package platform release zip
         shell: bash
         run: |
           set -euo pipefail
-          VERSION="${{ steps.version.outputs.version }}"
-          mkdir -p release
 
-          package_platform() {
-            local platform="$1"
-            local jar="$2"
-            local dir="release/Turris-${VERSION}-${platform}"
+          version="${{ needs.prepare-release.outputs.version }}"
+          asset_name="${{ matrix.asset_name }}-${version}"
+          jar_name="turris-${version}-${{ matrix.jar_classifier }}.jar"
+          dist_dir="dist/${asset_name}"
 
-            mkdir -p "$dir"
-            cp "target/${jar}" "$dir/"
-            cp -R target/assets "$dir/assets"
-            (cd release && zip -qr "Turris-${VERSION}-${platform}.zip" "Turris-${VERSION}-${platform}")
-          }
+          test -f "target/${jar_name}"
+          test -d target/assets
 
-          package_platform "windows-x64" "turris-${VERSION}-natives-windows.jar"
-          package_platform "windows-x86" "turris-${VERSION}-natives-windows-x86.jar"
-          package_platform "macos-x64" "turris-${VERSION}-natives-macos.jar"
-          package_platform "macos-arm64" "turris-${VERSION}-natives-macos-arm64.jar"
-          package_platform "linux-x64" "turris-${VERSION}-natives-linux.jar"
-          package_platform "linux-arm32" "turris-${VERSION}-natives-linux-arm32.jar"
-          package_platform "linux-arm64" "turris-${VERSION}-natives-linux-arm64.jar"
+          mkdir -p "${dist_dir}"
+          cp "target/${jar_name}" "${dist_dir}/"
+          cp -R target/assets "${dist_dir}/assets"
+          cp README.md "${dist_dir}/README.md"
 
-          ls -lh release/*.zip
+          (cd dist && zip -qr "../${asset_name}.zip" "${asset_name}")
+          ls -lh "${asset_name}.zip"
 
-      - name: Publish GitHub release
+      - name: Upload packaged asset artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ matrix.asset_name }}-${{ needs.prepare-release.outputs.version }}.zip
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub release
+    needs:
+      - prepare-release
+      - build-release-assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Download release asset artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Show release assets
+        shell: bash
+        run: |
+          find release-assets -type f -maxdepth 1 -print -exec ls -lh {} \;
+          asset_count="$(find release-assets -maxdepth 1 -name '*.zip' | wc -l)"
+          test "${asset_count}" -eq 7
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare-release.outputs.tag_name }}
+          name: ${{ needs.prepare-release.outputs.release_name }}
+          target_commitish: ${{ needs.prepare-release.outputs.target_sha }}
+          make_latest: true
+          generate_release_notes: true
+          files: release-assets/*.zip
+          fail_on_unmatched_files: true
+
+      - name: Verify GitHub release assets
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          TAG="${{ steps.version.outputs.tag }}"
-          VERSION="${{ steps.version.outputs.version }}"
-
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release ${TAG} already exists. Uploading/replacing assets."
-            gh release upload "$TAG" release/*.zip --clobber
-          else
-            gh release create "$TAG" release/*.zip \
-              --target "$GITHUB_SHA" \
-              --title "Turris ${VERSION}" \
-              --notes "Automated Turris release ${VERSION}. Download the zip for your platform, extract it, and run the jar from inside the extracted folder."
-          fi
+          tag_name="${{ needs.prepare-release.outputs.tag_name }}"
+          gh release view "${tag_name}" --json tagName,name,assets --jq '.tagName + " " + .name, (.assets[] | .name)'
+          asset_count="$(gh release view "${tag_name}" --json assets --jq '.assets | length')"
+          test "${asset_count}" -ge 7
