@@ -107,7 +107,7 @@ jobs:
           git ls-remote --tags origin "refs/tags/${tag_name}"
 
   build-release-assets:
-    name: Build ${{ matrix.asset_name }}
+    name: Build jar bundle ${{ matrix.asset_name }}
     needs: prepare-release
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -197,11 +197,123 @@ jobs:
           path: ${{ matrix.asset_name }}-${{ needs.prepare-release.outputs.version }}.zip
           if-no-files-found: error
 
+  build-native-packages:
+    name: Build native launcher ${{ matrix.asset_name }}
+    needs: prepare-release
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - asset_name: Turris-windows-x64-exe
+            os: windows-latest
+            maven_profile: windows-x64
+            jar_classifier: natives-windows
+            archive_ext: zip
+
+          - asset_name: Turris-macos-arm64-dmg
+            os: macos-14
+            maven_profile: macos-arm64
+            jar_classifier: natives-macos-arm64
+            archive_ext: dmg
+
+          - asset_name: Turris-macos-x64-dmg
+            os: macos-13
+            maven_profile: macos-x64
+            jar_classifier: natives-macos
+            archive_ext: dmg
+
+          - asset_name: Turris-linux-x64-executable
+            os: ubuntu-latest
+            maven_profile: linux-x64
+            jar_classifier: natives-linux
+            archive_ext: tar.gz
+
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare-release.outputs.target_sha }}
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Set Maven project version
+        shell: bash
+        run: |
+          mvn -B versions:set \
+            -DnewVersion="${{ needs.prepare-release.outputs.version }}" \
+            -DgenerateBackupPoms=false
+
+      - name: Build platform jar
+        shell: bash
+        run: |
+          mvn -B -P "${{ matrix.maven_profile }}" package
+
+      - name: Prepare jpackage input
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${{ needs.prepare-release.outputs.version }}"
+          jar_name="turris-${version}-${{ matrix.jar_classifier }}.jar"
+
+          test -f "target/${jar_name}"
+          test -d target/assets
+
+          mkdir -p jpackage-input
+          cp "target/${jar_name}" "jpackage-input/${jar_name}"
+          cp -R target/assets jpackage-input/assets
+
+      - name: Build Windows app image
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $version = "${{ needs.prepare-release.outputs.version }}"
+          $jar = "turris-$version-${{ matrix.jar_classifier }}.jar"
+          jpackage --type app-image --name Turris --app-version "$version" --input jpackage-input --main-jar "$jar" --dest native --vendor OleeL
+          Compress-Archive -Path native/Turris/* -DestinationPath "${{ matrix.asset_name }}-$version.zip" -Force
+
+      - name: Build macOS DMG
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${{ needs.prepare-release.outputs.version }}"
+          jar="turris-${version}-${{ matrix.jar_classifier }}.jar"
+          jpackage --type dmg --name Turris --app-version "${version}" --input jpackage-input --main-jar "${jar}" --dest native --vendor OleeL
+          dmg="$(find native -maxdepth 1 -name '*.dmg' | head -n 1)"
+          test -f "${dmg}"
+          cp "${dmg}" "${{ matrix.asset_name }}-${version}.dmg"
+
+      - name: Build Linux app image
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${{ needs.prepare-release.outputs.version }}"
+          jar="turris-${version}-${{ matrix.jar_classifier }}.jar"
+          jpackage --type app-image --name Turris --app-version "${version}" --input jpackage-input --main-jar "${jar}" --dest native --vendor OleeL
+          tar -czf "${{ matrix.asset_name }}-${version}.tar.gz" -C native Turris
+
+      - name: Upload native package artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ matrix.asset_name }}-${{ needs.prepare-release.outputs.version }}.${{ matrix.archive_ext }}
+          if-no-files-found: error
+
   publish-release:
     name: Publish GitHub release
     needs:
       - prepare-release
       - build-release-assets
+      - build-native-packages
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -215,9 +327,9 @@ jobs:
       - name: Show release assets
         shell: bash
         run: |
-          find release-assets -type f -maxdepth 1 -print -exec ls -lh {} \;
-          asset_count="$(find release-assets -maxdepth 1 -name '*.zip' | wc -l)"
-          test "${asset_count}" -eq 7
+          find release-assets -maxdepth 1 -type f -print -exec ls -lh {} \;
+          asset_count="$(find release-assets -maxdepth 1 -type f | wc -l)"
+          test "${asset_count}" -ge 11
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
@@ -227,7 +339,7 @@ jobs:
           target_commitish: ${{ needs.prepare-release.outputs.target_sha }}
           make_latest: true
           generate_release_notes: true
-          files: release-assets/*.zip
+          files: release-assets/*
           fail_on_unmatched_files: true
 
       - name: Verify GitHub release assets
@@ -239,4 +351,4 @@ jobs:
           tag_name="${{ needs.prepare-release.outputs.tag_name }}"
           gh release view "${tag_name}" --json tagName,name,assets --jq '.tagName + " " + .name, (.assets[] | .name)'
           asset_count="$(gh release view "${tag_name}" --json assets --jq '.assets | length')"
-          test "${asset_count}" -ge 7
+          test "${asset_count}" -ge 11
