@@ -1,2 +1,29 @@
+# Maven / Java build output
+/target/
 /bin/
+/assets/
+*.class
+
+# Local IDE metadata
 /.classpath
+/.project
+/.settings/
+/.idea/
+/.vscode/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# JVM crash logs
+/hs_err_pid*.log
+/replay_pid*.log
+
+# Legacy vendored dependency dumps; Maven resolves these now.
+/lib/*.jar
+/natives/*.jar
+/lib/*_license.txt
+/lib/lwjgl-release-*.json

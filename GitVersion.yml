@@ -1,0 +1,33 @@
+workflow: GitHubFlow/v1
+mode: ContinuousDeployment
+tag-prefix: "[vV]?"
+
+branches:
+  main:
+    regex: ^main$
+    label: ""
+    increment: Patch
+    mode: ContinuousDeployment
+    is-main-branch: true
+    prevent-increment:
+      of-merged-branch: true
+      when-current-commit-tagged: true
+
+  feature:
+    regex: ^features?[/-](?<BranchName>.+)
+    label: alpha
+    increment: Inherit
+    mode: ContinuousDeployment
+    prevent-increment:
+      when-current-commit-tagged: false
+
+  unknown:
+    regex: (?<BranchName>.+)
+    label: alpha
+    increment: Inherit
+    mode: ContinuousDeployment
+    prevent-increment:
+      when-current-commit-tagged: false
+
+ignore:
+  sha: []

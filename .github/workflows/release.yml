@@ -1,0 +1,107 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Set up GitVersion
+        uses: gittools/actions/gitversion/setup@v3.2.1
+        with:
+          versionSpec: '6.x'
+
+      - name: Calculate version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v3.2.1
+        with:
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+
+      - name: Set release version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.gitversion.outputs.semVer }}"
+          TAG="v${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "Release version: ${VERSION}"
+          echo "Release tag: ${TAG}"
+
+      - name: Set Maven project version
+        shell: bash
+        run: |
+          mvn -B versions:set -DnewVersion="${{ steps.version.outputs.version }}" -DgenerateBackupPoms=false
+
+      - name: Build all platform jars
+        run: make package-all
+
+      - name: Package release bundles
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          mkdir -p release
+
+          package_platform() {
+            local platform="$1"
+            local jar="$2"
+            local dir="release/Turris-${VERSION}-${platform}"
+
+            mkdir -p "$dir"
+            cp "target/${jar}" "$dir/"
+            cp -R target/assets "$dir/assets"
+            (cd release && zip -qr "Turris-${VERSION}-${platform}.zip" "Turris-${VERSION}-${platform}")
+          }
+
+          package_platform "windows-x64" "turris-${VERSION}-natives-windows.jar"
+          package_platform "windows-x86" "turris-${VERSION}-natives-windows-x86.jar"
+          package_platform "macos-x64" "turris-${VERSION}-natives-macos.jar"
+          package_platform "macos-arm64" "turris-${VERSION}-natives-macos-arm64.jar"
+          package_platform "linux-x64" "turris-${VERSION}-natives-linux.jar"
+          package_platform "linux-arm32" "turris-${VERSION}-natives-linux-arm32.jar"
+          package_platform "linux-arm64" "turris-${VERSION}-natives-linux-arm64.jar"
+
+          ls -lh release/*.zip
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release ${TAG} already exists. Uploading/replacing assets."
+            gh release upload "$TAG" release/*.zip --clobber
+          else
+            gh release create "$TAG" release/*.zip \
+              --target "$GITHUB_SHA" \
+              --title "Turris ${VERSION}" \
+              --notes "Automated Turris release ${VERSION}. Download the zip for your platform, extract it, and run the jar from inside the extracted folder."
+          fi
