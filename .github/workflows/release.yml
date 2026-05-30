@@ -349,6 +349,6 @@ jobs:
         run: |
           set -euo pipefail
           tag_name="${{ needs.prepare-release.outputs.tag_name }}"
-          gh release view "${tag_name}" --json tagName,name,assets --jq '.tagName + " " + .name, (.assets[] | .name)'
-          asset_count="$(gh release view "${tag_name}" --json assets --jq '.assets | length')"
+          gh release view "${tag_name}" --repo "${GITHUB_REPOSITORY}" --json tagName,name,assets --jq '.tagName + " " + .name, (.assets[] | .name)'
+          asset_count="$(gh release view "${tag_name}" --repo "${GITHUB_REPOSITORY}" --json assets --jq '.assets | length')"
           test "${asset_count}" -ge 11
