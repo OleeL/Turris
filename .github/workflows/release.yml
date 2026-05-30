@@ -212,9 +212,12 @@ jobs:
 
   build-native-packages:
     name: Build native launcher ${{ matrix.asset_name }}
-    needs: prepare-release
+    needs:
+      - prepare-release
+      - publish-release
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
+    continue-on-error: true
 
     strategy:
       fail-fast: false
@@ -234,7 +237,7 @@ jobs:
             archive_ext: dmg
 
           - asset_name: Turris-macos-x64-dmg
-            os: macos-latest
+            os: macos-13
             expected_arch: x86_64
             maven_profile: macos-x64
             jar_classifier: natives-macos
@@ -337,19 +340,28 @@ jobs:
           path: ${{ matrix.asset_name }}-${{ needs.prepare-release.outputs.version }}.${{ matrix.archive_ext }}
           if-no-files-found: error
 
+      - name: Upload native package to GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          asset="${{ matrix.asset_name }}-${{ needs.prepare-release.outputs.version }}.${{ matrix.archive_ext }}"
+          gh release upload "${{ needs.prepare-release.outputs.tag_name }}" "${asset}" --repo "${GITHUB_REPOSITORY}" --clobber
+
   publish-release:
     name: Publish GitHub release
     needs:
       - prepare-release
       - build-release-assets
-      - build-native-packages
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
-      - name: Download release asset artifacts
+      - name: Download jar bundle artifacts
         uses: actions/download-artifact@v5
         with:
+          pattern: Turris-*
           path: release-assets
           merge-multiple: true
 
@@ -357,8 +369,11 @@ jobs:
         shell: bash
         run: |
           find release-assets -maxdepth 1 -type f -print -exec ls -lh {} \;
-          asset_count="$(find release-assets -maxdepth 1 -type f | wc -l)"
-          test "${asset_count}" -ge 11
+          jar_bundle_count="$(find release-assets -maxdepth 1 -name 'Turris-*.zip' ! -name '*-exe-*' | wc -l)"
+          total_asset_count="$(find release-assets -maxdepth 1 -type f | wc -l)"
+          echo "jar_bundle_count=${jar_bundle_count}"
+          echo "total_asset_count=${total_asset_count}"
+          test "${jar_bundle_count}" -ge 7
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
@@ -380,4 +395,4 @@ jobs:
           tag_name="${{ needs.prepare-release.outputs.tag_name }}"
           gh release view "${tag_name}" --repo "${GITHUB_REPOSITORY}" --json tagName,name,assets --jq '.tagName + " " + .name, (.assets[] | .name)'
           asset_count="$(gh release view "${tag_name}" --repo "${GITHUB_REPOSITORY}" --json assets --jq '.assets | length')"
-          test "${asset_count}" -ge 11
+          test "${asset_count}" -ge 7
