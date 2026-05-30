@@ -1,5 +1,6 @@
 package com.team62.turris.engine.io;
 
+import com.team62.turris.Main;
 import com.team62.turris.Main_menu;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,7 +45,7 @@ public class Audio {
     public static final String MSC_GAME = "music/game.wav";
 
     //Path to all the sound files
-    public static final String PATH = "assets/sounds/";
+    public static final String PATH = "sounds/";
 
     //Stores the current background music Sound object
     private static Sound background_music = null;
@@ -280,7 +281,7 @@ class Sound extends Thread {
             STEREO = 2;
 
         //Load the audio file
-        File audio = new File(Audio.PATH + name);
+        File audio = new File(Main.assetPath(Audio.PATH + name));
 
         //Create a stream out of the audio file
         AudioInputStream stream = null;

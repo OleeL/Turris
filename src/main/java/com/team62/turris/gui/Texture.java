@@ -8,6 +8,7 @@ package com.team62.turris.gui;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import com.team62.turris.Main;
 import com.team62.turris.engine.io.Image;
 import java.io.File;
 
@@ -28,7 +29,7 @@ public class Texture {
     public Texture(String filename, float x, float y, float sx, float sy) {
         id = glGenTextures();
 
-        String imagePath = "./assets/images/" + filename;
+        String imagePath = Main.assetPath("images/" + filename);
         if (!new File(imagePath).isFile()) {
             System.err.println("Image file not found: " + imagePath);
         }
@@ -74,8 +75,8 @@ public class Texture {
     // Sets the texture image
     public void setTexture(String filename) {
         id = glGenTextures();
-        Image.loadImage("./assets/images/" + filename);
-        texture = Image.loadImage("./assets/images/" + filename);
+        Image.loadImage(Main.assetPath("images/" + filename));
+        texture = Image.loadImage(Main.assetPath("images/" + filename));
 
         // Binds the texture to the id.
         glBindTexture(GL_TEXTURE_2D, id);

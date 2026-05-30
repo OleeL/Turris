@@ -22,6 +22,7 @@ public class Main {
     public static final int MAIN_MENU = 0;
     public static final int PLAYING = 1;
     public static int state = MAIN_MENU;
+    private static File assetDirectory = new File("assets");
 
     public static void main(String[] args) throws Exception {
         Thread.sleep(4000);
@@ -39,7 +40,7 @@ public class Main {
         // Creates the game window
         window = new Window(width, height, fps, vsync, windowName);
 
-        String iconPath = "assets/images/TurrisIcon.png";
+        String iconPath = assetPath("images/TurrisIcon.png");
         if (!new File(iconPath).isFile()) {
             throw new Exception("Icon file not found: " + iconPath);
         }
@@ -96,7 +97,7 @@ public class Main {
 
     private static void configureWorkingDirectoryForAssets()
         throws URISyntaxException {
-        if (new File("assets").isDirectory()) {
+        if (assetDirectory.isDirectory()) {
             return;
         }
 
@@ -120,10 +121,20 @@ public class Main {
             if (
                 candidate != null && new File(candidate, "assets").isDirectory()
             ) {
-                System.setProperty("user.dir", candidate.getAbsolutePath());
+                assetDirectory = new File(candidate, "assets");
                 return;
             }
         }
+    }
+
+    public static String assetPath(String path) {
+        if (path.startsWith("./")) {
+            path = path.substring(2);
+        }
+        if (path.startsWith("assets/")) {
+            path = path.substring("assets/".length());
+        }
+        return new File(assetDirectory, path).getPath();
     }
 
     public static void printMouseCoordsOnClick() {
