@@ -18,7 +18,8 @@ import org.lwjgl.system.Platform;
  */
 public class Window {
 
-    private int width, height;
+    private final int logicalWidth, logicalHeight;
+    private int windowWidth, windowHeight;
     private String title;
     private long window;
     private double fps_cap,
@@ -35,8 +36,10 @@ public class Window {
     private static GLFWImage.Buffer iconBuffer;
 
     public Window(int width, int height, int fps, boolean vsync, String title) {
-        this.width = width;
-        this.height = height;
+        this.logicalWidth = width;
+        this.logicalHeight = height;
+        this.windowWidth = width;
+        this.windowHeight = height;
         this.title = title;
         this.vsync = vsync;
         this.fps_cap = fps;
@@ -62,8 +65,8 @@ public class Window {
         // Creates the window with the given width, height, title, the monitor
         // it goes on and the share
         window = GLFW.glfwCreateWindow(
-            width,
-            height,
+            logicalWidth,
+            logicalHeight,
             title,
             (isFullscreen) ? GLFW.glfwGetPrimaryMonitor() : 0,
             window
@@ -83,8 +86,8 @@ public class Window {
         videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(
             window,
-            (videoMode.width() - width) / 2,
-            (videoMode.height() - height) / 2
+            (videoMode.width() - logicalWidth) / 2,
+            (videoMode.height() - logicalHeight) / 2
         );
 
         if (iconBuffer != null) {
@@ -110,13 +113,22 @@ public class Window {
             framebufferHeight
         );
         glViewport(0, 0, framebufferWidth.get(0), framebufferHeight.get(0));
-        glOrtho(0, width, height, 0.0, -1.0, 1.0);
+        glOrtho(0, logicalWidth, logicalHeight, 0.0, -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glClear(GL_COLOR_BUFFER_BIT);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        updateWindowSize();
         time = getTime();
+    }
+
+    private void updateWindowSize() {
+        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
+        GLFW.glfwGetWindowSize(window, widthBuffer, heightBuffer);
+        windowWidth = widthBuffer.get(0);
+        windowHeight = heightBuffer.get(0);
     }
 
     // Returns whether the window should be closed
@@ -134,12 +146,7 @@ public class Window {
 
     // The update loop where all the game processing will be handled
     public void update() {
-        // Window buffer
-        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
-        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
-        GLFW.glfwGetWindowSize(window, widthBuffer, heightBuffer);
-        width = widthBuffer.get(0);
-        height = heightBuffer.get(0);
+        updateWindowSize();
         IntBuffer framebufferWidth = BufferUtils.createIntBuffer(1);
         IntBuffer framebufferHeight = BufferUtils.createIntBuffer(1);
         GLFW.glfwGetFramebufferSize(
@@ -201,12 +208,12 @@ public class Window {
 
     // Gets the width of the screen
     public int getWidth() {
-        return width;
+        return logicalWidth;
     }
 
     // Gets the height of the screen
     public int getHeight() {
-        return height;
+        return logicalHeight;
     }
 
     // Gets the title of the game
@@ -288,14 +295,22 @@ public class Window {
     public double getMouseX() {
         DoubleBuffer buffer = BufferUtils.createDoubleBuffer(1);
         GLFW.glfwGetCursorPos(window, buffer, null);
-        return buffer.get(0);
+        return scaleMouseX(buffer.get(0));
     }
 
     // Gets the mouse y position
     public double getMouseY() {
         DoubleBuffer buffer = BufferUtils.createDoubleBuffer(1);
         GLFW.glfwGetCursorPos(window, null, buffer);
-        return buffer.get(0);
+        return scaleMouseY(buffer.get(0));
+    }
+
+    private double scaleMouseX(double x) {
+        return windowWidth == 0 ? x : (x * logicalWidth) / windowWidth;
+    }
+
+    private double scaleMouseY(double y) {
+        return windowHeight == 0 ? y : (y * logicalHeight) / windowHeight;
     }
 
     // Draws a rectangle
@@ -320,23 +335,33 @@ public class Window {
 
     public void setFullscreen(boolean isFullscreen) {
         this.isFullscreen = isFullscreen;
-        GLFW.glfwSetWindowMonitor(
-            window,
-            (isFullscreen) ? GLFW.glfwGetPrimaryMonitor() : 0,
-            0,
-            0,
-            width,
-            height,
-            GLFW.GLFW_REFRESH_RATE
-        );
 
-        GLFWVidMode videoMode;
-        videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-        GLFW.glfwSetWindowPos(
-            window,
-            (videoMode.width() - width) / 2,
-            (videoMode.height() - height) / 2
-        );
+        long monitor = GLFW.glfwGetPrimaryMonitor();
+        GLFWVidMode videoMode = GLFW.glfwGetVideoMode(monitor);
+
+        if (isFullscreen) {
+            GLFW.glfwSetWindowMonitor(
+                window,
+                monitor,
+                0,
+                0,
+                videoMode.width(),
+                videoMode.height(),
+                videoMode.refreshRate()
+            );
+        } else {
+            GLFW.glfwSetWindowMonitor(
+                window,
+                0,
+                (videoMode.width() - logicalWidth) / 2,
+                (videoMode.height() - logicalHeight) / 2,
+                logicalWidth,
+                logicalHeight,
+                videoMode.refreshRate()
+            );
+        }
+
+        updateWindowSize();
     }
 
     // Draws a rectangle with rounded edges

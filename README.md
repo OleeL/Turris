@@ -38,11 +38,8 @@ The game currently loads assets from a filesystem path named `assets/...`, so ru
 
 ```sh
 mvn package
-cd target
-java -jar turris-1.0.0-natives-macos-arm64.jar
+java -jar target/turris-1.0.0-natives-macos-arm64.jar
 ```
-
-Use the jar that matches your platform from inside `target/`:
 
 ```text
 turris-1.0.0-natives-windows.jar       Windows x64
@@ -57,15 +54,13 @@ turris-1.0.0-natives-linux-arm64.jar   Linux ARM64
 On Apple Silicon Macs, use:
 
 ```sh
-cd target
-java -jar turris-1.0.0-natives-macos-arm64.jar
+java -jar target/turris-1.0.0-natives-macos-arm64.jar
 ```
 
 On Intel Macs, use:
 
 ```sh
-cd target
-java -jar turris-1.0.0-natives-macos.jar
+java -jar target/turris-1.0.0-natives-macos.jar
 ```
 
 ## Build all release jars
