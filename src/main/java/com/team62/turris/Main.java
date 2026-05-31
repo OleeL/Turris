@@ -40,7 +40,7 @@ public class Main {
         // Creates the game window
         window = new Window(width, height, fps, vsync, windowName);
 
-        String iconPath = assetPath("images/TurrisIcon.png");
+        String iconPath = assetPath("images/Icon.png");
         if (!new File(iconPath).isFile()) {
             throw new Exception("Icon file not found: " + iconPath);
         }

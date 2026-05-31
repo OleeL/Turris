@@ -306,7 +306,13 @@ jobs:
           $version = "${{ needs.prepare-release.outputs.version }}"
           $appVersion = "${{ needs.prepare-release.outputs.app_version }}"
           $jar = "turris-$version-${{ matrix.jar_classifier }}.jar"
-          jpackage --type app-image --name Turris --app-version "$appVersion" --input jpackage-input --main-jar "$jar" --dest native --vendor OleeL
+          $pngIcon = "jpackage-input/assets/images/Icon.png"
+          $icoIcon = "jpackage-input/assets/images/Icon.ico"
+          if (-not (Test-Path $pngIcon)) {
+            throw "Icon file not found: $pngIcon"
+          }
+          magick $pngIcon -define icon:auto-resize=256,128,64,48,32,16 $icoIcon
+          jpackage --type app-image --name Turris --app-version "$appVersion" --input jpackage-input --main-jar "$jar" --icon "$icoIcon" --dest native --vendor OleeL
           Compress-Archive -Path native/Turris/* -DestinationPath "${{ matrix.asset_name }}-$version.zip" -Force
 
       - name: Build macOS DMG
